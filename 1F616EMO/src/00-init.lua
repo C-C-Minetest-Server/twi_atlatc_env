@@ -1,0 +1,83 @@
+-- luacheck: no unused
+
+local F, S = F, S
+local rwt = rwt
+local sqrt, floor, abs = math.sqrt, math.floor, math.abs
+
+local function string_split(str, delim, include_empty, max_splits, sep_is_pattern)
+    delim = delim or ","
+    if delim == "" then
+        error("string.split separator is empty", 2)
+    end
+    max_splits = max_splits or -2
+    local items = {}
+    local pos, len = 1, #str
+    local plain = not sep_is_pattern
+    max_splits = max_splits + 1
+    repeat
+        local np, npe = string.find(str, delim, pos, plain)
+        np, npe = (np or (len + 1)), (npe or (len + 1))
+        if (not np) or (max_splits == 1) then
+            np = len + 1
+            npe = np
+        end
+        local s = string.sub(str, pos, np - 1)
+        if include_empty or (s ~= "") then
+            max_splits = max_splits - 1
+            items[#items + 1] = s
+        end
+        pos = npe + 1
+    until (max_splits == 0) or (pos > (len + 1))
+    return items
+end
+
+local function table_indexof(list, val)
+    for i, v in ipairs(list) do
+        if v == val then
+            return i
+        end
+    end
+    return -1
+end
+
+local function cascade_index(...)
+    local tables = { ... }
+    return function(k)
+        for _, tb in ipairs(tables) do
+            if tb[k] ~= nil then return tb[k] end
+        end
+    end
+end
+
+local function aspect_is_free(asp)
+    if type(asp.main) == "table" then
+        return asp.main.free
+    else
+        return asp.main ~= 0
+    end
+end
+
+F.has_rc = function(query, rc_list) -- query = string, single entry
+    for word in rc_list:gmatch("[^%s]+") do
+        if word == query then return true end
+    end
+    return false
+end
+
+F.get_rc_safe = function()
+    if not atc_id then return "" end
+    return get_rc() or ""
+end
+
+F.get_line_safe = function()
+    if not atc_id then return "" end
+    return get_line() or ""
+end
+
+F.get_rc_list = function(rc)
+    rc = rc or F.get_rc_safe()
+    return string_split(rc, " ")
+end
+
+local debug = print
+-- local debug = function() end
