@@ -221,7 +221,7 @@ F.stn_v2 = function(basic_def, lines_def)
                 F.set_outside(def, atc_id)
 
                 if status_key and (not S.stn_status[status_key] or S.stn_status[status_key].atc_id ~= atc_id) then
-                --if status_key then
+                    --if status_key then
                     local now = os.time()
                     local index = train.get_index and train:get_index() or 0
                     local max_speed = train:get_max_speed()
@@ -560,7 +560,6 @@ function F.show_textline_r(_, texts)
     end
     display(table.concat(rtexts, "\n"), table.concat(texts, "\n"))
 end
-
 
 F.set_textline = function(def)
     if not def.track then
