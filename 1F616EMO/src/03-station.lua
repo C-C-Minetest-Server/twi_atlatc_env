@@ -572,7 +572,11 @@ F.set_textline = function(def)
     local timer_str
     local stn_event, time_left, line_id, dir = F.get_station_status(def)
     if stn_event == "ARR" then
-        timer_str = "Arriving in " .. time_left .. " sec."
+        if time_left > 59 then
+            timer_str = string.format("Arriving in %.1f min.", time_left / 60)
+        else
+            timer_str = "Arriving in " .. time_left .. " sec."
+        end
     elseif stn_event == "DEP" then
         timer_str = "Leaving " .. (time_left > 0 and ("in " .. time_left .. " sec.") or "now")
     elseif def.line then

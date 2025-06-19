@@ -2,7 +2,7 @@
 
 local F, S = F, S
 local rwt = rwt
-local sqrt, floor, abs = math.sqrt, math.floor, math.abs
+local sqrt, floor, abs, fmod = math.sqrt, math.floor, math.abs, math.fmod
 
 local function string_split(str, delim, include_empty, max_splits, sep_is_pattern)
     delim = delim or ","

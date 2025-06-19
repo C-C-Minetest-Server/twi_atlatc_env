@@ -40,6 +40,8 @@ read_globals = {
     "sqrt",
     "floor",
     "abs",
+    "fmod",
+
     "string_split",
     "table_indexof",
     "cascade_index",
