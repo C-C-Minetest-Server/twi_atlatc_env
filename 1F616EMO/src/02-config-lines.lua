@@ -138,7 +138,7 @@ F.lines = {
         rc = "L-LUC",
         code = "E2",
         name = "1F616EMO Express 2",
-        N = "eSPH",
+        N = "eGRH",
         S = "HR-NEN",
     },
     ["E3"] = {
