@@ -165,6 +165,14 @@ F.lines = {
         S = "RXB",
     },
 
+    ["VFT"] = {
+        rc = "L-VFT",
+        name = " Fenced Town Shuttle",
+        short_name = "Fenced Town",
+        N = "eGRH",
+        S = "VFT",
+    },
+
     -- Display only
     ["SPN"] = {
         -- was: Spawn Metro: Spawn Line
