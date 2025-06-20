@@ -244,6 +244,10 @@ F.stn_v2 = function(basic_def, lines_def)
             F.platform_display_control[status_key] = nil
         end
 
+        if status_key then
+            F.register_train_arrive(status_key, atc_id)
+        end
+
         for line_id, def in pairs(lines_def) do
             def.line = line_id
             for k, v in pairs(basic_def) do
@@ -311,10 +315,6 @@ F.stn_v2 = function(basic_def, lines_def)
 
                 return
             end
-        end
-
-        if status_key then
-            F.register_train_arrive(status_key, atc_id)
         end
     elseif event.msg and type(event.msg) == "table" then
         local msg_type = event.msg.type
