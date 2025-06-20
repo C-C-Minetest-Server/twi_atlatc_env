@@ -192,17 +192,19 @@ F.stn_v2 = function(basic_def, lines_def)
 
     local status_key = F.get_stn_status_key(basic_def)
 
+    for line_id, def in pairs(lines_def) do
+        for _, key in ipairs({
+            "track", "platform_id",
+            "here", "door_dir",
+            "signal", "rev_signal",
+        }) do
+            def[key] = def[key] or basic_def[key] or nil
+        end
+        def.line = line_id
+    end
+
     if event.approach and not event.has_entered and atc_arrow then
         for line_id, def in pairs(lines_def) do
-            def.line = line_id
-            for _, key in ipairs({
-                "track", "platform_id",
-                "here", "door_dir",
-                "signal", "rev_signal",
-            }) do
-                def[key] = def[key] or basic_def[key] or nil
-            end
-            def.line = line_id
             local line_def = F.lines[line_id]
             if train and match_train(line_def, train) then
                 atc_set_ars_disable(true)
