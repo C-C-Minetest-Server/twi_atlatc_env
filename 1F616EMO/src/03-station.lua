@@ -599,8 +599,8 @@ F.get_station_status = function(def)
         end
     end
 
-    if closest_time_left then
-        return "ARR", closest_time_left, closest_line_id, closest_line_dir
+    if closest_line_id then
+        return "ARR", floor(closest_time_left), closest_line_id, closest_line_dir
     end
 end
 
