@@ -578,7 +578,7 @@ F.get_station_status = function(def)
     local dest_data = F.trains_by_destination[dest_key]
     if not dest_data or not station_checkpoint_data then return end
 
-    local closest_time_left
+    local closest_time_left = math.huge
     local closest_line_id
     local closest_line_dir
     for _, train_dest_data in pairs(dest_data) do
