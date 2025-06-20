@@ -167,7 +167,7 @@ F.lines = {
 
     ["VFT"] = {
         rc = "L-VFT",
-        name = " Fenced Town Shuttle",
+        name = "Fenced Town Shuttle",
         short_name = "Fenced Town",
         N = "eGRH",
         S = "VFT",

@@ -34,6 +34,7 @@ F.stations = {
     KIH = "Kitkahood",
     DUI = "Duck Island",
     eSPH = "Spagetihood",
+    VFT = "Fenced Town",
 
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = "ShroomVille (Backup Platform)",
