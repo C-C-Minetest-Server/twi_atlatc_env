@@ -211,10 +211,29 @@ F.stn_v2 = function(basic_def, lines_def)
                 atc_set_text_inside("Stopping at: " .. stn_name .. generate_interchange_string(here, line_id))
                 F.set_outside(def, atc_id)
 
-                if status_key then
-                    local approach_status_key = F.get_approach_status_key(def, atc_id)
-                    if approach_status_key then
-                        F.register_train_on_checkpoint(approach_status_key, atc_id, true)
+                local approach_status_key = F.get_approach_status_key(def, atc_id)
+                if approach_status_key then
+                    F.register_train_on_checkpoint(approach_status_key, atc_id, true)
+
+                    local next = def.reverse and def.rev_next or def.next or nil
+                    local next_track = def.reverse and def.rev_next_track or def.next_track or nil
+                    if next and next_track then
+                        local dest_key = next .. ":" .. next_track
+                        local line_dir = def.dir
+                        if F.lines[def.line]
+                            and F.lines[def.line][line_dir] == next
+                            and F.lines[def.line][F.rev_dirs[line_dir]] then
+                            -- Terminus
+                            line_dir = F.rev_dirs[line_dir]
+                        end
+                        F.register_train_depart(
+                            approach_status_key,
+                            status_key,
+                            dest_key,
+                            def.line,
+                            line_dir,
+                            atc_id,
+                            true)
                     end
                 end
 
@@ -320,7 +339,7 @@ F.stn_v2 = function(basic_def, lines_def)
                         if F.lines[def.line]
                             and F.lines[def.line][line_dir] == next
                             and F.lines[def.line][F.rev_dirs[line_dir]] then
-                                -- Terminus
+                            -- Terminus
                             line_dir = F.rev_dirs[line_dir]
                         end
                         F.register_train_depart(status_key .. ":s", status_key, dest_key, def.line, line_dir, atc_id)
@@ -415,7 +434,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     if F.lines[def.line]
                         and F.lines[def.line][line_dir] == next
                         and F.lines[def.line][F.rev_dirs[line_dir]] then
-                            -- Terminus
+                        -- Terminus
                         line_dir = F.rev_dirs[line_dir]
                     end
                     F.register_train_depart(status_key, status_key, dest_key, def.line, line_dir, atc_id)
@@ -473,7 +492,7 @@ F.trains_to_destination    = {}
 F.platform_display_control = {}
 
 -- Weight of old data
-F.AVERGING_FACTOR = 0.6
+F.AVERGING_FACTOR          = 0.6
 
 --[[
     Status key is:
@@ -508,7 +527,8 @@ end
 ---@param line_id string
 ---@param line_dir string
 ---@param is_station boolean
-F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id)
+---@param no_override boolean
+F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, no_override)
     -- If record for another destination found, clear it first
     if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
         if F.trains_by_destination[F.trains_to_destination[atc_id]] then
@@ -526,7 +546,9 @@ F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir
     train_dest_data.line_id = line_id
     train_dest_data.line_dir = line_dir
     train_dest_data.checkpoints = train_dest_data.checkpoints or {}
-    train_dest_data.checkpoints[src_key] = os.time()
+    if not train_dest_data.checkpoints[src_key] or not no_override then
+        train_dest_data.checkpoints[src_key] = os.time()
+    end
 end
 
 ---Called when a train circulates a chekpoint.
