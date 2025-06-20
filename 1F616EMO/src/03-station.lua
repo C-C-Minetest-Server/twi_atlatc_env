@@ -528,9 +528,9 @@ end
 ---@param line_dir string
 ---@param is_station boolean
 ---@param no_override boolean
-F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, no_override)
+F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, on_approach)
     -- If record for another destination found, clear it first
-    if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
+    if not on_approach and F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
         if F.trains_by_destination[F.trains_to_destination[atc_id]] then
             F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
         end
@@ -546,7 +546,7 @@ F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir
     train_dest_data.line_id = line_id
     train_dest_data.line_dir = line_dir
     train_dest_data.checkpoints = train_dest_data.checkpoints or {}
-    if not train_dest_data.checkpoints[src_key] or not no_override then
+    if not train_dest_data.checkpoints[src_key] or not on_approach then
         train_dest_data.checkpoints[src_key] = os.time()
     end
 end
