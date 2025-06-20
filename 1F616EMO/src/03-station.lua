@@ -214,7 +214,7 @@ F.stn_v2 = function(basic_def, lines_def)
                 if status_key then
                     local approach_status_key = F.get_approach_status_key(def, atc_id)
                     if approach_status_key then
-                        F.register_train_on_checkpoint(approach_status_key, atc_id)
+                        F.register_train_on_checkpoint(approach_status_key, atc_id, true)
                     end
                 end
 
@@ -516,7 +516,8 @@ end
 ---Called when a train circulates a chekpoint.
 ---@param checkpoint_id string
 ---@param atc_id integer
-F.register_train_on_checkpoint = function(checkpoint_id, atc_id)
+---@param no_override boolean
+F.register_train_on_checkpoint = function(checkpoint_id, atc_id, no_override)
     local dest_key = F.trains_to_destination[atc_id]
     if not dest_key then return end
 
@@ -525,7 +526,9 @@ F.register_train_on_checkpoint = function(checkpoint_id, atc_id)
 
     train_dest_data.latest = checkpoint_id
     train_dest_data.checkpoints = train_dest_data.checkpoints or {}
-    train_dest_data.checkpoints[checkpoint_id] = os.time()
+    if not train_dest_data.checkpoints[checkpoint_id] or not no_override then
+        train_dest_data.checkpoints[checkpoint_id] = os.time()
+    end
 end
 
 ---Called when a train arrives a station
