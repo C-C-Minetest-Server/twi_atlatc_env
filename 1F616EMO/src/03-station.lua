@@ -2,6 +2,7 @@
 
 F.GLOBAL_APPROACH_CORRECTION = 0
 
+
 local function get_term_id(line, dir)
     local linedata = F.lines[line]
     if not linedata then return end
@@ -131,10 +132,6 @@ local function generate_interchange_string(stn, curr_line, through_line_id)
     return rtn
 end
 
-if not S.stn_status then
-    S.stn_status = {}
-end
-
 F.rev_dirs = {
     N = "S",
     E = "W",
@@ -160,12 +157,6 @@ F.dir_short_name = {
     U = "Up",
     D = "Down",
 }
-
-F.get_stn_status_key = function(def)
-    local track = def.track or def.platform_id
-    if not (def.here and track) then return end
-    return def.here .. ":" .. track
-end
 
 F.stn = function(def)
     if not def.line then return end
@@ -220,33 +211,18 @@ F.stn_v2 = function(basic_def, lines_def)
                 atc_set_text_inside("Stopping at: " .. stn_name .. generate_interchange_string(here, line_id))
                 F.set_outside(def, atc_id)
 
-                if status_key and (not S.stn_status[status_key] or S.stn_status[status_key].atc_id ~= atc_id) then
-                    --if status_key then
-                    local now = os.time()
-                    local index = train.get_index and train:get_index() or 0
-                    local max_speed = train:get_max_speed()
-                    local arr_after = floor(((max_speed + sqrt(abs(max_speed * max_speed - 30 - 3 * index))) / 3)
-                        + (def.approach_correction or 0) + F.GLOBAL_APPROACH_CORRECTION - 1)
-                    local arr_at = arr_after + now
-                    S.stn_status[status_key] = {
-                        status = "arriving",
-                        time = now,
-                        def = def,
-                        atc_id = atc_id,
-                        max_speed = max_speed,
-                        arr_at = arr_at,
-                        index = index,
-                    }
-                    F.set_arrive_data_from_last_stn(def, arr_after + (def.delay or 10) + 2)
+                if status_key then
+                    local approach_status_key = F.get_approach_status_key(def, atc_id)
+                    if approach_status_key then
+                        F.register_train_on_checkpoint(approach_status_key, atc_id)
+                    end
                 end
 
                 if basic_def.alt_tracks then
                     for _, alt_track in basic_def.alt_tracks do
                         local alt_status_key = basic_def.here .. ":" .. alt_track
-                        S.stn_status[alt_status_key] = {
-                            status = "opposite",
-                            time = os.time(),
-                            atc_id = atc_id,
+                        F.platform_display_control[alt_status_key] = {
+                            status = "OPP",
                         }
                     end
                 end
@@ -257,15 +233,15 @@ F.stn_v2 = function(basic_def, lines_def)
 
         -- No match
         if status_key then
-            S.stn_status[status_key] = {
-                status = "nonstop",
-                time = os.time(),
-                atc_id = atc_id,
+            F.platform_display_control[status_key] = {
+                status = "NON",
             }
         end
     elseif event.train and atc_arrow then
-        if status_key and S.stn_status[status_key] and S.stn_status[status_key].status == "nonstop" then
-            S.stn_status[status_key] = nil
+        if status_key
+            and F.platform_display_control[status_key]
+            and F.platform_display_control[status_key].status == "NON" then
+            F.platform_display_control[status_key] = nil
         end
 
         for line_id, def in pairs(lines_def) do
@@ -325,18 +301,20 @@ F.stn_v2 = function(basic_def, lines_def)
                 F.set_outside(def, atc_id)
 
                 if status_key then
-                    S.stn_status[status_key] = {
-                        status = "arrived",
-                        time = os.time(),
-                        def = def,
-                        atc_id = atc_id,
+                    F.platform_display_control[status_key] = {
+                        status = "DEP",
+                        rwt_end = rwnext,
+                        line_id = def.line,
+                        line_dir = def.reverse and def.rev_dir or def.dir,
                     }
                 end
 
-                F.set_arrive_data_from_last_stn(def, (def.delay or 10) + 2)
-
                 return
             end
+        end
+
+        if status_key then
+            F.register_train_arrive(status_key, atc_id)
         end
     elseif event.msg and type(event.msg) == "table" then
         local msg_type = event.msg.type
@@ -404,9 +382,8 @@ F.stn_v2 = function(basic_def, lines_def)
             end
 
             atc_send("OCD1S" .. (def.speed or "M"))
-            F.set_arrive_data_from_last_stn(def)
 
-            local next = def.reverse and def.rev_next or def.next
+            local next = def.reverse and def.rev_next or def.next or nil
             local next_name = F.stations[next] or next or ""
             local inside_text = ""
             if next and next_name then
@@ -417,122 +394,212 @@ F.stn_v2 = function(basic_def, lines_def)
             atc_set_text_inside(inside_text)
 
             if status_key then
-                S.stn_status[status_key] = nil
+                local next_track = def.reverse and def.rev_next_track or def.next_track or nil
+                if next and next_track then
+                    local dest_key = next .. ":" .. next_track
+                    local line_dir = def.line_dir
+                    if F.lines[def.line]
+                        and F.lines[def.line][line_dir] == next
+                        and F.lines[def.line][F.rev_dirs[line_dir]] then
+                            -- Terminus
+                        line_dir = F.rev_dirs[line_dir]
+                    end
+                    F.register_train_depart(status_key, dest_key, def.line, line_dir, atc_id)
+                end
             end
 
             if basic_def.alt_tracks then
                 for _, alt_track in basic_def.alt_tracks do
                     local alt_status_key = basic_def.here .. ":" .. alt_track
-                    S.stn_status[alt_status_key] = nil
+                    F.platform_display_control[alt_status_key] = nil
                 end
             end
         end
     end
 end
 
--- { stn: { atc_id: { arr_time, line, dir } } }
-S.arrive_time_from_last_stn = S.arrive_time_from_last_stn or {}
+--[[
+    Persistant data tables
+    * S.station_from_checkpoint:
+        { [station key]: { [checkpoint key]: [duration in seconds] } }
+    * F.trains_by_destination:
+        {
+            [station key]: {
+                [atc_id]: {
+                    checkpoints: { [checkpoint key]: [start time in seconds] },
+                    from: [station key],
+                    line_id: [line id],
+                    line_dir: [direction],
+                    latest: [checkpoint key]
+                }
+            }
+        }
+        Intentionally not kept between restarts to prevent noises
+    * F.trains_to_destination:
+        { [atc_id]: [station_key] }
+        For easier garbage cleaning
+    * F.platform_display_control:
+        {
+            [station key]: {
+                status:
+                    "DEP" (Departing in)
+                    "NON" (Non-stop train)
+                    "OPP" (Doors not opening),
+                rwt_end: [end time in rwt]?,
+                line_id: [line id]?,
+                line_dir: [direction]?,
+            }
+        }
+]]
 
-F.set_arrive_data = function(atc_id, dest, track, line, dir, time)
-    local key = dest .. ":" .. track
-    if not S.arrive_time_from_last_stn[key] then
-        S.arrive_time_from_last_stn[key] = {}
-    end
-    S.arrive_time_from_last_stn[key][atc_id] = {
-        os.time() + time,
-        line,
-        dir
-    }
+S.station_from_checkpoint  = S.station_from_checkpoint or {}
+F.trains_by_destination    = {}
+F.trains_to_destination    = {}
+F.platform_display_control = {}
+
+-- Weight of old data
+F.AVERGING_FACTOR = 0.6
+
+--[[
+    Status key is:
+    1. For stations: <code>:<track No.>
+        (Technically also checkpoints)
+    2. For approaches: <dest code>:<dest track No.>:<src code>:<src track No.>:a
+    3. For checkpoints: <system name>:<checkpoint ID>
+        (Technically arbitary)
+]]
+
+F.get_stn_status_key = function(def)
+    local track = def.track or def.platform_id
+    if not (def.here and track) then return end
+    return def.here .. ":" .. track
 end
 
-F.set_arrive_data_from_last_stn = function(def, additional_time)
-    local line = def.through or def.line
-    local dir = def.reverse and def.rev_dir or def.dir or nil
-    if not line then return end
-    local next_stn = def.reverse and def.rev_next or def.next or nil
-    local next_track = def.reverse and def.rev_next_track or def.next_track or nil
-    local next_time = def.reverse and def.rev_next_time or def.next_time or nil
-    if not (next_stn and next_track and next_time) then return end
+F.get_approach_status_key = function(def, atc_id)
+    local stn_status_key = F.get_stn_status_key(def)
+    if not stn_status_key then return end
+    local train_data = F.trains_by_destination[stn_status_key] and F.trains_by_destination[stn_status_key][atc_id]
+    if train_data and train_data.from then
+        return stn_status_key .. ":" .. train_data.from .. ":a"
+    end
+end
 
-    if dir then
-        local line_def = F.lines[line]
-        if line_def[dir] == next_stn and line_def[F.rev_dirs[dir]] then -- Term
-            dir = F.rev_dirs[dir]
+---Called when a train leaves a station.
+---@param src_key string
+---@param dest_key string
+---@param atc_id integer
+---@param line_id string
+---@param line_dir string
+---@param is_station boolean
+F.register_train_depart = function(src_key, dest_key, line_id, line_dir, atc_id)
+    -- If record for another destination found, clear it first
+    if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
+        if F.trains_by_destination[F.trains_to_destination[atc_id]] then
+            F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
         end
     end
 
-    F.set_arrive_data(atc_id, next_stn, next_track, line, dir, next_time + (additional_time or 0))
+    F.trains_to_destination[atc_id] = dest_key
+    F.trains_by_destination[dest_key] = F.trains_by_destination[dest_key] or {}
+    F.trains_by_destination[dest_key][atc_id] = {}
+    local train_dest_data = F.trains_by_destination[dest_key][atc_id]
+
+    train_dest_data.from = src_key
+    train_dest_data.latest = src_key
+    train_dest_data.line_id = line_id
+    train_dest_data.line_dir = line_dir
+    train_dest_data.checkpoints = train_dest_data.checkpoints or {}
+    train_dest_data.checkpoints[src_key] = os.time()
 end
 
-F.set_arrive_data_on_runover = function(defs)
-    if not (event.train and atc_arrow) then return end
-    local train = get_train(atc_id)
-    if not train then return end
-    for line_id, def in pairs(defs) do
-        local line_def = F.lines[line_id]
-        if line_def and train and match_train(line_def, train) then
-            if def.next and def.next_track and def.next_time then
-                F.set_arrive_data(atc_id, def.next, def.next_track, line_id, def.dir, def.next_time)
-            end
-            return
+---Called when a train circulates a chekpoint.
+---@param checkpoint_id string
+---@param atc_id integer
+F.register_train_on_checkpoint = function(checkpoint_id, atc_id)
+    local dest_key = F.trains_to_destination[atc_id]
+    if not dest_key then return end
+
+    local train_dest_data = F.trains_by_destination[dest_key] and F.trains_by_destination[dest_key][atc_id]
+    if not train_dest_data then return end
+
+    train_dest_data.latest = checkpoint_id
+    train_dest_data.checkpoints = train_dest_data.checkpoints or {}
+    train_dest_data.checkpoints[checkpoint_id] = os.time()
+end
+
+---Called when a train arrives a station
+---@param dest_key string
+---@param atc_id integer
+F.register_train_arrive = function(dest_key, atc_id)
+    if F.trains_to_destination[atc_id] ~= dest_key then
+        -- Arrived at unexpected station
+        if F.trains_by_destination[F.trains_to_destination[atc_id]] then
+            F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
         end
+        return
     end
-end
 
-F.get_arrive_data_from_last_stn = function(def)
-    local this_key = F.get_stn_status_key(def)
-    local this_data = S.arrive_time_from_last_stn[this_key]
-    if not (this_key and this_data) then return end
+    local train_dest_data = F.trains_by_destination[dest_key] and F.trains_by_destination[dest_key][atc_id]
+    if not train_dest_data then return end
+    F.trains_by_destination[dest_key][atc_id] = nil
+
+    S.station_from_checkpoint[dest_key] = S.station_from_checkpoint[dest_key] or {}
+    local station_checkpoint_data = S.station_from_checkpoint[dest_key]
 
     local now = os.time()
-    local earlist_data
-    for train_id, data in pairs(this_data) do
-        if data[1] < now then
-            this_data[train_id] = nil
-        else
-            if not earlist_data or data[1] < earlist_data[1] then
-                earlist_data = data
-            end
+    for src_key, src_start_time in pairs(train_dest_data.checkpoints) do
+        local old_data = station_checkpoint_data[src_key]
+        local delta_time = now - src_start_time
+        if old_data then
+            delta_time = old_data * F.AVERGING_FACTOR + delta_time * (1 - F.AVERGING_FACTOR)
         end
+        station_checkpoint_data[src_key] = delta_time
     end
-
-    if not next(this_data) then
-        S.arrive_time_from_last_stn[this_key] = nil
-    end
-
-    return earlist_data
 end
 
+---@return string status
+---@return integer? seconds_left
+---@return string? line_id
+---@return string? line_dir
 F.get_station_status = function(def)
+    local dest_key = F.get_stn_status_key(def)
     local now = os.time()
-    local status = S.stn_status[F.get_stn_status_key(def)]
-    if status then
-        local stn_def = status.def or {}
-        local dir = stn_def.reverse and stn_def.rev_dir or stn_def.dir or nil
-        if status.status == "arriving" and status.arr_at then
-            return "ARR", (status.arr_at - now), stn_def.line, dir
-        elseif status.status == "arrived" then
-            local leaving_in
-            if stn_def.rwnext then
-                leaving_in = rwt.diff(rwt.now(), stn_def.rwnext)
-            else
-                local delay = stn_def.delay or 10
-                leaving_in = delay - now + status.time + 2
+
+    if F.platform_display_control[dest_key] then
+        local data = F.platform_display_control[dest_key]
+        if data.status == "DEP" then
+            return "DEP", rwt.diff(rwt.now(), data.rwt_end), data.line_id, data.line_dir
+        end
+        return data.status
+    end
+
+    local station_checkpoint_data = S.station_from_checkpoint[dest_key]
+    local dest_data = F.trains_by_destination[dest_key]
+    if not dest_data or not station_checkpoint_data then return end
+
+    local closest_time_left
+    local closest_line_id
+    local closest_line_dir
+    for _, train_dest_data in pairs(dest_data) do
+        local latest_checkpoint = train_dest_data.latest
+        local latest_checkpoint_arr_time =
+            train_dest_data.checkpoints and train_dest_data.checkpoints[latest_checkpoint]
+        local latest_checkpoint_time_needed = station_checkpoint_data[latest_checkpoint]
+
+        if latest_checkpoint_arr_time and latest_checkpoint_time_needed then
+            local est_arrival_time = latest_checkpoint_arr_time + latest_checkpoint_time_needed
+            local time_left = est_arrival_time - now
+
+            if time_left < closest_time_left then
+                closest_time_left = time_left
+                closest_line_id = train_dest_data.line_id
+                closest_line_dir = train_dest_data.line_dir
             end
-            return "DEP", leaving_in, stn_def.line, dir
         end
     end
 
-    local arr_from_last_stn = F.get_arrive_data_from_last_stn(def)
-    if arr_from_last_stn then
-        local status_code = status
-            and (status.status == "nonstop" and "NON"
-                or status.status == "opposite" and "OPP")
-            or "ARR"
-        return status_code,
-            (arr_from_last_stn[1] - now),
-            arr_from_last_stn[2],
-            arr_from_last_stn[3]
+    if closest_time_left then
+        return "ARR", closest_time_left, closest_line_id, closest_line_dir
     end
 end
 
