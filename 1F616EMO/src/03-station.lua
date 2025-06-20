@@ -555,7 +555,6 @@ F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir
         F.trains_to_destination[atc_id] = dest_key
     end
 
-    F.trains_to_destination[atc_id] = dest_key
     F.trains_by_destination[dest_key] = F.trains_by_destination[dest_key] or {}
     F.trains_by_destination[dest_key][atc_id] = F.trains_by_destination[dest_key][atc_id] or {}
     local train_dest_data = F.trains_by_destination[dest_key][atc_id]
@@ -581,9 +580,9 @@ F.register_train_on_checkpoint = function(checkpoint_id, atc_id, no_override)
     local train_dest_data = F.trains_by_destination[dest_key] and F.trains_by_destination[dest_key][atc_id]
     if not train_dest_data then return end
 
-    train_dest_data.latest = checkpoint_id
     train_dest_data.checkpoints = train_dest_data.checkpoints or {}
     if not train_dest_data.checkpoints[checkpoint_id] or not no_override then
+        train_dest_data.latest = checkpoint_id
         train_dest_data.checkpoints[checkpoint_id] = os.time()
     end
 end
