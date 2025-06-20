@@ -641,7 +641,7 @@ F.get_station_status = function(def)
     local closest_time_left = math.huge
     local closest_line_id
     local closest_line_dir
-    for _, train_dest_data in pairs(dest_data) do
+    for atc_id, train_dest_data in pairs(dest_data) do
         local latest_checkpoint = train_dest_data.latest
         local latest_checkpoint_arr_time =
             train_dest_data.checkpoints and train_dest_data.checkpoints[latest_checkpoint]
