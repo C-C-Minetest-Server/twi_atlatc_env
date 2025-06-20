@@ -311,6 +311,20 @@ F.stn_v2 = function(basic_def, lines_def)
                         line_id = def.line,
                         line_dir = def.reverse and def.rev_dir or def.dir,
                     }
+
+                    local next = def.reverse and def.rev_next or def.next or nil
+                    local next_track = def.reverse and def.rev_next_track or def.next_track or nil
+                    if next and next_track then
+                        local dest_key = next .. ":" .. next_track
+                        local line_dir = def.line_dir
+                        if F.lines[def.line]
+                            and F.lines[def.line][line_dir] == next
+                            and F.lines[def.line][F.rev_dirs[line_dir]] then
+                                -- Terminus
+                            line_dir = F.rev_dirs[line_dir]
+                        end
+                        F.register_train_depart(status_key .. ":s", status_key, dest_key, def.line, line_dir, atc_id)
+                    end
                 end
 
                 return
@@ -404,7 +418,7 @@ F.stn_v2 = function(basic_def, lines_def)
                             -- Terminus
                         line_dir = F.rev_dirs[line_dir]
                     end
-                    F.register_train_depart(status_key, dest_key, def.line, line_dir, atc_id)
+                    F.register_train_depart(status_key, status_key, dest_key, def.line, line_dir, atc_id)
                 end
                 F.platform_display_control[status_key] = nil
             end
@@ -463,10 +477,11 @@ F.AVERGING_FACTOR = 0.6
 
 --[[
     Status key is:
-    1. For stations: <code>:<track No.>
+    1. For station leaves: <code>:<track No.>
         (Technically also checkpoints)
-    2. For approaches: <dest code>:<dest track No.>:<src code>:<src track No.>:a
-    3. For checkpoints: <system name>:<checkpoint ID>
+    2. For station arrives: <code>:<track No.>:s
+    3. For approaches: <dest code>:<dest track No.>:<src code>:<src track No.>:a
+    4. For checkpoints: <system name>:<checkpoint ID>
         (Technically arbitary)
 ]]
 
@@ -487,12 +502,13 @@ end
 
 ---Called when a train leaves a station.
 ---@param src_key string
+---@param stn_key string
 ---@param dest_key string
 ---@param atc_id integer
 ---@param line_id string
 ---@param line_dir string
 ---@param is_station boolean
-F.register_train_depart = function(src_key, dest_key, line_id, line_dir, atc_id)
+F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id)
     -- If record for another destination found, clear it first
     if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
         if F.trains_by_destination[F.trains_to_destination[atc_id]] then
@@ -502,10 +518,10 @@ F.register_train_depart = function(src_key, dest_key, line_id, line_dir, atc_id)
 
     F.trains_to_destination[atc_id] = dest_key
     F.trains_by_destination[dest_key] = F.trains_by_destination[dest_key] or {}
-    F.trains_by_destination[dest_key][atc_id] = {}
+    F.trains_by_destination[dest_key][atc_id] = F.trains_by_destination[dest_key][atc_id] or {}
     local train_dest_data = F.trains_by_destination[dest_key][atc_id]
 
-    train_dest_data.from = src_key
+    train_dest_data.from = stn_key
     train_dest_data.latest = src_key
     train_dest_data.line_id = line_id
     train_dest_data.line_dir = line_dir
