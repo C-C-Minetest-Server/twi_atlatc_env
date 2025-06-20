@@ -644,10 +644,16 @@ F.get_station_status = function(def)
             local est_arrival_time = latest_checkpoint_arr_time + latest_checkpoint_time_needed
             local time_left = est_arrival_time - now
 
-            if time_left < closest_time_left then
-                closest_time_left = time_left
-                closest_line_id = train_dest_data.line_id
-                closest_line_dir = train_dest_data.line_dir
+            if time_left > -10 then
+                -- time_left < -10 is probably not meaningful
+                if time_left < closest_time_left then
+                    closest_time_left = time_left
+                    closest_line_id = train_dest_data.line_id
+                    closest_line_dir = train_dest_data.line_dir
+                end
+            elseif time_left < -500 then
+                -- Something had absolutely gone wrong, delete this data
+                dest_data[atc_id] = nil
             end
         end
     end
