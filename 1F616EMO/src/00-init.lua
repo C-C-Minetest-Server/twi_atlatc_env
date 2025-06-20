@@ -58,6 +58,7 @@ local function aspect_is_free(asp)
 end
 
 F.has_rc = function(query, rc_list) -- query = string, single entry
+    if not rc_list then return false end
     for word in rc_list:gmatch("[^%s]+") do
         if word == query then return true end
     end
