@@ -828,7 +828,7 @@ F.set_status_textline = function(lines)
 
             local append_text
             local stn_event, time_left, line_id, dir = F.get_station_status(disp_def)
-            if stn_event == "ARR" or (stn_event == "NON" and time_left) then
+            if (stn_event == "ARR" or (stn_event == "NON" and time_left)) and time_left <= 99 then
                 append_text = string.format("Arr. %2s", time_left)
             elseif stn_event == "DEP" then
                 append_text = string.format("Dep. %2s", time_left > 0 and time_left or "  ")
