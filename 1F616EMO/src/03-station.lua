@@ -683,7 +683,7 @@ end
 function F.show_textline(_, texts)
     local rtexts = {}
     for _, y in ipairs(texts) do
-        table.insert(rtexts, string.format("%26s", y))
+        table.insert(rtexts, string.format("%27s", y))
     end
     display(table.concat(texts, "\n"), table.concat(rtexts, "\n"))
 end
@@ -691,7 +691,7 @@ end
 function F.show_textline_r(_, texts)
     local rtexts = {}
     for _, y in ipairs(texts) do
-        table.insert(rtexts, string.format("%26s", y))
+        table.insert(rtexts, string.format("%27s", y))
     end
     display(table.concat(rtexts, "\n"), table.concat(texts, "\n"))
 end
