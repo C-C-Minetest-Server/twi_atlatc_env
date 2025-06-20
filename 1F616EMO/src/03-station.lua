@@ -406,6 +406,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     end
                     F.register_train_depart(status_key, dest_key, def.line, line_dir, atc_id)
                 end
+                F.platform_display_control[status_key] = nil
             end
 
             if basic_def.alt_tracks then
