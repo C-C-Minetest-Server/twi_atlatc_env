@@ -546,10 +546,13 @@ end
 ---@param no_override boolean
 F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, on_approach)
     -- If record for another destination found, clear it first
-    if not on_approach and F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
-        if F.trains_by_destination[F.trains_to_destination[atc_id]] then
-            F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
+    if not on_approach then
+        if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
+            if F.trains_by_destination[F.trains_to_destination[atc_id]] then
+                F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
+            end
         end
+        F.trains_to_destination[atc_id] = dest_key
     end
 
     F.trains_to_destination[atc_id] = dest_key
