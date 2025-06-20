@@ -316,7 +316,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     local next_track = def.reverse and def.rev_next_track or def.next_track or nil
                     if next and next_track then
                         local dest_key = next .. ":" .. next_track
-                        local line_dir = def.line_dir
+                        local line_dir = def.dir
                         if F.lines[def.line]
                             and F.lines[def.line][line_dir] == next
                             and F.lines[def.line][F.rev_dirs[line_dir]] then
@@ -411,7 +411,7 @@ F.stn_v2 = function(basic_def, lines_def)
                 local next_track = def.reverse and def.rev_next_track or def.next_track or nil
                 if next and next_track then
                     local dest_key = next .. ":" .. next_track
-                    local line_dir = def.line_dir
+                    local line_dir = def.dir
                     if F.lines[def.line]
                         and F.lines[def.line][line_dir] == next
                         and F.lines[def.line][F.rev_dirs[line_dir]] then
