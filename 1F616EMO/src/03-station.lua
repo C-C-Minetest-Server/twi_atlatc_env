@@ -721,12 +721,12 @@ F.set_textline = function(def)
 
     if stn_event == "NON" then
         local linedef = F.lines[line_id]
-        texts[#texts + 1] = def.custom_line or (linedef and linedef.textline_name or linedef.name) or line_id or ""
+        texts[#texts + 1] = def.custom_line or (linedef and (linedef.textline_name or linedef.name)) or line_id or ""
         texts[#texts + 1] = "!! NONSTOP TRAIN !!"
         texts[#texts + 1] = "!!    ARRIVING   !!"
     elseif stn_event == "OPP" then
         local linedef = F.lines[line_id]
-        texts[#texts + 1] = def.custom_line or (linedef and linedef.textline_name or linedef.name) or line_id or ""
+        texts[#texts + 1] = def.custom_line or (linedef and (linedef.textline_name or linedef.name)) or line_id or ""
         texts[#texts + 1] = "!!   DOORS NOT   !!"
         texts[#texts + 1] = "!!    OPENING    !!"
     elseif line_id then
@@ -750,7 +750,7 @@ F.set_textline = function(def)
             end
         end
 
-        texts[#texts + 1] = def.custom_line or (linedef and linedef.textline_name or linedef.name) or line_id
+        texts[#texts + 1] = def.custom_line or (linedef and (linedef.textline_name or linedef.name)) or line_id
         texts[#texts + 1] = term_text
         if timer_str then
             texts[#texts + 1] = timer_str
