@@ -436,6 +436,10 @@ F.stn_v2 = function(basic_def, lines_def)
             end
             atc_set_text_inside(inside_text)
 
+            if def.on_leave then
+                def.on_leave(train)
+            end
+
             if status_key then
                 local next_track = def.reverse and def.rev_next_track or def.next_track or nil
                 if next and next_track then
