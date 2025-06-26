@@ -80,5 +80,47 @@ F.get_rc_list = function(rc)
     return string_split(rc, " ")
 end
 
+--[[
+F.t_acc_all = {
+	[0] = -10,
+	[1] = -3,
+	[11] = -2, -- calculation base for LZB
+	[2] = -0.5,
+	[4] = 0.5,
+}
+
+F.t_accel_eng = {
+	[0] = 0,
+	[1] = 0,
+	[11] = 0,
+	[2] = 0,
+	[4] = 1.5,
+}
+
+F.VLEVER = {
+    EMERG = 0,
+    BRAKE = 1,
+    LZBCALC = 11,
+    ROLL = 2,
+    HOLD = 3,
+    ACCEL = 4,
+}
+
+F.get_train_accleration = function(train, lever)
+    local acc_all = F.t_accel_all[lever]
+	if not acc_all then return 0 end
+
+	local acc_eng = F.t_accel_eng[lever]
+	local nwagons = train:train_length()
+    local nlocomotives = train:locomotives_in_train()
+	if nwagons == 0 or nwagons == false or nlocomotives == false then
+		-- empty train! avoid division through zero
+		return -1
+	end
+	local acc = acc_all + (acc_eng*nlocomotives)/nwagons
+	return acc
+end
+]]
+
 local debug = print
 -- local debug = function() end

@@ -520,6 +520,8 @@ F.AVERGING_FACTOR          = 0.6
     3. For approaches: <dest code>:<dest track No.>:<src code>:<src track No.>:a
     4. For checkpoints: <system name>:<checkpoint ID>
         (Technically arbitary)
+
+    For departure points, '~~<train max speed>' is appended.
 ]]
 
 F.get_stn_status_key = function(def)
@@ -547,15 +549,12 @@ end
 ---@param is_station boolean
 ---@param no_override boolean
 F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, on_approach)
-    -- If record for another destination found, clear it first
-    if not on_approach then
-        if F.trains_to_destination[atc_id] and F.trains_to_destination[atc_id] ~= dest_key then
-            if F.trains_by_destination[F.trains_to_destination[atc_id]] then
-                F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
-            end
-        end
-        F.trains_to_destination[atc_id] = dest_key
-    end
+    local train = get_train(atc_id)
+    local max_speed = train and train:get_max_speed() or 0
+    if not max_speed then return end
+    src_key = src_key .. "~~" .. max_speed
+
+    F.trains_to_destination[atc_id] = dest_key
 
     F.trains_by_destination[dest_key] = F.trains_by_destination[dest_key] or {}
     F.trains_by_destination[dest_key][atc_id] = F.trains_by_destination[dest_key][atc_id] or {}
@@ -576,6 +575,11 @@ end
 ---@param atc_id integer
 ---@param no_override boolean
 F.register_train_on_checkpoint = function(checkpoint_id, atc_id, no_override)
+    local train = get_train(atc_id)
+    local max_speed = train and train:get_max_speed() or 0
+    if not max_speed then return end
+    checkpoint_id = checkpoint_id .. "~~" .. max_speed
+
     local dest_key = F.trains_to_destination[atc_id]
     if not dest_key then return end
 
@@ -593,14 +597,6 @@ end
 ---@param dest_key string
 ---@param atc_id integer
 F.register_train_arrive = function(dest_key, atc_id)
-    if F.trains_to_destination[atc_id] ~= dest_key then
-        -- Arrived at unexpected station
-        if F.trains_by_destination[F.trains_to_destination[atc_id]] then
-            F.trains_by_destination[F.trains_to_destination[atc_id]][atc_id] = nil
-        end
-        return
-    end
-
     local train_dest_data = F.trains_by_destination[dest_key] and F.trains_by_destination[dest_key][atc_id]
     if not train_dest_data then return end
     F.trains_by_destination[dest_key][atc_id] = nil
