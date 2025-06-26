@@ -874,7 +874,7 @@ F.get_track_status_textline_info_lines = function(station, track)
             local line_data = F.lines[train_data.line_id]
             local line_code = line_data and line_data.code or train_data.line_id
             local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
-            line_term = F.stations[line_term] or line_term
+            line_term = F.stations_short[line_term] or F.stations[line_term] or line_term
             local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                 and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
             local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -899,7 +899,7 @@ F.get_track_status_textline_info_lines = function(station, track)
         display_texts[#display_texts + 1] = string.format(
             "%-4s %-15s %s",
             entry_data.line_code,
-            entry_data.line_term,
+            string.sub(entry_data.line_term, 1, 15),
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end
@@ -920,7 +920,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
                 local line_data = F.lines[train_data.line_id]
                 local line_code = line_data and line_data.code or train_data.line_id
                 local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
-                line_term = F.stations[line_term] or line_term
+                line_term = F.stations_short[line_term] or F.stations[line_term] or line_term
                 local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                     and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
                 local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -948,7 +948,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
             "%-2s %-4s %-12s %s",
             entry_data.track_id,
             entry_data.line_code,
-            entry_data.line_term,
+            string.sub(entry_data.line_term, 1, 12),
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end

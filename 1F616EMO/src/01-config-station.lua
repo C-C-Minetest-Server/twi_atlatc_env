@@ -67,6 +67,7 @@ F.stations_short = {
     NLU = "N. Luciopoli",
     YTP = "Yantian Rd.",
     SCC = "Sca. Cliff",
+    RXB = "RelaxBasin",
 
     eYTP = "Yantian Rd.",
     eSVE = "E. SmushyVille",
