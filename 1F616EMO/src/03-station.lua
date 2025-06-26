@@ -862,11 +862,11 @@ F.set_status_textline = function(lines)
 end
 
 F.get_track_status_textline_info_lines = function(station, track)
-    local station_data = F.trains_by_destination[station .. ":" .. track]
-    if not station_data then return {} end
+    local track_data = F.trains_by_destination[station .. ":" .. track]
+    if not track_data then return {} end
 
     local data = {}
-    for atc_id, train_data in pairs(station_data) do
+    for atc_id, train_data in pairs(track_data) do
         local latest_time = train_data.checkpoints and train_data.checkpoints[train_data.latest]
 
         if latest_time then
@@ -896,8 +896,57 @@ F.get_track_status_textline_info_lines = function(station, track)
 
     local display_texts = {}
     for _, entry_data in ipairs(data) do
-        display_texts[#display_texts+1] = string.format(
+        display_texts[#display_texts + 1] = string.format(
             "%-4s %-15s %s",
+            entry_data.line_code,
+            entry_data.line_term,
+            rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
+        )
+    end
+    return display_texts
+end
+
+F.get_station_status_textline_info_lines = function(station, tracks)
+    local data = {}
+
+    for _, track in ipairs(tracks) do
+        local track_data = F.trains_by_destination[station .. ":" .. track] or {}
+
+        for atc_id, train_data in pairs(track_data) do
+            local latest_time = train_data.checkpoints and train_data.checkpoints[train_data.latest]
+
+            if latest_time then
+                local line_dir = train_data.line_dir or nil
+                local line_data = F.lines[train_data.line_id]
+                local line_code = line_data and line_data.code or train_data.line_id
+                local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
+                line_term = F.stations[line_term] or line_term
+                local avg_time = S.station_from_checkpoint[station .. ":" .. track]
+                    and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
+                local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
+
+                if time_left and time_left >= 0 then
+                    data[#data + 1] = {
+                        atc_id = atc_id,
+                        track_id = track,
+                        line_code = line_code,
+                        line_term = line_term,
+                        time_left = time_left,
+                    }
+                end
+            end
+        end
+    end
+
+    table.sort(data, function(a, b)
+        return a.time_left < b.time_left
+    end)
+
+    local display_texts = {}
+    for _, entry_data in ipairs(data) do
+        display_texts[#display_texts + 1] = string.format(
+            "%-2s %-4s %-12s %s",
+            entry_data.track_id,
             entry_data.line_code,
             entry_data.line_term,
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
