@@ -164,6 +164,16 @@ F.lines = {
         name = "1F616EMO Express 1",
         E = "NO-T",
         W = "SAG",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"NO-T", "3", true}, -- 103 in y5nw's system
+            {"eYTP", "1"},
+            {"eSVE", "1"},
+            {"SAG", "4", true},
+            {"eSVE", "2"},
+            {"eYTP", "2"},
+        }),
     },
     ["LUC"] = {
         rc = "L-LUC",
@@ -171,6 +181,18 @@ F.lines = {
         name = "1F616EMO Express 2",
         N = "eGRH",
         S = "HR-NEN",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"eGRH", "3", true},
+            {"eSPH", "1"},
+            {"eYTP", "5"},
+            {"HR-LUC", "1"},
+            {"HR-NEN", "1", true},
+            {"HR-LUC", "6"},
+            {"eYTP", "6"},
+            {"eSPH", "2"},
+        }),
     },
     ["E3"] = {
         rc = "L-E3",
