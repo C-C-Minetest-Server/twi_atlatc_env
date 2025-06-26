@@ -1,3 +1,20 @@
+local function construct_adjacent_stations(list)
+    local station_to_following_stations = {}
+    for i, station in ipairs(list) do
+        local following_stations = {}
+        local j = i
+        repeat
+            j = j + 1
+            if j > #list then
+                j = 1
+            end
+            following_stations[#following_stations + 1] = list[j]
+        until j == i
+        station_to_following_stations[station[1]] = following_stations
+    end
+    return station_to_following_stations
+end
+
 F.lines = {
     ["U1"] = {
         -- RC L-U1
@@ -92,6 +109,20 @@ F.lines = {
 
         W = "DUI",
         E = "KIH",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"DUI", "1", true},
+            {"GRO", "2"},
+            {"SCC", "2"},
+            {"GRH", "3"},
+            {"SHI", "2"},
+            {"KIH", "2", true},
+            {"SHI", "3"},
+            {"GRH", "2"},
+            {"SCC", "1"},
+            {"GRO", "1"},
+        }),
     },
     ["GRH3"] = {
         rc = "L-GRH3",

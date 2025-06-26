@@ -122,5 +122,31 @@ F.get_train_accleration = function(train, lever)
 end
 ]]
 
+F.rev_dirs = {
+    N = "S",
+    E = "W",
+    S = "N",
+    W = "E",
+
+    CW = "ACW",
+    ACW = "CW",
+
+    U = "D",
+    D = "U",
+}
+
+F.dir_short_name = {
+    N = "Northbound",
+    E = "Eastbound",
+    S = "Southbound",
+    W = "Westbound",
+
+    CW = "Clockwise",
+    ACW = "Anti-clockw.",
+
+    U = "Up",
+    D = "Down",
+}
+
 local debug = print
 -- local debug = function() end

@@ -132,32 +132,6 @@ local function generate_interchange_string(stn, curr_line, through_line_id)
     return rtn
 end
 
-F.rev_dirs = {
-    N = "S",
-    E = "W",
-    S = "N",
-    W = "E",
-
-    CW = "ACW",
-    ACW = "CW",
-
-    U = "D",
-    D = "U",
-}
-
-F.dir_short_name = {
-    N = "Northbound",
-    E = "Eastbound",
-    S = "Southbound",
-    W = "Westbound",
-
-    CW = "Clockwise",
-    ACW = "Anti-clockw.",
-
-    U = "Up",
-    D = "Down",
-}
-
 F.stn = function(def)
     if not def.line then return end
     return F.stn_v2(def, {
@@ -216,29 +190,6 @@ F.stn_v2 = function(basic_def, lines_def)
                 local approach_status_key = F.get_approach_status_key(def, atc_id)
                 if approach_status_key then
                     F.register_train_on_checkpoint(approach_status_key, atc_id, true)
-
-                    local next = def.reverse and def.rev_next or def.next or nil
-                    local next_track = def.reverse and def.rev_next_track or def.next_track or nil
-                    if next and next_track then
-                        local dest_key = next .. ":" .. next_track
-                        local line_dir = def.reverse and def.rev_dir or def.dir or nil
-                        if line_dir then
-                            if F.lines[def.line]
-                                and F.lines[def.line][line_dir] == next
-                                and F.lines[def.line][F.rev_dirs[line_dir]] then
-                                -- Terminus
-                                line_dir = F.rev_dirs[line_dir]
-                            end
-                            F.register_train_depart(
-                                approach_status_key,
-                                status_key,
-                                dest_key,
-                                def.line,
-                                line_dir,
-                                atc_id,
-                                true)
-                        end
-                    end
                 end
 
                 if basic_def.alt_tracks then
@@ -520,6 +471,8 @@ F.AVERGING_FACTOR          = 0.6
     3. For approaches: <dest code>:<dest track No.>:<src code>:<src track No.>:a
     4. For checkpoints: <system name>:<checkpoint ID>
         (Technically arbitary)
+    5. For far-away station (>= 2 stations):
+        <this station code>:<this track No.>!![..via..]!!<second last station code>
 
     For departure points, '~~<train max speed>' is appended.
 ]]
@@ -554,7 +507,9 @@ F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir
     if not max_speed then return end
     src_key = src_key .. "~~" .. max_speed
 
-    F.trains_to_destination[atc_id] = dest_key
+    if not on_approach then
+        F.trains_to_destination[atc_id] = dest_key
+    end
 
     F.trains_by_destination[dest_key] = F.trains_by_destination[dest_key] or {}
     F.trains_by_destination[dest_key][atc_id] = F.trains_by_destination[dest_key][atc_id] or {}
