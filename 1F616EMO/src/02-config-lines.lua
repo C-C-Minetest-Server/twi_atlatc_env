@@ -10,7 +10,7 @@ local function construct_adjacent_stations(list)
             end
             following_stations[#following_stations + 1] = list[j]
         until j == i
-        station_to_following_stations[station[1]] = following_stations
+        station_to_following_stations[station[1] .. ":" .. station[2]] = following_stations
     end
     return station_to_following_stations
 end

@@ -395,6 +395,7 @@ F.stn_v2 = function(basic_def, lines_def)
 
             if status_key then
                 local next_track = def.reverse and def.rev_next_track or def.next_track or nil
+
                 if next and next_track then
                     local dest_key = next .. ":" .. next_track
                     local line_dir = def.reverse and def.rev_dir or def.dir or nil
@@ -408,6 +409,25 @@ F.stn_v2 = function(basic_def, lines_def)
                         F.register_train_depart(status_key, status_key, dest_key, def.line, line_dir, atc_id)
                     end
                 end
+
+                if F.lines[def.line] and F.lines[def.line].adjacent_stations then
+                    local line_dir = def.reverse and def.rev_dir or def.dir or nil
+                    local adj_stn_data = F.lines[def.line].adjacent_stations[status_key]
+                    if adj_stn_data then
+                        local base_string = def.here .. ":" .. def.track
+                        for i = 2, #adj_stn_data do
+                            base_string = base_string .. "!!" .. adj_stn_data[i - 1][1]
+                            local targ_stn = adj_stn_data[i][1]
+                            local targ_track = adj_stn_data[i][2]
+                            local targ_key = targ_stn .. ":" .. targ_track
+                            if adj_stn_data[i][3] then
+                                line_dir = F.rev_dirs[line_dir] or line_dir
+                            end
+                            F.register_train_depart(base_string, status_key, targ_key, def.line, line_dir, atc_id, true)
+                        end
+                    end
+                end
+
                 F.platform_display_control[status_key] = nil
             end
 
@@ -455,7 +475,14 @@ end
         }
 ]]
 
-S.station_from_checkpoint  = S.station_from_checkpoint or {}
+-- Accumulate this value if the saved data need to be resetted
+local time_arrival_estimation_reset = 2
+if time_arrival_estimation_reset == S.time_arrival_estimation_reset then
+    S.station_from_checkpoint  = S.station_from_checkpoint or {}
+else
+    S.station_from_checkpoint  = {}
+    S.time_arrival_estimation_reset = time_arrival_estimation_reset
+end
 F.trains_by_destination    = {}
 F.trains_to_destination    = {}
 F.platform_display_control = {}
@@ -501,13 +528,13 @@ end
 ---@param line_dir string
 ---@param is_station boolean
 ---@param no_override boolean
-F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, on_approach)
+F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir, atc_id, remote_set)
     local train = get_train(atc_id)
     local max_speed = train and train:get_max_speed() or 0
     if not max_speed then return end
     src_key = src_key .. "~~" .. max_speed
 
-    if not on_approach then
+    if not remote_set then
         F.trains_to_destination[atc_id] = dest_key
     end
 
@@ -520,7 +547,7 @@ F.register_train_depart = function(src_key, stn_key, dest_key, line_id, line_dir
     train_dest_data.line_id = line_id
     train_dest_data.line_dir = line_dir
     train_dest_data.checkpoints = train_dest_data.checkpoints or {}
-    if not train_dest_data.checkpoints[src_key] or not on_approach then
+    if not train_dest_data.checkpoints[src_key] or not remote_set then
         train_dest_data.checkpoints[src_key] = os.time()
     end
 end
