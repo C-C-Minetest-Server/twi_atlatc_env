@@ -175,6 +175,21 @@ F.stn_v2 = function(basic_def, lines_def)
             def[key] = def[key] or basic_def[key] or nil
         end
         def.line = line_id
+
+        local line_def = F.lines[line_id]
+        if not def.dir and line_def then
+            def.dir = line_def.default_dir
+        end
+        if not def.next or not def.next_track
+            and def.here and def.track
+            and line_def and line_def.adjacent_stations
+            and line_def.adjacent_stations[def.here .. ":" .. def.track] then
+            local adjacent_station_data = line_def.adjacent_stations[def.here .. ":" .. def.track]
+            if adjacent_station_data[1] then
+                def.next = adjacent_station_data[1][1]
+                def.next_track = adjacent_station_data[1][2]
+            end
+        end
     end
 
     if event.approach and not event.has_entered and atc_arrow then
