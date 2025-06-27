@@ -180,7 +180,7 @@ F.stn_v2 = function(basic_def, lines_def)
         if not def.dir and line_def then
             def.dir = line_def.default_dir
         end
-        if not def.next or not def.next_track
+        if (not def.next or not def.next_track)
             and def.here and def.track
             and line_def and line_def.adjacent_stations
             and line_def.adjacent_stations[def.here .. ":" .. def.track] then
@@ -284,7 +284,9 @@ F.stn_v2 = function(basic_def, lines_def)
                         line_id = line_id,
                     })
                 end
-                time_str = "\nArr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
+                time_str = "\n" ..
+                    (status_key and (status_key .. " ") or "") ..
+                    "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
 
                 atc_send("B0WO" .. (def.door_dir or "C") .. (def.kick and "K" or ""))
 
