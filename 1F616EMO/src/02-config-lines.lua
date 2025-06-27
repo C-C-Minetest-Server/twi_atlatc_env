@@ -55,6 +55,17 @@ F.lines = {
         custom_term_desc = "Clockwise Loop",
         custom_term_desc_textline = "Clockwise Loop",
         custom_term_desc_short = "Clockwise",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"SPN", "1"},
+            {"SPS", "1"},
+            {"ALF", "1"},
+            {"NLU", "1"},
+            {"MOF", "1"},
+            {"YTP", "1"},
+            {"HLY", "1"},
+        }),
     },
     ["SPN-ACW"] = {
         -- Spawn Line (Anti clockwise)
@@ -69,6 +80,17 @@ F.lines = {
         custom_term_desc = "Anti-clockwise Loop",
         custom_term_desc_textline = "Anti-clockwise Loop",
         custom_term_desc_short = "Anti-clockw.",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"SPN", "2"},
+            {"SPS", "2"},
+            {"ALF", "2"},
+            {"NLU", "2"},
+            {"MOF", "2"},
+            {"YTP", "2"},
+            {"HLY", "2"},
+        }),
     },
 
     ["CSL"] = {
