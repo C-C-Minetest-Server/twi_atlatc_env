@@ -84,12 +84,12 @@ F.lines = {
         adjacent_stations = construct_adjacent_stations({
             -- station, track, reverse point
             {"SPN", "2"},
-            {"SPS", "2"},
-            {"ALF", "2"},
-            {"NLU", "2"},
-            {"MOF", "2"},
-            {"YTP", "2"},
             {"HLY", "2"},
+            {"YTP", "2"},
+            {"MOF", "2"},
+            {"NLU", "2"},
+            {"ALF", "2"},
+            {"SPS", "2"},
         }),
     },
 
