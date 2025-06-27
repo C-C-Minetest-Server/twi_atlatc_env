@@ -248,6 +248,14 @@ F.lines = {
         short_name = "Fenced Town",
         N = "eGRH",
         S = "VFT",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"eGRH", "4", true},
+            {"eSPH", "1"}, -- physically reversed but logically didn't
+            {"VFT", "2", true},
+            {"eSPH", "2"}, -- physically reversed but logically didn't
+        }),
     },
 
     -- Display only
