@@ -430,10 +430,10 @@ F.stn_v2 = function(basic_def, lines_def)
                 if F.lines[def.line] and F.lines[def.line].adjacent_stations then
                     local line_dir = def.reverse and def.rev_dir or def.dir or nil
                     local adj_stn_data = F.lines[def.line].adjacent_stations[status_key]
-                    if adj_stn_data[1] and adj_stn_data[1][3] then
-                        line_dir = F.rev_dirs[line_dir] or line_dir
-                    end
                     if adj_stn_data then
+                        if adj_stn_data[1] and adj_stn_data[1][3] then
+                            line_dir = F.rev_dirs[line_dir] or line_dir
+                        end
                         local base_string = def.here .. ":" .. def.track
                         for i = 2, #adj_stn_data do
                             base_string = base_string .. "!!" .. adj_stn_data[i - 1][1]
