@@ -258,6 +258,20 @@ F.lines = {
         }),
     },
 
+    ["VFT2"] = {
+        rc = "L-VFT2",
+        name = "Fenced Town Shuttle",
+        short_name = "Fenced Town",
+        N = "VFT",
+        S = "eYTP",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"eYTP", "4", true},
+            {"VFT", "2", true},
+        }),
+    },
+
     -- Display only
     ["SPN"] = {
         -- was: Spawn Metro: Spawn Line
