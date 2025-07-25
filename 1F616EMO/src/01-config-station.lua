@@ -35,6 +35,10 @@ F.stations = {
     DUI = "Duck Island",
     eSPH = "Spagetihood",
     VFT = "Fenced Town",
+    SNL = "Snake Lakes",
+    CCB = "Coco Beach",
+    CED = "Centric Desert",
+    PIA = "Piaskowiec",
 
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = "ShroomVille (Backup Platform)",

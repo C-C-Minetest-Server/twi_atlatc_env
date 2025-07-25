@@ -124,6 +124,19 @@ F.lines = {
         name = "Grape Hills Line 1",
         textline_name = "Grape Hills 1",
         short_name = "GRH1",
+
+        N = "SNL",
+        S = "VFT",
+    },
+    ["GRH1E"] = {
+        rc = "L-GRH1E",
+        code = "GRH1",
+        name = "Grape Hills Line 1",
+        textline_name = "Grape Hills 1",
+        short_name = "GRH1",
+
+        N = "SNL",
+        -- S = "VFT", -- TBD on West Link
     },
     ["GRH2"] = {
         rc = "L-GRH2",
