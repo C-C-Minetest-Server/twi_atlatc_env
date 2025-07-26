@@ -127,6 +127,22 @@ F.lines = {
 
         N = "SNL",
         S = "VFT",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"SNL", "2", true},
+            {"SHI", "4"},
+            {"GRH", "4"},
+            {"CCB", "1"},
+            {"CED", "1"},
+            {"PIA", "1"},
+            {"VFT", "1", true},
+            {"PIA", "2"},
+            {"CEB", "2"},
+            {"CCB", "4"},
+            {"GRH", "1"},
+            {"SHI", "1"},
+        }),
     },
     ["GRH1E"] = {
         rc = "L-GRH1E",
@@ -136,7 +152,25 @@ F.lines = {
         short_name = "GRH1",
 
         N = "SNL",
-        -- S = "VFT", -- TBD on West Link
+        S = "OTH",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"SNL", "2", true},
+            {"SHI", "4"},
+            {"GRH", "4"},
+            {"CCB", "1"},
+            {"CED", "1"},
+            {"PIA", "1"},
+            {"VFT", "1"},
+            {"eOTH", "3", true},
+            {"VFT", "2"},
+            {"PIA", "2"},
+            {"CEB", "2"},
+            {"CCB", "4"},
+            {"GRH", "1"},
+            {"SHI", "1"},
+        }),
     },
     ["GRH2"] = {
         rc = "L-GRH2",
@@ -286,6 +320,26 @@ F.lines = {
         }),
     },
 
+    ["VD-VFT1-CW"] = {
+        rc = "L-VD-VFT1-CW",
+        code = "VFT1",
+        name = "Fenced Town Subway",
+        short_name = "Subway",
+        default_dir = "CW",
+        custom_dir_abbr = "CW",
+        custom_term_desc = "Clockwise Loop",
+        custom_term_desc_textline = "Clockwise Loop",
+        custom_term_desc_short = "Clockwise",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"VD-VFT", "1"},
+            {"VD-CLI", "1"},
+            {"VD-DIC", "1"},
+            {"VD-CAF", "1"},
+        }),
+    },
+
     -- Display only
     ["SPN"] = {
         -- was: Spawn Metro: Spawn Line
@@ -293,6 +347,12 @@ F.lines = {
         name = "Origin Metro: Origin Line",
         textline_name = "Origin Line",
         short_name = "Origin",
+    },
+
+    ["VD-VFT1"] = {
+        code = "VFT1",
+        name = "Fenced Town Subway",
+        short_name = "Subway",
     },
 
     -- Deprecated / unused

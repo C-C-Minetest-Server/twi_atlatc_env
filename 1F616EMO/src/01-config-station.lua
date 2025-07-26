@@ -39,6 +39,7 @@ F.stations = {
     CCB = "Coco Beach",
     CED = "Centric Desert",
     PIA = "Piaskowiec",
+    eOTH = "Otterhood",
 
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = "ShroomVille (Backup Platform)",
@@ -56,6 +57,12 @@ F.stations = {
     ["HR-LUC"] = "Luciopoli Central",
     ["HR-eCIG"] = "Citrus Grove",
     ["HR-NEN"] = "New Normandy Central",
+
+    -- Vedu_0825
+    ["VD-VFT"] = "Train Station",
+    ["VD-CLI"] = "Cliff",
+    ["VD-DIC"] = "Digtron Complex",
+    ["VD-CAF"] = "Cactus Farm",
 
     -- 1F616EMO Ferry
     ["FR-SPN"] = "Origin",
@@ -111,6 +118,7 @@ F.station_interchange = {
     SAG = { "E1", "CSL", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "E3", },
+    VFT = { "VFT2", "VD-VFT1" },
 
     ["NO-WS"] = { "NO1", "NO2", "E1", },
 
