@@ -694,7 +694,7 @@ function F.show_textline_r(_, texts)
     display(table.concat(rtexts, "\n"), table.concat(texts, "\n"))
 end
 
-F.set_textline = function(def)
+F.get_textline_display = function(def)
     if not def.track then
         def.track = def.platform_id
     end
@@ -763,6 +763,11 @@ F.set_textline = function(def)
         texts[#texts + 1] = "!! ON TRACKS  !!"
     end
 
+    return texts
+end
+
+F.set_textline = function(def)
+    local texts = F.get_textline_display(def)
     local show_func = def.show_func or F.show_lr
     show_func(def, texts)
 end
