@@ -976,3 +976,22 @@ F.get_station_status_textline_info_lines = function(station, tracks)
     end
     return display_texts
 end
+
+F.get_express_station_display_lines = function(def)
+    local stn_event, time_left, line_id, dir = F.get_station_status(def)
+    if stn_event == "DEP" then
+        return F.get_textline_display(def)
+    end
+
+    def.track = def.track or def.platform_id
+
+    local info_lines = def.here and def.track
+        and F.get_track_status_textline_info_lines(def.here, def.track) or {}
+
+    return {
+        (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":",
+        info_lines[1] or "",
+        info_lines[2] or "",
+        info_lines[3] or "",
+    }
+end
