@@ -148,5 +148,21 @@ F.dir_short_name = {
     D = "Down",
 }
 
+F.right_pad_textline = function(lines)
+    local rtns = {}
+    for i, y in ipairs(lines) do
+        rtns[i] = string.format("%26s", y)
+    end
+    return rtns
+end
+
+F.right_pad_luaatc_textline = function(lines)
+    local rtns = {}
+    for i, y in ipairs(lines) do
+        rtns[i] = string.format("%27s", y)
+    end
+    return rtns
+end
+
 local debug = print
 -- local debug = function() end
