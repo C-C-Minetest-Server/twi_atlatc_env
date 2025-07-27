@@ -988,8 +988,11 @@ F.get_express_station_display_lines = function(def)
     local info_lines = def.here and def.track
         and F.get_track_status_textline_info_lines(def.here, def.track) or {}
 
+    local header = (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":"
+    header = string.format("%-20s %s", header, rwt.to_string(rwt.now(), true))
+
     return {
-        (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":",
+        header,
         info_lines[1] or "",
         info_lines[2] or "",
         info_lines[3] or "",
