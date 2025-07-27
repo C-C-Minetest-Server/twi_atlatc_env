@@ -1,4 +1,5 @@
 env_setup.lua: header.lua src/*.lua
+	mv -f env_setup.lua ~env_setup.lua &>/dev/null || true
 	printf "" > env_setup.lua
 	printf -- "-- Running on " >> env_setup.lua
 	git rev-parse --verify HEAD | tr -d '\n' >> env_setup.lua
