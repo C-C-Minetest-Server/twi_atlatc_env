@@ -1,6 +1,10 @@
+F.cache_dbg = {}
+
 F.cache_function = function(period, get_key, func)
     local caches = {}
     local last_clear = os.time()
+
+    F.cache_dbg[#F.cache_dbg+1] = caches
 
     return function(...)
         local now = os.time()
