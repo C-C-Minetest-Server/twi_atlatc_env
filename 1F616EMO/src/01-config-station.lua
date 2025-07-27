@@ -118,7 +118,7 @@ F.station_interchange = {
     SAG = { "E1", "CSL", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "E3", },
-    VFT = { "VFT2", "VD-VFT1" },
+    VFT = { "GRH1", "VD-VFT1" },
 
     ["NO-WS"] = { "NO1", "NO2", "E1", },
 
@@ -132,4 +132,5 @@ F.station_interchange["NO-T"] = F.station_interchange["NO-WS"]
 F.interchange_line_alias = {
     ["SPN-CW"] = "SPN",
     ["SPN-ACW"] = "SPN",
+    ["GRH1E"] = "GRH1",
 }
