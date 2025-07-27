@@ -152,7 +152,7 @@ F.lines = {
         short_name = "GRH1",
 
         N = "SNL",
-        S = "OTH",
+        S = "eOTH",
 
         adjacent_stations = construct_adjacent_stations({
             -- station, track, reverse point
