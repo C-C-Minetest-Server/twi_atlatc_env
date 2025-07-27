@@ -128,6 +128,8 @@ F.lines = {
         N = "SNL",
         S = "VFT",
 
+        background_color = "#5555FF",
+
         adjacent_stations = construct_adjacent_stations({
             -- station, track, reverse point
             {"SNL", "2", true},
@@ -153,6 +155,8 @@ F.lines = {
 
         N = "SNL",
         S = "eOTH",
+
+        background_color = "#5555FF",
 
         adjacent_stations = construct_adjacent_stations({
             -- station, track, reverse point
