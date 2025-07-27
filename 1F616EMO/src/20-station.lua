@@ -883,7 +883,9 @@ F.set_status_textline = function(lines)
     end
 end
 
-F.get_track_status_textline_info_lines = function(station, track)
+F.get_track_status_textline_info_lines = F.cache_function(1, function(station, track)
+    return station and track and (station .. ":" .. track) or nil
+end, function(station, track)
     local track_data = F.trains_by_destination[station .. ":" .. track]
     if not track_data then return {} end
 
@@ -926,7 +928,7 @@ F.get_track_status_textline_info_lines = function(station, track)
         )
     end
     return display_texts
-end
+end)
 
 F.get_station_status_textline_info_lines = function(station, tracks)
     local data = {}
