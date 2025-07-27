@@ -621,7 +621,7 @@ end
 ---@return integer? seconds_left
 ---@return string? line_id
 ---@return string? line_dir
-F.get_station_status = function(def)
+F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
     local dest_key = F.get_stn_status_key(def)
     local now = os.time()
 
@@ -667,7 +667,7 @@ F.get_station_status = function(def)
     if closest_line_id then
         return "ARR", floor(closest_time_left), closest_line_id, closest_line_dir
     end
-end
+end)
 
 function F.show_lr(def, texts)
     digiline_send(def.left_disp or "l", table.concat(texts, "\n"))
@@ -978,8 +978,10 @@ F.get_station_status_textline_info_lines = function(station, tracks)
 end
 
 F.get_express_station_display_lines = function(def)
-    local stn_event, time_left, line_id, dir = F.get_station_status(def)
-    if stn_event == "DEP" then
+    local dest_key = F.get_stn_status_key(def)
+
+    if F.platform_display_control[dest_key]
+        and F.platform_display_control[dest_key].status == "DEP" then
         return F.get_textline_display(def)
     end
 
