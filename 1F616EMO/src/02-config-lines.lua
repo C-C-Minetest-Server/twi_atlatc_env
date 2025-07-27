@@ -291,6 +291,12 @@ F.lines = {
         short_name = "RelaxingBasin",
         N = "eYTP",
         S = "RXB",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"eYTP", "3", true},
+            {"RXB", "1", true},
+        }),
     },
 
     ["VFT"] = {
