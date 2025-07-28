@@ -885,7 +885,7 @@ end
 
 F.get_track_status_textline_info_lines = F.cache_function(3, function(station, track)
     return station and track and (station .. ":" .. track) or nil
-end, function(station, track)
+end, function(station, track, custom_stations)
     local track_data = F.trains_by_destination[station .. ":" .. track]
     if not track_data then return {} end
 
@@ -898,7 +898,8 @@ end, function(station, track)
             local line_data = F.lines[train_data.line_id]
             local line_code = line_data and line_data.code or train_data.line_id
             local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
-            line_term = F.stations_short[line_term] or F.stations[line_term] or line_term
+            line_term = (custom_stations and custom_stations[line_term]) or F.stations_short[line_term]
+                or F.stations[line_term] or line_term
             local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                 and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
             local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -990,7 +991,7 @@ F.get_express_station_display_lines = function(def)
     def.track = def.track or def.platform_id
 
     local info_lines = def.here and def.track
-        and F.get_track_status_textline_info_lines(def.here, def.track) or {}
+        and F.get_track_status_textline_info_lines(def.here, def.track, def.custom_stations) or {}
 
     local header = (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":"
     header = string.format("%-20s %s", header, rwt.to_string(rwt.now(), true))
