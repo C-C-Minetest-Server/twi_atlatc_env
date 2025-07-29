@@ -291,7 +291,7 @@ F.lines["E4"] = {
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "GRH",  "4", true },
+        { "eGRH",  "4", true },
         { "eOTH", "2" },
         { "SAG",  "5" },
         { "RXB",  "1", true },
