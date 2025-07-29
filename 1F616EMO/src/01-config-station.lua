@@ -115,12 +115,13 @@ F.station_interchange = {
     HAI = { "S1", "NO1", },
     YTP = { "SPN", "E1", "LUC", "RXB", "VFT2", },
     SVE = { "E1", "CSL", },
-    SAG = { "E1", "CSL", },
+    SAG = { "E1", "E4", "CSL", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "E3", },
     VFT = { "GRH1", "VD-VFT1" },
-    GRH = { "GRH1", "GRH2" },
+    GRH = { "E4", "GRH1", "GRH2" },
     SHI = { "GRH1", "GRH2" },
+    eOTH = { "E4", "GRH1" },
 
     ["NO-WS"] = { "NO1", "NO2", "E1", },
 
