@@ -117,6 +117,14 @@ F.lines = {
         short_name = "Oasis",
         N = "ACP",
         S = "OAI",
+
+        adjacent_stations = construct_adjacent_stations({
+            -- station, track, reverse point
+            {"ACP", "2", true},
+            {"OLV", "1"},
+            {"OAI", "2", true},
+            {"OLV", "2"},
+        }),
     },
 
     ["GRH1"] = {
