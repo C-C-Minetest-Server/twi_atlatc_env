@@ -250,7 +250,7 @@ F.lines["E1"] = {
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "NO-T", "3", true },   -- 103 in y5nw's system
+        { "NO-T", "3", true }, -- 103 in y5nw's system
         { "eYTP", "1" },
         { "eSVE", "1" },
         { "SAG",  "4", true },
@@ -282,6 +282,22 @@ F.lines["E3"] = {
     name = "1F616EMO Express 3",
     E = "eOAI",
     W = "HR-NEN",
+}
+F.lines["E4"] = {
+    rc = "L-E4",
+    name = "1F616EMO Express 4",
+    E = "RXB",
+    W = "GRH",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "GRH",  "4", true },
+        { "eOTH", "2" },
+        { "SAG",  "3" },
+        { "RXB",  "1", true },
+        { "SAG",  "5" },
+        { "eOTH", "1" },
+    }),
 }
 
 F.lines["eNO-SV"] = {
@@ -317,9 +333,9 @@ F.lines["VFT"] = {
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eGRH", "4", true },
-        { "eSPH", "1" },   -- physically reversed but logically didn't
+        { "eSPH", "1" }, -- physically reversed but logically didn't
         { "VFT",  "2", true },
-        { "eSPH", "2" },   -- physically reversed but logically didn't
+        { "eSPH", "2" }, -- physically reversed but logically didn't
     }),
 }
 
