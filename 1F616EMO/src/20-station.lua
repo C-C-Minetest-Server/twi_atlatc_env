@@ -319,7 +319,7 @@ F.stn_v2 = function(basic_def, lines_def)
                                 status_key .. ":s",
                                 status_key,
                                 dest_key,
-                                def.line,
+                                through or def.line,
                                 line_dir,
                                 atc_id)
                         end
@@ -412,6 +412,7 @@ F.stn_v2 = function(basic_def, lines_def)
 
             if status_key then
                 local next_track = def.reverse and def.rev_next_track or def.next_track or nil
+                local through = def.reverse and def.rev_through or def.through or nil
 
                 if next and next_track then
                     local dest_key = next .. ":" .. next_track
@@ -423,7 +424,8 @@ F.stn_v2 = function(basic_def, lines_def)
                             -- Terminus
                             line_dir = F.rev_dirs[line_dir]
                         end
-                        F.register_train_depart(status_key, status_key, dest_key, def.line, line_dir, atc_id)
+                        F.register_train_depart(status_key, status_key, dest_key, through or def.line, line_dir,
+                            atc_id)
                     end
                 end
 
@@ -440,10 +442,12 @@ F.stn_v2 = function(basic_def, lines_def)
                             local targ_stn = adj_stn_data[i][1]
                             local targ_track = adj_stn_data[i][2]
                             local targ_key = targ_stn .. ":" .. targ_track
+                            local targ_line_id = adj_stn_data[i][4] or def.line
                             if adj_stn_data[i][3] then
                                 line_dir = F.rev_dirs[line_dir] or line_dir
                             end
-                            F.register_train_depart(base_string, status_key, targ_key, def.line, line_dir, atc_id, true)
+                            F.register_train_depart(base_string, status_key, targ_key, targ_line_id, line_dir, atc_id,
+                                true)
                         end
                     end
                 end

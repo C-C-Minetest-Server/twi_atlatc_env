@@ -26,19 +26,20 @@ F.lines["U1"] = {
     textline_name = "Islands Line",
     short_name = "Islands",
     W = "SPN",
+    E = "ACP",
     through_E = "CEN",
 
     -- Shared with CEN
     adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "SPN", "3", true },
-        { "ISN", "1" },
-        { "FRI", "1" },
-        { "SCL", "1" },
-        { "ACP", "1", true },
-        { "SCL", "2" },
-        { "FRI", "2" },
-        { "ISN", "2" },
+        -- station, track, reverse point, line_id if different
+        { "SPN", "3", true,  "U1" },
+        { "ISN", "1", false, "U1" },
+        { "FRI", "1", false, "U1" },
+        { "SCL", "1", false, "U1" },
+        { "ACP", "1", true,  "CEN" },
+        { "SCL", "2", false, "U1" },
+        { "FRI", "2", false, "U1" },
+        { "ISN", "2", false, "U1" },
     }),
 }
 F.lines["S1"] = {
@@ -121,7 +122,8 @@ F.lines["CEN"] = {
     textline_name = "Central Line",
     short_name = "Central",
     through_W = "U1",
-    E = "ACP",
+    E = F.lines["U1"].E,
+    W = F.lines["U1"].W,
 
     adjacent_stations = F.lines["U1"].adjacent_stations,
 }
