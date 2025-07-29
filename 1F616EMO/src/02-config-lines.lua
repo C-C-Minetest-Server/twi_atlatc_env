@@ -293,9 +293,9 @@ F.lines["E4"] = {
         -- station, track, reverse point
         { "GRH",  "4", true },
         { "eOTH", "2" },
-        { "SAG",  "3" },
-        { "RXB",  "1", true },
         { "SAG",  "5" },
+        { "RXB",  "1", true },
+        { "SAG",  "3" },
         { "eOTH", "1" },
     }),
 }
