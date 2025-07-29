@@ -27,6 +27,19 @@ F.lines["U1"] = {
     short_name = "Islands",
     W = "SPN",
     through_E = "CEN",
+
+    -- Shared with CEN
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "SPN", "3", true },
+        { "ISN", "1" },
+        { "FRI", "1" },
+        { "SCL", "1" },
+        { "ACP", "1", true },
+        { "SCL", "2" },
+        { "FRI", "2" },
+        { "ISN", "2" },
+    }),
 }
 F.lines["S1"] = {
     -- RC L-S1
@@ -109,6 +122,8 @@ F.lines["CEN"] = {
     short_name = "Central",
     through_W = "U1",
     E = "ACP",
+
+    adjacent_stations = F.lines["U1"].adjacent_stations,
 }
 F.lines["OAI"] = {
     rc = "L-OAI",
@@ -291,7 +306,7 @@ F.lines["E4"] = {
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "eGRH",  "4", true },
+        { "eGRH", "4", true },
         { "eOTH", "2" },
         { "SAG",  "5" },
         { "RXB",  "1", true },
