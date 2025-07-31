@@ -984,6 +984,8 @@ F.get_station_status_textline_info_lines = function(station, tracks)
     return display_texts
 end
 
+F.express_display_status = {}
+
 F.get_express_station_display_lines = function(def)
     local dest_key = F.get_stn_status_key(def)
 
