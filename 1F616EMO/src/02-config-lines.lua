@@ -114,6 +114,18 @@ F.lines["CSL"] = {
     short_name = "Castle",
     E = "SVE",
     W = "SAE",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "SVE", "2", true },
+        { "SDS", "1" },
+        { "SHV", "1" },
+        { "SAG", "1" },
+        { "SAE", "1", true },
+        { "SAG", "2" },
+        { "SHV", "2" },
+        { "SDS", "4" },
+    }),
 }
 
 F.lines["CEN"] = {
