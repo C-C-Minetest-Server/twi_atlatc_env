@@ -197,7 +197,7 @@ F.stn_v2 = function(basic_def, lines_def)
             local line_def = F.lines[line_id]
             if train and match_train(line_def, train) then
                 atc_set_ars_disable(true)
-                atc_set_lzb_tsr(2)
+                atc_set_lzb_tsr(1)
                 local stn_name = F.stations[here] or here
                 atc_set_text_inside("Stopping at: " .. stn_name .. generate_interchange_string(here, line_id))
                 F.set_outside(def, atc_id)
