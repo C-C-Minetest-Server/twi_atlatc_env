@@ -16,6 +16,9 @@ local function construct_adjacent_stations(list)
 end
 
 F.lines = {}
+
+-- Origin Metro
+
 F.lines["U1"] = {
     -- RC L-U1
     -- was: Spawn Subway Line 1
@@ -42,6 +45,7 @@ F.lines["U1"] = {
         { "ISN", "2", false, "U1" },
     }),
 }
+
 F.lines["S1"] = {
     -- RC L-S1
     -- was: S1
@@ -56,6 +60,7 @@ F.lines["S1"] = {
     N = "HAI",
     S = "OVV",
 }
+
 F.lines["SPN-CW"] = {
     -- Spawn Line (Clockwise)
     -- was: Spawn Metro: Spawn Line
@@ -81,6 +86,7 @@ F.lines["SPN-CW"] = {
         { "HLY", "1" },
     }),
 }
+
 F.lines["SPN-ACW"] = {
     -- Spawn Line (Anti clockwise)
     -- was: Spawn Metro: Spawn Line
@@ -106,6 +112,8 @@ F.lines["SPN-ACW"] = {
         { "SPS", "2" },
     }),
 }
+
+-- SmushyVille Metro
 
 F.lines["CSL"] = {
     rc = "L-CSL",
@@ -139,6 +147,7 @@ F.lines["CEN"] = {
 
     adjacent_stations = F.lines["U1"].adjacent_stations,
 }
+
 F.lines["OAI"] = {
     rc = "L-OAI",
     name = "Acacia Plains Railway: Oasis Line",
@@ -155,6 +164,8 @@ F.lines["OAI"] = {
         { "OLV", "2" },
     }),
 }
+
+-- Grape Hills Metro
 
 F.lines["GRH1"] = {
     rc = "L-GRH1",
@@ -183,6 +194,7 @@ F.lines["GRH1"] = {
         { "SHI", "1" },
     }),
 }
+
 F.lines["GRH1E"] = {
     rc = "L-GRH1E",
     code = "GRH1",
@@ -213,6 +225,7 @@ F.lines["GRH1E"] = {
         { "SHI",  "1" },
     }),
 }
+
 F.lines["GRH2"] = {
     rc = "L-GRH2",
     name = "Grape Hills Line 2",
@@ -236,6 +249,7 @@ F.lines["GRH2"] = {
         { "GRO", "1" },
     }),
 }
+
 F.lines["GRH3"] = {
     rc = "L-GRH3",
     name = "Grape Hills Line 3",
@@ -243,14 +257,14 @@ F.lines["GRH3"] = {
     short_name = "GRH3",
 }
 
-F.lines["eCEN"] = {
-    rc = "L-eCEN",
-    name = "Spawn-Acacia Plains Central Express",
-    textline_name = "Central Express",
-    short_name = "SPN-ACP",
-    W = "SPN",
-    E = "ACP",
+F.lines["GRH4"] = {
+    rc = "L-GRH4",
+    name = "Grape Hills Line 4GRH4",
+    textline_name = "Grape Hills 4GRH4",
+    short_name = "GRH4",
 }
+
+-- Nordstetten Trams (Display only)
 
 F.lines["NO1"] = {
     line = "NO1",
@@ -261,6 +275,7 @@ F.lines["NO1"] = {
     N = "NO-ISN",
     S = "HAI",
 }
+
 F.lines["NO2"] = {
     line = "NO2",
     code = "NO-LRT2",
@@ -270,6 +285,8 @@ F.lines["NO2"] = {
     N = "NO-ISN",
     S = "NO-WS",
 }
+
+-- Express / Intercity
 
 F.lines["E1"] = {
     rc = "L-E1",
@@ -287,6 +304,7 @@ F.lines["E1"] = {
         { "eYTP", "2" },
     }),
 }
+
 F.lines["LUC"] = {
     rc = "L-LUC",
     code = "E2",
@@ -306,12 +324,14 @@ F.lines["LUC"] = {
         { "eSPH",   "2" },
     }),
 }
+
 F.lines["E3"] = {
     rc = "L-E3",
     name = "1F616EMO Express 3",
     E = "eOAI",
     W = "HR-NEN",
 }
+
 F.lines["E4"] = {
     rc = "L-E4",
     name = "1F616EMO Express 4",
@@ -329,29 +349,7 @@ F.lines["E4"] = {
     }),
 }
 
-F.lines["eNO-SV"] = {
-    rc = "L-eNO-SV",
-    name = "Nordstetten-SmushyVille High-Speed",
-    textline_name = "NO-SV High-Speed",
-    shortname = "NO-SV HSR",
-    E = "NO-T",
-    W = "SAG",
-}
-
-F.lines["VFT2"] = {
-    rc = "L-VFT2",
-    code = "VFT",
-    name = "Fenced Town Shuttle",
-    short_name = "Fenced Town",
-    N = "VFT",
-    S = "eYTP",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eYTP", "4", true },
-        { "VFT",  "2", true },
-    }),
-}
+-- Vedu_0825's services
 
 F.lines["VD-VFT1-CW"] = {
     rc = "L-VD-VFT1-CW",
@@ -405,6 +403,7 @@ F.lines["VFT"] = {
 }
 
 -- Deprecated / unused
+
 F.lines["S1-SPN"] = {
     -- RC L-S1-SPN
     -- was: S1 (towards Spawn Island)
@@ -428,6 +427,39 @@ F.lines["RXB"] = {
         -- station, track, reverse point
         { "eYTP", "3", true },
         { "RXB",  "1", true },
+    }),
+}
+
+F.lines["eCEN"] = {
+    rc = "L-eCEN",
+    name = "Spawn-Acacia Plains Central Express",
+    textline_name = "Central Express",
+    short_name = "SPN-ACP",
+    W = "SPN",
+    E = "ACP",
+}
+
+F.lines["eNO-SV"] = {
+    rc = "L-eNO-SV",
+    name = "Nordstetten-SmushyVille High-Speed",
+    textline_name = "NO-SV High-Speed",
+    shortname = "NO-SV HSR",
+    E = "NO-T",
+    W = "SAG",
+}
+
+F.lines["VFT2"] = {
+    rc = "L-VFT2",
+    code = "VFT",
+    name = "Fenced Town Shuttle",
+    short_name = "Fenced Town",
+    N = "VFT",
+    S = "eYTP",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eYTP", "4", true },
+        { "VFT",  "2", true },
     }),
 }
 
