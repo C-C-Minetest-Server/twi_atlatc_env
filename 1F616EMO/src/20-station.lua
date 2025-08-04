@@ -242,7 +242,6 @@ F.stn_v2 = function(basic_def, lines_def)
         end
 
         for line_id, def in pairs(lines_def) do
-            def.line = line_id
             for k, v in pairs(basic_def) do
                 def[k] = v
             end
@@ -299,7 +298,7 @@ F.stn_v2 = function(basic_def, lines_def)
                 atc_set_text_inside(
                     stn_name ..
                     time_str ..
-                    generate_interchange_string(def.here, def.line, through) ..
+                    generate_interchange_string(def.here, line_id, through) ..
                     (def.additional_text and ("\n" .. def.additional_text) or ""))
                 F.set_outside(def, atc_id)
 
@@ -307,7 +306,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     F.platform_display_control[status_key] = {
                         status = "DEP",
                         rwt_end = rwnext,
-                        line_id = def.line,
+                        line_id = line_id,
                         line_dir = def.reverse and def.rev_dir or def.dir,
                     }
 
@@ -317,9 +316,9 @@ F.stn_v2 = function(basic_def, lines_def)
                         local dest_key = next .. ":" .. next_track
                         local line_dir = def.reverse and def.rev_dir or def.dir or nil
                         if line_dir then
-                            if F.lines[def.line]
-                                and F.lines[def.line][line_dir] == next
-                                and F.lines[def.line][F.rev_dirs[line_dir]] then
+                            if F.lines[line_id]
+                                and F.lines[line_id][line_dir] == next
+                                and F.lines[line_id][F.rev_dirs[line_dir]] then
                                 -- Terminus
                                 line_dir = F.rev_dirs[line_dir]
                             end
@@ -327,7 +326,7 @@ F.stn_v2 = function(basic_def, lines_def)
                                 status_key .. ":s",
                                 status_key,
                                 dest_key,
-                                through or def.line,
+                                through or line_id,
                                 line_dir,
                                 atc_id)
                         end
@@ -426,20 +425,20 @@ F.stn_v2 = function(basic_def, lines_def)
                     local dest_key = next .. ":" .. next_track
                     local line_dir = def.reverse and def.rev_dir or def.dir or nil
                     if line_dir then
-                        if F.lines[def.line]
-                            and F.lines[def.line][line_dir] == next
-                            and F.lines[def.line][F.rev_dirs[line_dir]] then
+                        if F.lines[line_id]
+                            and F.lines[line_id][line_dir] == next
+                            and F.lines[line_id][F.rev_dirs[line_dir]] then
                             -- Terminus
                             line_dir = F.rev_dirs[line_dir]
                         end
-                        F.register_train_depart(status_key, status_key, dest_key, through or def.line, line_dir,
+                        F.register_train_depart(status_key, status_key, dest_key, through or line_id, line_dir,
                             atc_id)
                     end
                 end
 
-                if F.lines[def.line] and F.lines[def.line].adjacent_stations then
+                if F.lines[line_id] and F.lines[line_id].adjacent_stations then
                     local line_dir = def.reverse and def.rev_dir or def.dir or nil
-                    local adj_stn_data = F.lines[def.line].adjacent_stations[status_key]
+                    local adj_stn_data = F.lines[line_id].adjacent_stations[status_key]
                     if adj_stn_data then
                         if adj_stn_data[1] and adj_stn_data[1][3] then
                             line_dir = F.rev_dirs[line_dir] or line_dir
@@ -450,7 +449,7 @@ F.stn_v2 = function(basic_def, lines_def)
                             local targ_stn = adj_stn_data[i][1]
                             local targ_track = adj_stn_data[i][2]
                             local targ_key = targ_stn .. ":" .. targ_track
-                            local targ_line_id = adj_stn_data[i][4] or def.line
+                            local targ_line_id = adj_stn_data[i][4] or line_id
                             if adj_stn_data[i][3] then
                                 line_dir = F.rev_dirs[line_dir] or line_dir
                             end
