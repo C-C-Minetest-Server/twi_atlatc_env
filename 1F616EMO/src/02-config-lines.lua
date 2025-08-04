@@ -226,6 +226,30 @@ F.lines["GRH1E"] = {
     }),
 }
 
+F.lines["GRH1"].adjacent_stations["VFT:2"] = F.lines["GRH1"].adjacent_stations["VFT:1"]
+F.lines["GRH1"].adjacent_stations["eOTH:3"] = {}
+F.lines["GRH1"].adjacent_stations["eOTH:3"][#F.lines["GRH1"].adjacent_stations["eOTH:3"] + 1] = { "VFT", "2" }
+for _, entry in ipairs(F.lines["GRH1"].adjacent_stations["VFT:1"]) do
+    F.lines["GRH1"].adjacent_stations["eOTH:3"][#F.lines["GRH1"].adjacent_stations["eOTH:3"] + 1] = entry
+end
+
+F.lines["GRH1E-R-VFT"] = {
+    rc = "L-GRH1E-R-VFT",
+    code = "GRH1",
+    name = "Grape Hills Line 1",
+    textline_name = "Grape Hills 1",
+    short_name = "GRH1",
+
+    N = "SNL",
+    S = "eOTH",
+
+    background_color = "#5555FF",
+
+    adjacent_stations ={
+        ["VFT:1"] = F.lines["GRH1E"].adjacent_stations["VFT:2"],
+    },
+}
+
 F.lines["GRH2"] = {
     rc = "L-GRH2",
     name = "Grape Hills Line 2",
