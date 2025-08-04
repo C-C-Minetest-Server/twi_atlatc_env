@@ -199,7 +199,11 @@ F.stn_v2 = function(basic_def, lines_def)
                 atc_set_ars_disable(true)
                 atc_set_lzb_tsr(1)
                 local stn_name = F.stations[here] or here
-                atc_set_text_inside("Stopping at: " .. stn_name .. generate_interchange_string(here, line_id))
+                atc_set_text_inside(
+                    "Stopping at: " ..
+                    stn_name ..
+                    generate_interchange_string(here, line_id) ..
+                    (def.additional_text and ("\n" .. def.additional_text) or ""))
                 F.set_outside(def, atc_id)
 
                 local approach_status_key = F.get_approach_status_key(def, atc_id)
@@ -292,7 +296,11 @@ F.stn_v2 = function(basic_def, lines_def)
 
                 local stn_name = F.stations[here] or here
                 local through = def.reverse and def.rev_through or def.through or nil
-                atc_set_text_inside(stn_name .. time_str .. generate_interchange_string(def.here, def.line, through))
+                atc_set_text_inside(
+                    stn_name ..
+                    time_str ..
+                    generate_interchange_string(def.here, def.line, through) ..
+                    (def.additional_text and ("\n" .. def.additional_text) or ""))
                 F.set_outside(def, atc_id)
 
                 if status_key then
