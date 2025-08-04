@@ -193,6 +193,10 @@ F.stn_v2 = function(basic_def, lines_def)
     end
 
     if event.approach and not event.has_entered and atc_arrow then
+        if basic_def.on_approach then
+            basic_def.on_approach(train)
+        end
+
         for line_id, def in pairs(lines_def) do
             local line_def = F.lines[line_id]
             if train and match_train(line_def, train) then
