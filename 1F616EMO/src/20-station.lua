@@ -998,7 +998,7 @@ end
 F.get_express_station_display_lines = function(def)
     local dest_key = F.get_stn_status_key(def)
 
-    if F.platform_display_control[dest_key]
+    if not def.no_current_train and F.platform_display_control[dest_key]
         and F.platform_display_control[dest_key].status == "DEP" then
         return F.get_textline_display(def)
     end
