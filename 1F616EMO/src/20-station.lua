@@ -511,7 +511,7 @@ end
 ]]
 
 -- Accumulate this value if the saved data need to be resetted
-local time_arrival_estimation_reset = 2
+local time_arrival_estimation_reset = 3
 if time_arrival_estimation_reset == S.time_arrival_estimation_reset then
     S.station_from_checkpoint = S.station_from_checkpoint or {}
 else
