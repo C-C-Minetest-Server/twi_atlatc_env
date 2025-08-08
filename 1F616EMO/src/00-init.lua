@@ -164,5 +164,15 @@ F.right_pad_luaatc_textline = function(lines)
     return rtns
 end
 
+F.slice_textline = function(lines, no_display, digiline_prefix)
+    for i = 0, (no_display or 1) - 1 do
+        digiline_send((digiline_prefix or "") .. (i + 1),
+            (lines[(i * 4) + 1] or "") .. "\n" ..
+            (lines[(i * 4) + 2] or "") .. "\n" ..
+            (lines[(i * 4) + 3] or "") .. "\n" ..
+            (lines[(i * 4) + 4] or ""))
+    end
+end
+
 local debug = print
 -- local debug = function() end

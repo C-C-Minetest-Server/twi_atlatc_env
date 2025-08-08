@@ -220,6 +220,7 @@ F.stn_v2 = function(basic_def, lines_def)
                         local alt_status_key = basic_def.here .. ":" .. alt_track
                         F.platform_display_control[alt_status_key] = {
                             status = "OPP",
+                            atc_id = atc_id,
                         }
                     end
                 end
@@ -232,6 +233,7 @@ F.stn_v2 = function(basic_def, lines_def)
         if status_key then
             F.platform_display_control[status_key] = {
                 status = "NON",
+                atc_id = atc_id,
             }
         end
     elseif event.train and atc_arrow then
@@ -311,6 +313,7 @@ F.stn_v2 = function(basic_def, lines_def)
                         status = "DEP",
                         rwt_end = rwnext,
                         line_id = line_id,
+                        atc_id = atc_id,
                         line_dir = def.reverse and def.rev_dir or def.dir,
                     }
 
@@ -636,6 +639,7 @@ end
 ---@return integer? seconds_left
 ---@return string? line_id
 ---@return string? line_dir
+---@return string? atc_id
 F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
     local dest_key = F.get_stn_status_key(def)
     local now = os.time()
@@ -655,6 +659,7 @@ F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
     local closest_time_left = math.huge
     local closest_line_id
     local closest_line_dir
+    local closest_atc_id
     for atc_id, train_dest_data in pairs(dest_data) do
         local latest_checkpoint = train_dest_data.latest
         local latest_checkpoint_arr_time =
@@ -671,6 +676,7 @@ F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
                     closest_time_left = time_left
                     closest_line_id = train_dest_data.line_id
                     closest_line_dir = train_dest_data.line_dir
+                    closest_atc_id = atc_id
                 end
             elseif time_left < -500 then
                 -- Something had absolutely gone wrong, delete this data
@@ -680,7 +686,7 @@ F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
     end
 
     if closest_line_id then
-        return "ARR", floor(closest_time_left), closest_line_id, closest_line_dir
+        return "ARR", floor(closest_time_left), closest_line_id, closest_line_dir, closest_atc_id
     end
 end)
 
@@ -898,10 +904,10 @@ F.set_status_textline = function(lines)
     end
 end
 
-F.get_track_status_textline_info_lines = F.cache_function(3, function(station, track)
-    return station and track and (station .. ":" .. track) or nil
-end, function(station, track, custom_stations)
-    local track_data = F.trains_by_destination[station .. ":" .. track]
+F.sort_track_destination_data = F.cache_function(3, function(status_key)
+    return status_key
+end, function(status_key)
+    local track_data = F.trains_by_destination[status_key]
     if not track_data then return {} end
 
     local data = {}
@@ -912,17 +918,17 @@ end, function(station, track, custom_stations)
             local line_dir = train_data.line_dir or nil
             local line_data = F.lines[train_data.line_id]
             local line_code = line_data and line_data.code or train_data.line_id
-            local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
-            line_term = (custom_stations and custom_stations[line_term]) or F.stations_short[line_term]
-                or F.stations[line_term] or line_term
-            local avg_time = S.station_from_checkpoint[station .. ":" .. track]
-                and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
+            local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or nil
+            local avg_time = S.station_from_checkpoint[status_key]
+                and S.station_from_checkpoint[status_key][train_data.latest]
             local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
 
             if time_left and time_left >= 0 then
                 data[#data + 1] = {
                     atc_id = atc_id,
+                    from = train_data.from,
                     line_code = line_code,
+                    line_dir = line_dir,
                     line_term = line_term,
                     time_left = time_left,
                 }
@@ -934,17 +940,28 @@ end, function(station, track, custom_stations)
         return a.time_left < b.time_left
     end)
 
+    return data
+end)
+
+F.get_track_status_textline_info_lines = function(station, track, custom_stations)
+    local data = F.sort_track_destination_data(station .. ":" .. track)
+
     local display_texts = {}
     for _, entry_data in ipairs(data) do
+        local line_term =
+            (custom_stations and custom_stations[entry_data.line_term])
+            or F.stations_short[entry_data.line_term]
+            or F.stations[entry_data.line_term] or entry_data.line_term
         display_texts[#display_texts + 1] = string.format(
             "%-4s %-15s %s",
             entry_data.line_code,
-            string.sub(entry_data.line_term, 1, 15),
+            string.sub(line_term, 1, 15),
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end
     return display_texts
-end)
+end
+
 
 F.get_station_status_textline_info_lines = function(station, tracks)
     local data = {}
