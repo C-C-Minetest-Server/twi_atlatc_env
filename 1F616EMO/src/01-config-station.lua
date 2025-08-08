@@ -31,6 +31,7 @@ F.stations = {
     SHI = "Shino",
     SCC = "Scattered Cliff",
     GRO = "Grand Groma",
+    eGRO = "Grand Groma",
     KIH = "Kitkahood",
     DUI = "Duck Island",
     eSPH = "Spagetihood",
@@ -131,6 +132,7 @@ F.station_interchange = {
 F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE
 F.station_interchange.eGRH = F.station_interchange.GRH
+F.station_interchange.eGRO = F.station_interchange.GRO
 F.station_interchange["NO-T"] = F.station_interchange["NO-WS"]
 
 F.interchange_line_alias = {

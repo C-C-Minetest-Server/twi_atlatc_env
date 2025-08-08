@@ -360,11 +360,11 @@ F.lines["E4"] = {
     rc = "L-E4",
     name = "1F616EMO Express 4",
     E = "RXB",
-    W = "eGRH",
+    W = "eGRO",
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "eGRH", "4", true },
+        { "eGRO", "3", true },
         { "eOTH", "2" },
         { "SAG",  "5" },
         { "RXB",  "1", true },
