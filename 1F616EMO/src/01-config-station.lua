@@ -118,12 +118,14 @@ F.station_interchange = {
     SVE = { "E1", "CSL", },
     SAG = { "E1", "E4", "CSL", },
     ACP = { "CEN", "OAI", },
-    OVV = { "S1", "E3", },
+    OVV = { "S1", "E3", "E4", },
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "E3", "GRH1", "GRH2" },
     SHI = { "GRH1", "GRH2" },
     eOTH = { "E4", "GRH1" },
     GRO = { "GRH2", "E4" },
+    OAI = { "E3", "E4", "OAI" },
+    NLU = { "E4", "SPN" },
 
     ["NO-WS"] = { "NO1", "NO2", "E1", },
 
@@ -134,6 +136,7 @@ F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE
 F.station_interchange.eGRH = F.station_interchange.GRH
 F.station_interchange.eGRO = F.station_interchange.GRO
+F.station_interchange.eOAI = F.station_interchange.OAI
 F.station_interchange["NO-T"] = F.station_interchange["NO-WS"]
 
 F.interchange_line_alias = {

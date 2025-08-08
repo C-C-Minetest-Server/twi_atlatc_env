@@ -359,7 +359,7 @@ F.lines["E3"] = {
 F.lines["E4"] = {
     rc = "L-E4",
     name = "1F616EMO Express 4",
-    E = "RXB",
+    E = "eOAI",
     W = "eGRO",
 
     adjacent_stations = construct_adjacent_stations({
@@ -367,7 +367,13 @@ F.lines["E4"] = {
         { "eGRO", "3", true },
         { "eOTH", "2" },
         { "SAG",  "5" },
-        { "RXB",  "1", true },
+        { "NLU", "4" },
+        { "HR-eCIG", "2" },
+        { "OVV", "3" },
+        { "eOAI", "3", true },
+        { "OVV", "1" },
+        { "HR-eCIG", "1" },
+        { "NLU", "3" },
         { "SAG",  "3" },
         { "eOTH", "1" },
     }),
