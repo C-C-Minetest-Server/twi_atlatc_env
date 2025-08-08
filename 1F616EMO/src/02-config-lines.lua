@@ -349,13 +349,6 @@ F.lines["LUC"] = {
     }),
 }
 
-F.lines["E3"] = {
-    rc = "L-E3",
-    name = "1F616EMO Express 3",
-    E = "eOAI",
-    W = "HR-NEN",
-}
-
 F.lines["E4"] = {
     rc = "L-E4",
     name = "1F616EMO Express 4",
@@ -370,12 +363,26 @@ F.lines["E4"] = {
         { "NLU", "3" },
         { "HR-eCIG", "2" },
         { "OVV", "3" },
-        { "eOAI", "3", true },
+        { "eOAI", "4", true },
         { "OVV", "1" },
         { "HR-eCIG", "1" },
         { "NLU", "4" },
         { "SAG",  "3" },
         { "eOTH", "1" },
+    }),
+}
+
+F.lines["RXB"] = {
+    rc = "L-RXB",
+    name = "RelaxingBasin Shuttle",
+    short_name = "RelaxingBasin",
+    N = "eYTP",
+    S = "RXB",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eYTP", "3", true },
+        { "RXB",  "1", true },
     }),
 }
 
@@ -446,20 +453,6 @@ F.lines["S1-SPN"] = {
     S = "NLU",
 }
 
-F.lines["RXB"] = {
-    rc = "L-RXB",
-    name = "RelaxingBasin Shuttle",
-    short_name = "RelaxingBasin",
-    N = "eYTP",
-    S = "RXB",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eYTP", "3", true },
-        { "RXB",  "1", true },
-    }),
-}
-
 F.lines["eCEN"] = {
     rc = "L-eCEN",
     name = "Spawn-Acacia Plains Central Express",
@@ -491,6 +484,13 @@ F.lines["VFT2"] = {
         { "eYTP", "4", true },
         { "VFT",  "2", true },
     }),
+}
+
+F.lines["E3"] = {
+    rc = "L-E3",
+    name = "1F616EMO Express 3",
+    E = "eOAI",
+    W = "HR-NEN",
 }
 
 -- Ferry
