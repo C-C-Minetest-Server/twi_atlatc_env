@@ -120,9 +120,10 @@ F.station_interchange = {
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "E3", },
     VFT = { "GRH1", "VD-VFT1" },
-    GRH = { "E4", "GRH1", "GRH2" },
+    GRH = { "E3", "GRH1", "GRH2" },
     SHI = { "GRH1", "GRH2" },
     eOTH = { "E4", "GRH1" },
+    GRO = { "GRH2", "E4" },
 
     ["NO-WS"] = { "NO1", "NO2", "E1", },
 
