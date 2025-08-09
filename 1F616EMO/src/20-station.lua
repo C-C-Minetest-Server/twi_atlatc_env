@@ -197,17 +197,17 @@ F.stn_v2 = function(basic_def, lines_def)
             basic_def.on_approach(train)
         end
 
-        local line_def
+        local stn_line_def
 
         for _, def in pairs(lines_def) do
-            if match_train(def, train) then
-                line_def = def
+            if match_train(F.lines[def.line], train) then
+                stn_line_def = def
                 break
             end
         end
 
-        if line_def then
-            local line_id = line_def.line
+        if stn_line_def then
+            local line_id = stn_line_def.line
             atc_set_ars_disable(true)
             atc_set_lzb_tsr(1)
             local stn_name = F.stations[here] or here
@@ -215,10 +215,10 @@ F.stn_v2 = function(basic_def, lines_def)
                 "Stopping at: " ..
                 stn_name ..
                 generate_interchange_string(here, line_id) ..
-                (line_def.additional_text and ("\n" .. line_def.additional_text) or ""))
-            F.set_outside(line_def, atc_id)
+                (stn_line_def.additional_text and ("\n" .. stn_line_def.additional_text) or ""))
+            F.set_outside(stn_line_def, atc_id)
 
-            local approach_status_key = F.get_approach_status_key(line_def, atc_id)
+            local approach_status_key = F.get_approach_status_key(stn_line_def, atc_id)
             if approach_status_key then
                 F.register_train_on_checkpoint(approach_status_key, atc_id, true)
             end
@@ -249,17 +249,17 @@ F.stn_v2 = function(basic_def, lines_def)
             F.register_train_arrive(status_key, atc_id)
         end
 
-        local line_def
+        local stn_line_def
 
         for _, def in pairs(lines_def) do
-            if train and match_train(def, train) then
-                line_def = def
+            if train and match_train(F.lines[def.line], train) then
+                stn_line_def = def
                 break
             end
         end
 
-        if line_def then
-            local line_id = line_def.line
+        if stn_line_def then
+            local line_id = stn_line_def.line
             atc_set_ars_disable(true)
 
             if atc_speed and atc_speed > 10 then
@@ -274,21 +274,21 @@ F.stn_v2 = function(basic_def, lines_def)
             local time_str
             local rwtime = rwt.now()
             local rwnext
-            if line_def.rpt_interval then
+            if stn_line_def.rpt_interval then
                 rwnext = rwtime
                 repeat
-                    rwnext = rwt.next_rpt(rwnext, line_def.rpt_interval, line_def.rpt_offset or 0)
-                until rwt.diff(rwtime, rwnext) >= (line_def.min_stop_time or 5)
+                    rwnext = rwt.next_rpt(rwnext, stn_line_def.rpt_interval, stn_line_def.rpt_offset or 0)
+                until rwt.diff(rwtime, rwnext) >= (stn_line_def.min_stop_time or 5)
             else
-                rwnext = rwt.add(rwtime, line_def.delay or 10)
+                rwnext = rwt.add(rwtime, stn_line_def.delay or 10)
             end
-            line_def.rwnext = rwnext
+            stn_line_def.rwnext = rwnext
             if rwt.diff(rwnext, rwtime) > 1 then
                 schedule(rwt.sub(rwnext, 1), {
                     type = "enable_ars",
                     line_id = line_id,
                 })
-            elseif line_def.reverse then
+            elseif stn_line_def.reverse then
                 schedule(rwnext, {
                     type = "reverse",
                     line_id = line_id,
@@ -303,16 +303,16 @@ F.stn_v2 = function(basic_def, lines_def)
                 (status_key and (status_key .. " ") or "") ..
                 "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
 
-            atc_send("B0WO" .. (line_def.door_dir or "C") .. (line_def.kick and "K" or ""))
+            atc_send("B0WO" .. (stn_line_def.door_dir or "C") .. (stn_line_def.kick and "K" or ""))
 
             local stn_name = F.stations[here] or here
-            local through = line_def.reverse and line_def.rev_through or line_def.through or nil
+            local through = stn_line_def.reverse and stn_line_def.rev_through or stn_line_def.through or nil
             atc_set_text_inside(
                 stn_name ..
                 time_str ..
-                generate_interchange_string(line_def.here, line_id, through) ..
-                (line_def.additional_text and ("\n" .. line_def.additional_text) or ""))
-            F.set_outside(line_def, atc_id)
+                generate_interchange_string(stn_line_def.here, line_id, through) ..
+                (stn_line_def.additional_text and ("\n" .. stn_line_def.additional_text) or ""))
+            F.set_outside(stn_line_def, atc_id)
 
             if status_key then
                 F.platform_display_control[status_key] = {
@@ -320,14 +320,16 @@ F.stn_v2 = function(basic_def, lines_def)
                     rwt_end = rwnext,
                     line_id = line_id,
                     atc_id = atc_id,
-                    line_dir = line_def.reverse and line_def.rev_dir or line_def.dir,
+                    line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir,
                 }
 
-                local next = line_def.reverse and line_def.rev_next or line_def.next or nil
-                local next_track = line_def.reverse and line_def.rev_next_track or line_def.next_track or nil
+                local next = stn_line_def.reverse and stn_line_def.rev_next or stn_line_def.next or nil
+                local next_track =
+                    stn_line_def.reverse and stn_line_def.rev_next_track
+                    or stn_line_def.next_track or nil
                 if next and next_track then
                     local dest_key = next .. ":" .. next_track
-                    local line_dir = line_def.reverse and line_def.rev_dir or line_def.dir or nil
+                    local line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir or nil
                     if line_dir then
                         if F.lines[line_id]
                             and F.lines[line_id][line_dir] == next
