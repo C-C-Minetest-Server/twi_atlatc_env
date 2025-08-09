@@ -192,45 +192,47 @@ F.stn_v2 = function(basic_def, lines_def)
         end
     end
 
-    if event.approach and not event.has_entered and atc_arrow then
+    if event.approach and not event.has_entered and atc_arrow and train then
         if basic_def.on_approach then
             basic_def.on_approach(train)
         end
 
-        for line_id, def in pairs(lines_def) do
-            local line_def = F.lines[line_id]
-            if train and match_train(line_def, train) then
-                atc_set_ars_disable(true)
-                atc_set_lzb_tsr(1)
-                local stn_name = F.stations[here] or here
-                atc_set_text_inside(
-                    "Stopping at: " ..
-                    stn_name ..
-                    generate_interchange_string(here, line_id) ..
-                    (def.additional_text and ("\n" .. def.additional_text) or ""))
-                F.set_outside(def, atc_id)
+        local line_def
 
-                local approach_status_key = F.get_approach_status_key(def, atc_id)
-                if approach_status_key then
-                    F.register_train_on_checkpoint(approach_status_key, atc_id, true)
-                end
-
-                if basic_def.alt_tracks then
-                    for _, alt_track in basic_def.alt_tracks do
-                        local alt_status_key = basic_def.here .. ":" .. alt_track
-                        F.platform_display_control[alt_status_key] = {
-                            status = "OPP",
-                            atc_id = atc_id,
-                        }
-                    end
-                end
-
-                return
+        for _, def in pairs(lines_def) do
+            if match_train(def, train) then
+                line_def = def
+                break
             end
         end
 
-        -- No match
-        if status_key then
+        if line_def then
+            local line_id = line_def.line
+            atc_set_ars_disable(true)
+            atc_set_lzb_tsr(1)
+            local stn_name = F.stations[here] or here
+            atc_set_text_inside(
+                "Stopping at: " ..
+                stn_name ..
+                generate_interchange_string(here, line_id) ..
+                (line_def.additional_text and ("\n" .. line_def.additional_text) or ""))
+            F.set_outside(line_def, atc_id)
+
+            local approach_status_key = F.get_approach_status_key(line_def, atc_id)
+            if approach_status_key then
+                F.register_train_on_checkpoint(approach_status_key, atc_id, true)
+            end
+
+            if basic_def.alt_tracks then
+                for _, alt_track in basic_def.alt_tracks do
+                    local alt_status_key = basic_def.here .. ":" .. alt_track
+                    F.platform_display_control[alt_status_key] = {
+                        status = "OPP",
+                        atc_id = atc_id,
+                    }
+                end
+            end
+        elseif status_key then
             F.platform_display_control[status_key] = {
                 status = "NON",
                 atc_id = atc_id,
@@ -247,100 +249,101 @@ F.stn_v2 = function(basic_def, lines_def)
             F.register_train_arrive(status_key, atc_id)
         end
 
-        for line_id, def in pairs(lines_def) do
-            for k, v in pairs(basic_def) do
-                def[k] = v
+        local line_def
+
+        for _, def in pairs(lines_def) do
+            if train and match_train(def, train) then
+                line_def = def
+                break
             end
-            def.line = line_id
-            local line_def = F.lines[line_id]
-            if train and match_train(line_def, train) then
-                atc_set_ars_disable(true)
+        end
 
-                if atc_speed and atc_speed > 10 then
-                    atc_send("BB")
-                    local dt = os.date()
-                    atc_set_text_outside("BrakeFail speed=" ..
-                        atc_speed .. " at " .. dt.year .. "-" .. dt.month .. "-" .. dt.day ..
-                        " " .. dt.hour .. ":" .. dt.min .. ":" .. dt.sec)
-                    error("Train " .. atc_id .. " has passed rail at speed of " .. atc_speed)
-                end
+        if line_def then
+            local line_id = line_def.line
+            atc_set_ars_disable(true)
 
-                local time_str
-                local rwtime = rwt.now()
-                local rwnext
-                if def.rpt_interval then
-                    rwnext = rwtime
-                    repeat
-                        rwnext = rwt.next_rpt(rwnext, def.rpt_interval, def.rpt_offset or 0)
-                    until rwt.diff(rwtime, rwnext) >= (def.min_stop_time or 5)
-                else
-                    rwnext = rwt.add(rwtime, def.delay or 10)
-                end
-                def.rwnext = rwnext
-                if rwt.diff(rwnext, rwtime) > 1 then
-                    schedule(rwt.sub(rwnext, 1), {
-                        type = "enable_ars",
-                        line_id = line_id,
-                    })
-                elseif def.reverse then
-                    schedule(rwnext, {
-                        type = "reverse",
-                        line_id = line_id,
-                    })
-                else
-                    schedule(rwnext, {
-                        type = "go",
-                        line_id = line_id,
-                    })
-                end
-                time_str = "\n" ..
-                    (status_key and (status_key .. " ") or "") ..
-                    "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
+            if atc_speed and atc_speed > 10 then
+                atc_send("BB")
+                local dt = os.date()
+                atc_set_text_outside("BrakeFail speed=" ..
+                    atc_speed .. " at " .. dt.year .. "-" .. dt.month .. "-" .. dt.day ..
+                    " " .. dt.hour .. ":" .. dt.min .. ":" .. dt.sec)
+                error("Train " .. atc_id .. " has passed rail at speed of " .. atc_speed)
+            end
 
-                atc_send("B0WO" .. (def.door_dir or "C") .. (def.kick and "K" or ""))
+            local time_str
+            local rwtime = rwt.now()
+            local rwnext
+            if line_def.rpt_interval then
+                rwnext = rwtime
+                repeat
+                    rwnext = rwt.next_rpt(rwnext, line_def.rpt_interval, line_def.rpt_offset or 0)
+                until rwt.diff(rwtime, rwnext) >= (line_def.min_stop_time or 5)
+            else
+                rwnext = rwt.add(rwtime, line_def.delay or 10)
+            end
+            line_def.rwnext = rwnext
+            if rwt.diff(rwnext, rwtime) > 1 then
+                schedule(rwt.sub(rwnext, 1), {
+                    type = "enable_ars",
+                    line_id = line_id,
+                })
+            elseif line_def.reverse then
+                schedule(rwnext, {
+                    type = "reverse",
+                    line_id = line_id,
+                })
+            else
+                schedule(rwnext, {
+                    type = "go",
+                    line_id = line_id,
+                })
+            end
+            time_str = "\n" ..
+                (status_key and (status_key .. " ") or "") ..
+                "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
 
-                local stn_name = F.stations[here] or here
-                local through = def.reverse and def.rev_through or def.through or nil
-                atc_set_text_inside(
-                    stn_name ..
-                    time_str ..
-                    generate_interchange_string(def.here, line_id, through) ..
-                    (def.additional_text and ("\n" .. def.additional_text) or ""))
-                F.set_outside(def, atc_id)
+            atc_send("B0WO" .. (line_def.door_dir or "C") .. (line_def.kick and "K" or ""))
 
-                if status_key then
-                    F.platform_display_control[status_key] = {
-                        status = "DEP",
-                        rwt_end = rwnext,
-                        line_id = line_id,
-                        atc_id = atc_id,
-                        line_dir = def.reverse and def.rev_dir or def.dir,
-                    }
+            local stn_name = F.stations[here] or here
+            local through = line_def.reverse and line_def.rev_through or line_def.through or nil
+            atc_set_text_inside(
+                stn_name ..
+                time_str ..
+                generate_interchange_string(line_def.here, line_id, through) ..
+                (line_def.additional_text and ("\n" .. line_def.additional_text) or ""))
+            F.set_outside(line_def, atc_id)
 
-                    local next = def.reverse and def.rev_next or def.next or nil
-                    local next_track = def.reverse and def.rev_next_track or def.next_track or nil
-                    if next and next_track then
-                        local dest_key = next .. ":" .. next_track
-                        local line_dir = def.reverse and def.rev_dir or def.dir or nil
-                        if line_dir then
-                            if F.lines[line_id]
-                                and F.lines[line_id][line_dir] == next
-                                and F.lines[line_id][F.rev_dirs[line_dir]] then
-                                -- Terminus
-                                line_dir = F.rev_dirs[line_dir]
-                            end
-                            F.register_train_depart(
-                                status_key .. ":s",
-                                status_key,
-                                dest_key,
-                                through or line_id,
-                                line_dir,
-                                atc_id)
+            if status_key then
+                F.platform_display_control[status_key] = {
+                    status = "DEP",
+                    rwt_end = rwnext,
+                    line_id = line_id,
+                    atc_id = atc_id,
+                    line_dir = line_def.reverse and line_def.rev_dir or line_def.dir,
+                }
+
+                local next = line_def.reverse and line_def.rev_next or line_def.next or nil
+                local next_track = line_def.reverse and line_def.rev_next_track or line_def.next_track or nil
+                if next and next_track then
+                    local dest_key = next .. ":" .. next_track
+                    local line_dir = line_def.reverse and line_def.rev_dir or line_def.dir or nil
+                    if line_dir then
+                        if F.lines[line_id]
+                            and F.lines[line_id][line_dir] == next
+                            and F.lines[line_id][F.rev_dirs[line_dir]] then
+                            -- Terminus
+                            line_dir = F.rev_dirs[line_dir]
                         end
+                        F.register_train_depart(
+                            status_key .. ":s",
+                            status_key,
+                            dest_key,
+                            through or line_id,
+                            line_dir,
+                            atc_id)
                     end
                 end
-
-                return
             end
         end
     elseif event.msg and type(event.msg) == "table" then
