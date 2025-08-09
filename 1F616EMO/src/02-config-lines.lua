@@ -441,7 +441,7 @@ F.lines["VFT"] = {
 
 -- Manually routed trains
 
-F.lines["~~~"] = {
+F.lines["---"] = {
     name = "Manually Routed Train",
     short_name = "Manual",
     textline_name = "Manual",
