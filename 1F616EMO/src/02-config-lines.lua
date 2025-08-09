@@ -362,7 +362,7 @@ F.lines["E4"] = {
         { "SAG",  "5" },
         { "NLU", "3" },
         { "HR-eCIG", "2" },
-        { "OVV", "3" },
+        { "OVV", "4" },
         { "eOAI", "4", true },
         { "OVV", "1" },
         { "HR-eCIG", "1" },
@@ -437,6 +437,14 @@ F.lines["VFT"] = {
         { "VFT",  "2", true },
         { "eSPH", "2" }, -- physically reversed but logically didn't
     }),
+}
+
+-- Manually routed trains
+
+F.lines["~~~"] = {
+    name = "Manually Routed Train",
+    short_name = "Manual",
+    textline_name = "Manual",
 }
 
 -- Deprecated / unused
