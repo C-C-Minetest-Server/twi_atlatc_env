@@ -871,7 +871,7 @@ F.set_status_textline = function(lines)
                 local linedef = F.lines[line_id]
                 disp = disp .. (linedef and linedef.code or line_id)
 
-                local term_text = linedef.custom_term_desc_short or linedef.custom_term_desc
+                local term_text = linedef and (linedef.custom_term_desc_short or linedef.custom_term_desc)
                 if not term_text then
                     if dir then
                         local term_id = get_term_id(line_id, dir)
