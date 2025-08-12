@@ -42,9 +42,15 @@ F.set_route_if_all_can = function(defs)
     end
     return true
 end
-
 F.checkpoint = function(checkpoint_id)
     if event.train and atc_arrow and atc_id then
+        if not checkpoint_id then
+            if atc_pos then
+                checkpoint_id = "POS:" .. atc_pos.x .. ":" .. atc_pos.y .. ":" .. atc_pos.z .. ""
+            else
+                return
+            end
+        end
         F.register_train_on_checkpoint(checkpoint_id, atc_id)
     end
 end
