@@ -24,6 +24,7 @@ read_globals = {
     "atc_id",
     "atc_speed",
     "atc_arrow",
+    "atc_pos",
 
     "get_line",
     "set_line",
