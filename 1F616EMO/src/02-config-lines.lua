@@ -372,6 +372,20 @@ F.lines["E4"] = {
     }),
 }
 
+F.lines["NX"] = {
+    rc = "L-NX",
+    name = "Newcomers Express",
+    short_name = "Newcomers",
+    W = "BAJ",
+    E = "eGRO",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRO", "8", true },
+        { "BAJ",  "2A", true },
+    }),
+}
+
 F.lines["RXB"] = {
     rc = "L-RXB",
     name = "RelaxingBasin Shuttle",

@@ -41,6 +41,8 @@ F.stations = {
     CED = "Centric Desert",
     PIA = "Piaskowiec",
     eOTH = "Otterhood",
+    MOT = "Mount Turkey",
+    BAJ = "Basandra Junction",
 
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = "ShroomVille (Backup Platform)",
