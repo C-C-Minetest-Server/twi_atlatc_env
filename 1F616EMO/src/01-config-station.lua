@@ -125,7 +125,7 @@ F.station_interchange = {
     GRH = { "GRH1", "GRH2" },
     SHI = { "GRH1", "GRH2" },
     eOTH = { "E4", "GRH1" },
-    GRO = { "GRH2", "E4" },
+    GRO = { "GRH2", "E4", "NX" },
     OAI = { "E4", "OAI" },
     NLU = { "E4", "SPN" },
 
