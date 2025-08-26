@@ -82,6 +82,7 @@ F.stations_short = {
     YTP = "Yantian Rd.",
     SCC = "Sca. Cliff",
     RXB = "RelaxBasin",
+    BAJ = "Basandra Jct.",
 
     eYTP = "Yantian Rd.",
     eSVE = "E. SmushyVille",
