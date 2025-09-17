@@ -446,9 +446,16 @@ F.lines["SPN"] = {
     short_name = "Origin",
 }
 
+-- Carts (Display only)
+
 F.lines["ALFC"] = {
     code = "ALFC",
     name = "Alcantaramark's Carts",
+}
+
+F.lines["RXIC"] = {
+    code = "RXIC",
+    name = "RelaxingIsland Carts",
 }
 
 -- Manually routed trains
