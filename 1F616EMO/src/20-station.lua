@@ -83,7 +83,7 @@ function F.set_outside_subway(def)
     local next = def.reverse and def.rev_next or def.next
     local term_name = linedef.custom_term_desc or get_line_term_string(line, dir)
     local term_short_name = linedef.custom_term_desc_short or get_line_term_short_disp_string(line, dir)
-    local line_name = linedef and linedef.name or def.line
+    local line_name = linedef and linedef.short_name or linedef.name or def.line
     local next_name = F.stations[next] or next or ""
     if term_name then
         atc_set_text_outside(string.format(
