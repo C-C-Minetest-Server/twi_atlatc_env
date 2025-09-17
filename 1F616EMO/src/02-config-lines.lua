@@ -407,6 +407,8 @@ F.lines["HR-LUC-LRT1"] = {
     code = "LRT1",
     name = "Luciopoli Polislink: Line 1",
     short_name = "Polislink 1",
+    N = "HR-CIG",
+    S = "HR-LUC",
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
