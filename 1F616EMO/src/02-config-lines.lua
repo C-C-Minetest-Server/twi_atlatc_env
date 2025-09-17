@@ -446,26 +446,9 @@ F.lines["SPN"] = {
     short_name = "Origin",
 }
 
-F.lines["VD-VFT1"] = {
-    code = "VFT1",
-    name = "Fenced Town Subway",
-    short_name = "Subway",
-}
-
-F.lines["VFT"] = {
-    rc = "L-VFT",
-    name = "Fenced Town Shuttle",
-    short_name = "Fenced Town",
-    N = "eGRH",
-    S = "VFT",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eGRH", "4", true },
-        { "eSPH", "1" }, -- physically reversed but logically didn't
-        { "VFT",  "2", true },
-        { "eSPH", "2" }, -- physically reversed but logically didn't
-    }),
+F.lines["ALFC"] = {
+    code = "ALFC",
+    name = "Alcantaramark's Carts",
 }
 
 -- Manually routed trains
@@ -528,6 +511,28 @@ F.lines["E3"] = {
     name = "1F616EMO Express 3",
     E = "eOAI",
     W = "HR-NEN",
+}
+
+F.lines["VD-VFT1"] = {
+    code = "VFT1",
+    name = "Fenced Town Subway",
+    short_name = "Subway",
+}
+
+F.lines["VFT"] = {
+    rc = "L-VFT",
+    name = "Fenced Town Shuttle",
+    short_name = "Fenced Town",
+    N = "eGRH",
+    S = "VFT",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRH", "4", true },
+        { "eSPH", "1" }, -- physically reversed but logically didn't
+        { "VFT",  "2", true },
+        { "eSPH", "2" }, -- physically reversed but logically didn't
+    }),
 }
 
 -- Ferry

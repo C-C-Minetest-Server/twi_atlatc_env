@@ -118,6 +118,7 @@ F.station_interchange = {
     ISN = { "S1", "U1", },
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", },
+    ALF = { "S1", "ALFC", },
     YTP = { "SPN", "E1", "LUC", "RXB", },
     SVE = { "E1", "CSL", },
     SAG = { "E1", "E4", "CSL", },
