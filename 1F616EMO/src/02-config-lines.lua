@@ -400,6 +400,21 @@ F.lines["RXB"] = {
     }),
 }
 
+-- HelenasaurusRex's Polislink
+
+F.lines["HR-LUC-LRT1"] = {
+    rc = "L-HR-LUC-LRT1",
+    code = "LRT1",
+    name = "Luciopoli Polislink: Line 1",
+    short_name = "Polislink 1",
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "HR-CIG", "1", true },
+        { "HR-LUC", "L2", true },
+    }),
+}
+
 -- Vedu_0825's services
 
 F.lines["VD-VFT1-CW"] = {
