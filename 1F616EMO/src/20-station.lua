@@ -129,6 +129,32 @@ local function generate_interchange_string(stn, curr_line, through_line_id)
             end
         end
     end
+    if F.complementary_station[stn] and F.lines[curr_line] and F.lines[curr_line].show_complementary_station then
+        for _, data in ipairs(F.complementary_station[stn]) do
+            local dest = data[1]
+            local via = data[2]
+            if via ~= curr_line and F.station_interchange[dest] then
+                rtn = rtn ..
+                    "\nComplementary station: " ..
+                    (F.stations[dest] or dest) .. " via " ..
+                    (F.lines[via] and F.lines[via].name or via) ..
+                    ", access: \n"
+                local counter = 0
+                for _, line in ipairs(F.station_interchange[dest]) do
+                    if line ~= curr_line and line ~= via and line ~= through_line_id then
+                        local line_def = F.lines[line]
+                        local line_name = line_def and line_def.name or line
+                        if counter == 0 then
+                            rtn = rtn .. line_name
+                        else
+                            rtn = rtn .. ", " .. (counter % 3 == 0 and "\n" or "") .. line_name
+                        end
+                        counter = counter + 1
+                    end
+                end
+            end
+        end
+    end
     return rtn
 end
 

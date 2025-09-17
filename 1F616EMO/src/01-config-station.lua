@@ -152,3 +152,26 @@ F.interchange_line_alias = {
     ["GRH1E"] = "GRH1",
     ["VD-VFT1-CW"] = "VF-VFT1",
 }
+
+F.complementary_station = {
+    ["eYTP"] = {
+        { "NLU", "SPN" },
+    },
+    ["NLU"] = {
+        { "eYTP", "SPN" },
+    },
+
+    ["HR-eCIG"] = {
+        { "HR-LUC", "HR-LUC-LRT1" },
+    },
+    ["HR-LUC"] = {
+        { "HR-eCIG", "HR-LUC-LRT1" },
+    },
+
+    ["eGRH"] = {
+        { "eGRO", "GRH2" },
+    },
+    ["eGRO"] = {
+        { "eGRH", "GRH2" },
+    },
+}

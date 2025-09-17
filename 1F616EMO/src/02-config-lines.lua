@@ -318,6 +318,7 @@ F.lines["E1"] = {
     E = "NO-T",
     W = "SAG",
 
+    show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "NO-T", "3", true }, -- 103 in y5nw's system
@@ -336,6 +337,7 @@ F.lines["LUC"] = {
     N = "eGRH",
     S = "HR-NEN",
 
+    show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eGRH",   "3", true },
@@ -355,6 +357,7 @@ F.lines["E4"] = {
     E = "eOAI",
     W = "eGRO",
 
+    show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eGRO", "3", true },
@@ -379,6 +382,7 @@ F.lines["NX"] = {
     W = "BAJ",
     E = "eGRO",
 
+    show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eGRO", "8", true },
@@ -393,6 +397,7 @@ F.lines["RXB"] = {
     N = "eYTP",
     S = "RXB",
 
+    show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eYTP", "3", true },
