@@ -1044,20 +1044,52 @@ F.get_station_status_textline_info_lines = function(station, tracks)
 end
 
 F.get_express_station_display_lines = function(def)
-    local dest_key = F.get_stn_status_key(def)
-
-    if not def.no_current_train and F.platform_display_control[dest_key]
-        and F.platform_display_control[dest_key].status == "DEP" then
-        return F.get_textline_display(def)
-    end
-
     def.track = def.track or def.platform_id
-
-    local info_lines = def.here and def.track
-        and F.get_track_status_textline_info_lines(def.here, def.track, def.custom_stations) or {}
-
+    local dest_key = F.get_stn_status_key(def)
     local header = (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":"
     header = string.format("%-20s %s", header, rwt.to_string(rwt.now(), true))
+
+    local info_lines
+    if not def.no_current_train and F.platform_display_control[dest_key]
+        and F.platform_display_control[dest_key].status == "DEP" then
+        local stn_event, time_left, line_id, dir = F.get_station_status(def)
+        local linedef = F.lines[line_id]
+
+        local term_text = linedef and
+            linedef.custom_term_desc_textline or
+            linedef.custom_term_desc_short or
+            linedef.custom_term_desc
+        if not term_text then
+            term_text = "Unknown Terminus"
+            if line_id and dir then
+                local term_id = get_term_id(line_id, dir)
+                if term_id then
+                    local station_name
+                    if def.custom_stations then
+                        station_name = cascade_index(def.custom_stations, F.stations)(term_id)
+                    else
+                        station_name = F.stations[term_id]
+                    end
+                    term_text = "To " .. (station_name or term_id)
+                end
+            end
+        end
+
+        info_lines = {
+            def.custom_line or (linedef and (linedef.textline_name or linedef.name)) or line_id or "",
+            term_text,
+            "Leaving " .. (time_left > 0 and ("in " .. time_left .. " sec.") or "now")
+        }
+    else
+        info_lines = def.here and def.track
+        and F.get_track_status_textline_info_lines(def.here, def.track, def.custom_stations) or {}
+    end
+
+    if #info_lines == 0 then
+        info_lines[1] = " "
+        info_lines[2] = "!!  TRAINS ARE DEADLY   !!"
+        info_lines[3] = "!! NEVER WALK ON TRACKS !!"
+    end
 
     return {
         header,
