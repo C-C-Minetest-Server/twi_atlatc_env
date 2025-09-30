@@ -60,6 +60,7 @@ F.stations = {
     ["HR-LUC"] = "Luciopoli Central",
     ["HR-CIG"] = "Citrus Grove",
     ["HR-eCIG"] = "Citrus Grove",
+    ["HR-SLU"] = "South Luciopoli",
     ["HR-NEN"] = "New Normandy Central",
 
     -- Vedu_0825

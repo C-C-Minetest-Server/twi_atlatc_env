@@ -414,12 +414,14 @@ F.lines["HR-LUC-LRT1"] = {
     textline_name = "Polislink Line 1",
     short_name = "Polislink 1",
     N = "HR-CIG",
-    S = "HR-LUC",
+    S = "HR-SLU",
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "HR-CIG", "1", true },
-        { "HR-LUC", "L2", true },
+        { "HR-LUC", "L2" },
+        { "HR-SLU", "2", true },
+        { "HR-LUC", "L1" },
     }),
 }
 
