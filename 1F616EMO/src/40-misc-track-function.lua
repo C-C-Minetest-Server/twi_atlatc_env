@@ -14,7 +14,7 @@ F.rev = function(speed, func)
     end
 end
 
-F.pre_signal = function(curr_system)
+F.pre_signal = function(_dep_curr_system)
     __approach_callback_mode = 1
 
     if not event.approach or event.has_entered then return end
@@ -26,10 +26,6 @@ F.pre_signal = function(curr_system)
         atc_set_ars_disable(true)
     elseif F.has_rc("A1", rc) then
         atc_set_ars_disable(false)
-    end
-
-    if curr_system then
-        F.find_and_set_route(curr_system)
     end
 end
 
