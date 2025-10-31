@@ -121,23 +121,19 @@ F.station_interchange = {
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", "RXIC", },
     ALF = { "SPN", "ALFC", },
-    YTP = { "SPN", "E1", "LUC", "RXB", },
-    SVE = { "E1", "CSL", },
-    SAG = { "E1", "E4", "CSL", },
+    YTP = { "SPN", "SPN-S1", "RXB", },
     ACP = { "CEN", "OAI", },
-    OVV = { "S1", "E4", },
+    OVV = { "S1", "SPN-S1", },
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2", "LUC" },
     SHI = { "GRH1", "GRH2" },
-    eOTH = { "E4", "GRH1" },
-    GRO = { "GRH2", "E4", "NX" },
-    OAI = { "E4", "OAI" },
-    NLU = { "E4", "SPN" },
+    GRO = { "GRH2", "NX" },
+    OAI = { "OAI", "SPN-S1", },
 
-    ["NO-WS"] = { "NO1", "NO2", "E1", },
+    ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
     ["HR-LUC"] = { "LUC", "HR-LUC-LRT1" },
-    ["HR-CIG"] = { "E4", "HR-LUC-LRT1" },
+    ["HR-CIG"] = { "HR-LUC-LRT1", "SPN-S1" },
 }
 F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE
