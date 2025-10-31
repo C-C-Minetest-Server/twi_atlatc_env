@@ -166,6 +166,8 @@ F.stn = function(def)
 end
 
 local function match_train(line_def, train)
+    if not line_def then return false end
+
     if line_def.rc then
         if F.has_rc(line_def.rc, train:get_rc()) then
             return true

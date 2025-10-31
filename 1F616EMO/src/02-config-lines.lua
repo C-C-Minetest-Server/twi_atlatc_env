@@ -310,70 +310,7 @@ F.lines["NO2"] = {
     S = "NO-WS",
 }
 
--- Express / Intercity
-
-F.lines["E1"] = {
-    rc = "L-E1",
-    name = "1F616EMO Express 1",
-    E = "NO-T",
-    W = "SAG",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "NO-T", "3", true }, -- 103 in y5nw's system
-        { "eYTP", "1" },
-        { "eSVE", "1" },
-        { "SAG",  "4", true },
-        { "eSVE", "2" },
-        { "eYTP", "2" },
-    }),
-}
-
-F.lines["LUC"] = {
-    rc = "L-LUC",
-    code = "E2",
-    name = "1F616EMO Express 2",
-    N = "eGRH",
-    S = "HR-NEN",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eGRH",   "3", true },
-        { "eSPH",   "1" },
-        { "eYTP",   "5" },
-        { "HR-LUC", "1" },
-        { "HR-NEN", "1", true },
-        { "HR-LUC", "6" },
-        { "eYTP",   "6" },
-        { "eSPH",   "2" },
-    }),
-}
-
-F.lines["E4"] = {
-    rc = "L-E4",
-    name = "1F616EMO Express 4",
-    E = "eOAI",
-    W = "eGRO",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eGRO", "3", true },
-        { "eOTH", "2" },
-        { "SAG",  "5" },
-        { "NLU", "3" },
-        { "HR-eCIG", "2" },
-        { "OVV", "4" },
-        { "eOAI", "4", true },
-        { "OVV", "1" },
-        { "HR-eCIG", "1" },
-        { "NLU", "4" },
-        { "SAG",  "3" },
-        { "eOTH", "1" },
-    }),
-}
+-- Express
 
 F.lines["NX"] = {
     rc = "L-NX",
@@ -387,6 +324,27 @@ F.lines["NX"] = {
         -- station, track, reverse point
         { "eGRO", "8", true },
         { "BAJ",  "2A", true },
+    }),
+}
+
+-- Intercity / S-Bahn
+
+F.lines["SPN-S1"] = {
+    rc = "L-SPN-S1",
+    code = "S1",
+    name = "Origin S-Bahn Line 1",
+    N = "NO-T",
+    S = "HR-NEN",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "NO-T", "3", true }, -- 103 in y5nw's system
+        { "eYTP", "5" },
+        { "HR-LUC", "1" },
+        { "HR-NEN", "1", true },
+        { "HR-LUC", "6" },
+        { "eYTP", "6" },
     }),
 }
 
@@ -520,6 +478,69 @@ F.lines["VFT2"] = {
         -- station, track, reverse point
         { "eYTP", "4", true },
         { "VFT",  "2", true },
+    }),
+}
+
+F.lines["E1"] = {
+    rc = "L-E1",
+    name = "1F616EMO Express 1",
+    E = "NO-T",
+    W = "SAG",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "NO-T", "3", true }, -- 103 in y5nw's system
+        { "eYTP", "1" },
+        { "eSVE", "1" },
+        { "SAG",  "4", true },
+        { "eSVE", "2" },
+        { "eYTP", "2" },
+    }),
+}
+
+F.lines["LUC"] = {
+    rc = "L-LUC",
+    code = "E2",
+    name = "1F616EMO Express 2",
+    N = "eGRH",
+    S = "HR-NEN",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRH",   "3", true },
+        { "eSPH",   "1" },
+        { "eYTP",   "5" },
+        { "HR-LUC", "1" },
+        { "HR-NEN", "1", true },
+        { "HR-LUC", "6" },
+        { "eYTP",   "6" },
+        { "eSPH",   "2" },
+    }),
+}
+
+F.lines["E4"] = {
+    rc = "L-E4",
+    name = "1F616EMO Express 4",
+    E = "eOAI",
+    W = "eGRO",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRO", "3", true },
+        { "eOTH", "2" },
+        { "SAG",  "5" },
+        { "NLU", "3" },
+        { "HR-eCIG", "2" },
+        { "OVV", "4" },
+        { "eOAI", "4", true },
+        { "OVV", "1" },
+        { "HR-eCIG", "1" },
+        { "NLU", "4" },
+        { "SAG",  "3" },
+        { "eOTH", "1" },
     }),
 }
 
