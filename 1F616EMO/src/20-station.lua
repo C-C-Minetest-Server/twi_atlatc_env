@@ -258,6 +258,27 @@ F.stn_v2 = function(basic_def, lines_def)
                     }
                 end
             end
+
+            -- Clear all RCs starting with S-, SN-, J-, Y-
+            -- if K-STN-CLEAR-ROUTE is present
+            local old_rcs = train:get_rc()
+            if F.has_rc("K-STN-CLEAR-ROUTE", old_rcs) then
+                local rc_list = F.get_rc_list(old_rcs)
+                local rc_keep = {}
+                for _, rc in ipairs(rc_list) do
+                    local rc_sub2 = string.sub(rc, 1, 2)
+                    local rc_sub3 = string.sub(rc, 1, 3)
+                    if not (
+                            rc_sub2 == "S-"
+                            or rc_sub3 == "SN-"
+                            or rc_sub2 == "J-"
+                            or rc_sub2 == "Y-"
+                        ) then
+                        table.insert(rc_keep, rc)
+                    end
+                end
+                train:set_rc(table.concat(rc_keep, " "))
+            end
         elseif status_key then
             F.platform_display_control[status_key] = {
                 status = "NON",
