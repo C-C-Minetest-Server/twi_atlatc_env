@@ -334,16 +334,18 @@ F.lines["SPN-S1"] = {
     code = "S1",
     name = "Origin S-Bahn Line 1",
     N = "NO-T",
-    S = "HR-NEN",
+    S = "eOAI",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "NO-T", "3", true }, -- 103 in y5nw's system
         { "eYTP", "5" },
-        { "HR-LUC", "1" },
-        { "HR-NEN", "1", true },
-        { "HR-LUC", "6" },
+        { "HR-eCIG", "2" },
+        { "OVV", "4" },
+        { "eOAI", "4", true },
+        { "OVV", "1" },
+        { "HR-eCIG", "1" },
         { "eYTP", "6" },
     }),
 }
