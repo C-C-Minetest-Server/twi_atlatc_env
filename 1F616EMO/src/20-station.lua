@@ -275,6 +275,7 @@ F.stn_v2 = function(basic_def, lines_def)
                             or rc_sub3 == "SN-"
                             or rc_sub2 == "J-"
                             or rc_sub2 == "Y-"
+                            or rc == "K-STN-CLEAR-ROUTE"
                         ) then
                         table.insert(rc_keep, rc)
                     end
