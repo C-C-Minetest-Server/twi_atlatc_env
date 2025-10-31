@@ -125,14 +125,13 @@ F.station_interchange = {
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "SPN-S1", },
     VFT = { "GRH1", "VD-VFT1" },
-    GRH = { "GRH1", "GRH2", "LUC" },
+    GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
     GRO = { "GRH2", "NX" },
     OAI = { "OAI", "SPN-S1", },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
-    ["HR-LUC"] = { "LUC", "HR-LUC-LRT1" },
     ["HR-CIG"] = { "HR-LUC-LRT1", "SPN-S1" },
 }
 F.station_interchange.eYTP = F.station_interchange.YTP
@@ -151,13 +150,6 @@ F.interchange_line_alias = {
 }
 
 F.complementary_station = {
-    ["eYTP"] = {
-        { "NLU", "SPN" },
-    },
-    ["NLU"] = {
-        { "eYTP", "SPN" },
-    },
-
     ["HR-eCIG"] = {
         { "HR-LUC", "HR-LUC-LRT1" },
     },
