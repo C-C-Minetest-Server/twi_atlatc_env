@@ -121,7 +121,7 @@ F.station_interchange = {
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", "RXIC", },
     ALF = { "SPN", "ALFC", },
-    YTP = { "SPN", "SPN-S1", "RXB", },
+    YTP = { "SPN", "SPN-S1", "RXB", "SVL", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "SPN-S1", },
     VFT = { "GRH1", "VD-VFT1" },
@@ -129,6 +129,9 @@ F.station_interchange = {
     SHI = { "GRH1", "GRH2" },
     GRO = { "GRH2", "NX" },
     OAI = { "OAI", "SPN-S1", },
+    SVE = { "CSL", "SVL", },
+    SAG = { "CSL", "SVL", },
+    OTH = { "GRH1", "SVL", },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
@@ -147,6 +150,8 @@ F.interchange_line_alias = {
     ["SPN-ACW"] = "SPN",
     ["GRH1E"] = "GRH1",
     ["VD-VFT1-CW"] = "VF-VFT1",
+    ["SVL-CW"] = "SVL",
+    ["SVL-ACW"] = "SVL",
 }
 
 F.complementary_station = {

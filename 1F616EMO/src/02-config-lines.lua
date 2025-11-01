@@ -464,6 +464,13 @@ F.lines["SPN"] = {
     short_name = "Origin",
 }
 
+F.lines["SVL"] = {
+    code = "SVL",
+    name = "SmushyVille Loop",
+    textline_name = "SmushyVille Loop",
+    short_name = "SmushyVille",
+}
+
 -- Carts (Display only)
 
 F.lines["ALFC"] = {
