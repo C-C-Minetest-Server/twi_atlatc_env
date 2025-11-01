@@ -131,7 +131,7 @@ F.station_interchange = {
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", },
     SAG = { "CSL", "SVL", },
-    OTH = { "GRH1", "SVL", },
+    eOTH = { "GRH1", "SVL", },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
