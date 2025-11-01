@@ -350,6 +350,54 @@ F.lines["SPN-S1"] = {
     }),
 }
 
+F.lines["SVL-CW"] = {
+    rc = "L-SVL-CW",
+    code = "SVL",
+    name = "SmushyVille Loop",
+    textline_name = "SmushyVille Loop",
+    short_name = "SmushyVille",
+    default_dir = "CW",
+    custom_dir_abbr = "CW",
+    custom_term_desc = "Clockwise Loop",
+    custom_term_desc_textline = "Clockwise Loop",
+    custom_term_desc_short = "Clockwise",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eYTP", "1" },
+        { "eSVE", "1" },
+        { "SAG", "4" },
+        { "OTH", "1" },
+        { "eSPH", "1" },
+        -- { "ABM", "1" },
+    }),
+}
+
+F.lines["SVL-ACW"] = {
+    rc = "L-SVL-ACW",
+    code = "SVL",
+    name = "SmushyVille Loop",
+    textline_name = "SmushyVille Loop",
+    short_name = "SmushyVille",
+    default_dir = "ACW",
+    custom_dir_abbr = "ACW",
+    custom_term_desc = "Anti-clockwise Loop",
+    custom_term_desc_textline = "Anti-clockwise Loop",
+    custom_term_desc_short = "Anti-clockw.",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eYTP", "2" },
+        -- { "ABM", "2" },
+        { "eSPH", "2" },
+        { "OTH", "2" },
+        { "SAG", "6" },
+        { "eSVE", "2" },
+    }),
+}
+
 F.lines["RXB"] = {
     rc = "L-RXB",
     name = "RelaxingBasin Shuttle",
