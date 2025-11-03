@@ -327,6 +327,23 @@ F.lines["NX"] = {
     }),
 }
 
+F.lines["OEX"] = {
+    rc = "L-OEX",
+    name = "Origin Express",
+    short_name = "Origin",
+    W = "eGRO",
+    E = "HR-NEN",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRO", "3", true },
+        { "eYTP", "3" },
+        { "HR-NEN", "2", true },
+        { "eYTP", "4" },
+    }),
+}
+
 -- Intercity / S-Bahn
 
 F.lines["SPN-S1"] = {
