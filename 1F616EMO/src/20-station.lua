@@ -324,13 +324,14 @@ F.stn_v2 = function(basic_def, lines_def)
             local time_str
             local rwtime = rwt.now()
             local rwnext
+            local adjustment = 0
             if stn_line_def.rpt_interval then
                 rwnext = rwtime
                 repeat
                     rwnext = rwt.next_rpt(rwnext, stn_line_def.rpt_interval, stn_line_def.rpt_offset or 0)
                 until rwt.diff(rwtime, rwnext) >= (stn_line_def.min_stop_time or 5)
             else
-                local adjustment = F.get_departure_time_adjustment(
+                adjustment = F.get_departure_time_adjustment(
                     stn_line_def.here,
                     stn_line_def.track or stn_line_def.platform_id,
                     line_id)
@@ -355,7 +356,8 @@ F.stn_v2 = function(basic_def, lines_def)
             end
             time_str = "\n" ..
                 (status_key and (status_key .. " ") or "") ..
-                "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true)
+                "Arr. " .. rwt.to_string(rwtime, true) .. " Dep. " .. rwt.to_string(rwnext, true) ..
+                " (" .. (adjustment >= 0 and ("+" .. adjustment) or adjustment) .. ")"
 
             atc_send("B0WO" .. (stn_line_def.door_dir or "C") .. (stn_line_def.kick and "K" or ""))
 
