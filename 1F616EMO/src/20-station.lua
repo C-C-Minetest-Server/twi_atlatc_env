@@ -736,7 +736,7 @@ F.get_departure_time_adjustment = function(stn_key, track, line_id)
     local delta_sign = delta_of_delta >= 0 and 1 or -1
     local abs_delta = math.abs(delta_of_delta)
 
-    local adjustment = -delta_sign * math.min(line.departure_time_adjustment, math.floor(abs_delta / 2))
+    local adjustment = -delta_sign * math.min(line.departure_time_adjustment, math.floor(math.sqrt(abs_delta)))
     return adjustment
 end
 
