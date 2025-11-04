@@ -263,7 +263,7 @@ F.lines["GRH2"] = {
     W = "DUI",
     E = "KIH",
 
-    departure_time_adjustment = 2,
+    departure_time_adjustment = 10,
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
