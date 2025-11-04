@@ -330,7 +330,11 @@ F.stn_v2 = function(basic_def, lines_def)
                     rwnext = rwt.next_rpt(rwnext, stn_line_def.rpt_interval, stn_line_def.rpt_offset or 0)
                 until rwt.diff(rwtime, rwnext) >= (stn_line_def.min_stop_time or 5)
             else
-                rwnext = rwt.add(rwtime, stn_line_def.delay or 10)
+                local adjustment = F.get_departure_time_adjustment(
+                    stn_line_def.here,
+                    stn_line_def.track or stn_line_def.platform_id,
+                    line_id)
+                rwnext = rwt.add(rwtime, (stn_line_def.delay or 10) + adjustment)
             end
             stn_line_def.rwnext = rwnext
             if rwt.diff(rwnext, rwtime) > 1 then
@@ -688,6 +692,50 @@ F.register_train_arrive = function(dest_key, atc_id)
         end
         station_checkpoint_data[src_key] = delta_time
     end
+end
+
+-- Do minor tweaks on train departure time
+-- in an attempt to average arrival times
+-- only enabled on line where F.lines[].departue_time_adjustment is not nil
+-- If set, the number will be the maximum adjustment in seconds
+
+-- keys: <stn>:<track>:<line>
+
+-- Delta time of last arrival
+F.last_arrival_delta = {}
+
+-- os.time() of last arrival
+F.last_arrival_time = {}
+
+-- Register arrival, and get adjustment
+-- Change are done atomically to the tables
+F.get_departure_time_adjustment = function(stn_key, track, line_id)
+    local line = F.lines[line_id]
+    if not line or not line.departure_time_adjustment then return 0 end
+
+    local tb_key = stn_key .. ":" .. track .. ":" .. line_id
+
+    local last_arrival_time = F.last_arrival_time[tb_key]
+    local new_arrival_time = os.time()
+    F.last_arrival_time[tb_key] = new_arrival_time
+    if not last_arrival_time then
+        return 0
+    end
+
+    local last_arrival_delta = F.last_arrival_delta[tb_key]
+    local new_arrival_delta = new_arrival_time - last_arrival_time
+    F.last_arrival_delta[tb_key] = new_arrival_delta
+
+    if not last_arrival_delta then
+        return 0
+    end
+
+    local delta_of_delta = new_arrival_delta - (last_arrival_delta or 0)
+    local delta_sign = delta_of_delta >= 0 and 1 or -1
+    local abs_delta = math.abs(delta_of_delta)
+
+    local adjustment = delta_sign * math.min(line.departure_time_adjustment, math.floor(abs_delta / 2))
+    return adjustment
 end
 
 ---@return string status
