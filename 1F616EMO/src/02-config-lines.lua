@@ -75,6 +75,8 @@ F.lines["SPN-CW"] = {
     custom_term_desc_textline = "Clockwise Loop",
     custom_term_desc_short = "Clockwise",
 
+    departure_time_adjustment = 2,
+
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "SPN", "1" },
@@ -100,6 +102,8 @@ F.lines["SPN-ACW"] = {
     custom_term_desc = "Anti-clockwise Loop",
     custom_term_desc_textline = "Anti-clockwise Loop",
     custom_term_desc_short = "Anti-clockw.",
+
+    departure_time_adjustment = 2,
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
