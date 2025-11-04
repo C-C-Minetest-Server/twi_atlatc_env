@@ -704,7 +704,7 @@ end
 -- keys: <stn>:<track>:<line>
 
 -- Delta time of last arrival
-F.last_arrival_delta = {}
+F.last_arrival_delta_avg = {}
 
 -- os.time() of last arrival
 F.last_arrival_time = {}
@@ -724,19 +724,23 @@ F.get_departure_time_adjustment = function(stn_key, track, line_id)
         return 0
     end
 
-    local last_arrival_delta = F.last_arrival_delta[tb_key]
+    local last_arrival_delta = F.last_arrival_delta_avg[tb_key]
     local new_arrival_delta = new_arrival_time - last_arrival_time
-    F.last_arrival_delta[tb_key] = new_arrival_delta
 
     if not last_arrival_delta then
+        F.last_arrival_delta_avg[tb_key] = new_arrival_delta
         return 0
     end
+
+    F.last_arrival_delta_avg[tb_key] =
+        last_arrival_delta * F.AVERGING_FACTOR
+        + new_arrival_delta * (1 - F.AVERGING_FACTOR)
 
     local delta_of_delta = new_arrival_delta - (last_arrival_delta or 0)
     local delta_sign = delta_of_delta >= 0 and 1 or -1
     local abs_delta = math.abs(delta_of_delta)
 
-    local adjustment = -delta_sign * math.min(line.departure_time_adjustment, math.floor(math.sqrt(abs_delta)))
+    local adjustment = -delta_sign * math.floor(math.min(line.departure_time_adjustment, math.sqrt(abs_delta)))
     return adjustment
 end
 
