@@ -1176,3 +1176,82 @@ F.get_express_station_display_lines = function(def)
         info_lines[3] or "",
     }
 end
+
+F.get_next_arrive_train_billboard = function(def)
+    local here = def.here
+    local track = def.track or def.platform_id
+    local dest_key = here .. ":" .. track
+
+    local arrived = false
+    local train_id = nil
+    local line_code = nil
+
+    if F.platform_display_control[dest_key] and F.platform_display_control[dest_key].status == "DEP" then
+        arrived = true
+        train_id = F.platform_display_control[dest_key].atc_id
+        line_code = F.platform_display_control[dest_key].line_id
+    else
+        local dest_data = F.sort_track_destination_data(dest_key)
+
+        if #dest_data > 0 then
+            train_id = dest_data[1].atc_id
+            line_code = dest_data[1].line_code
+        end
+    end
+
+    if not train_id then
+        return {
+            "No trains arriving.",
+        }
+    end
+
+    local line_data = F.lines[line_code]
+    local line_name = line_data and (line_data.textline_name or line_data.name) or line_code
+
+    local disp_ln = {}
+    disp_ln[1] = (arrived and "Arrived: " or "Coming:  ") .. line_name
+    disp_ln[2] = "Destination          Time "
+
+    local adjacent_stations_data = line_data.adjacent_stations and line_data.adjacent_stations[dest_key]
+    if not adjacent_stations_data then
+        disp_ln[3] = "[No data available.]"
+        return disp_ln
+    end
+
+    for _, coming_station_data in ipairs(adjacent_stations_data) do
+        local coming_stn = coming_station_data[1]
+        local coming_track = coming_station_data[2]
+        local coming_reverse = coming_station_data[3]
+
+        local coming_stn_name = def.custom_stations and def.custom_stations[coming_stn]
+            or F.stations_short[coming_stn]
+            or F.stations[coming_stn] or coming_stn
+
+        local coming_key = coming_stn .. ":" .. coming_track
+        local coming_dest_entry = F.trains_by_destination[coming_key]
+            and F.trains_by_destination[coming_key][train_id]
+
+        local time_left = nil
+        if coming_dest_entry then
+            local latest_checkpoint = coming_dest_entry.latest
+            local latest_checkpoint_arr_time =
+                coming_dest_entry.checkpoints and coming_dest_entry.checkpoints[latest_checkpoint]
+            local avg_time = S.station_from_checkpoint[coming_key]
+                and S.station_from_checkpoint[coming_key][latest_checkpoint]
+            time_left = avg_time and (avg_time - (os.time() - latest_checkpoint_arr_time)) or nil
+        end
+
+        local time_disp = "[N/A]"
+        if time_left then
+            time_disp = rwt.to_string(rwt.add(rwt.now(), time_left), true)
+        end
+        disp_ln[#disp_ln + 1] = string.format("%-20s %s", string.sub(coming_stn_name, 1, 20), time_disp)
+
+        -- Don't loop on ourselves if we hit reverse
+        if coming_reverse or (coming_stn == here and coming_track == track)then
+            break
+        end
+    end
+
+    return disp_ln
+end
