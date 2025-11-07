@@ -1223,6 +1223,10 @@ F.get_next_arrive_train_billboard = function(def)
         local coming_track = coming_station_data[2]
         local coming_reverse = coming_station_data[3]
 
+        if coming_stn == here and coming_track == track then
+            break
+        end
+
         local coming_stn_name = def.custom_stations and def.custom_stations[coming_stn]
             or F.stations_short[coming_stn]
             or F.stations[coming_stn] or coming_stn
@@ -1248,7 +1252,7 @@ F.get_next_arrive_train_billboard = function(def)
         disp_ln[#disp_ln + 1] = string.format("%-20s %s", string.sub(coming_stn_name, 1, 20), time_disp)
 
         -- Don't loop on ourselves if we hit reverse
-        if coming_reverse or (coming_stn == here and coming_track == track)then
+        if coming_reverse then
             break
         end
     end
