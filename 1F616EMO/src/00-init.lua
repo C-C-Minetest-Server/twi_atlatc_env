@@ -57,6 +57,16 @@ local function aspect_is_free(asp)
     end
 end
 
+local function merge_key_tables(tables)
+    local rtn = {}
+    for _, tb in ipairs(tables) do
+        for k, v in pairs(tb) do
+            rtn[k] = v
+        end
+    end
+    return rtn
+end
+
 F.has_rc = function(query, rc_list) -- query = string, single entry
     if not rc_list then return false end
     for word in rc_list:gmatch("[^%s]+") do

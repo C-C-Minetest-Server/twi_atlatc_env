@@ -485,6 +485,11 @@ F.lines["SPN"] = {
     name = "Origin Metro: Origin Line",
     textline_name = "Origin Line",
     short_name = "Origin",
+
+    adjacent_stations = merge_key_tables({
+        F.lines["SPN-CW"].adjacent_stations,
+        F.lines["SPN-ACW"].adjacent_stations,
+    }),
 }
 
 F.lines["SVL"] = {
@@ -492,6 +497,11 @@ F.lines["SVL"] = {
     name = "SmushyVille Loop",
     textline_name = "SmushyVille Loop",
     short_name = "SmushyVille",
+
+    adjacent_stations = merge_key_tables({
+        F.lines["SVL-CW"].adjacent_stations,
+        F.lines["SVL-ACW"].adjacent_stations,
+    }),
 }
 
 -- Carts (Display only)

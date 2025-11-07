@@ -47,5 +47,6 @@ read_globals = {
     "table_indexof",
     "cascade_index",
     "aspect_is_free",
+    "merge_key_tables",
     "debug",
 }
