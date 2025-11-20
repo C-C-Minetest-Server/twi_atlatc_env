@@ -709,6 +709,8 @@ F.last_arrival_delta_avg = {}
 -- os.time() of last arrival
 F.last_arrival_time = {}
 
+F.ADJUSTMENT_AVERGING_FACTOR = 0.3
+
 -- Register arrival, and get adjustment
 -- Change are done atomically to the tables
 F.get_departure_time_adjustment = function(stn_key, track, line_id)
@@ -733,8 +735,8 @@ F.get_departure_time_adjustment = function(stn_key, track, line_id)
     end
 
     F.last_arrival_delta_avg[tb_key] =
-        last_arrival_delta * F.AVERGING_FACTOR
-        + new_arrival_delta * (1 - F.AVERGING_FACTOR)
+        last_arrival_delta * F.ADJUSTMENT_AVERGING_FACTOR
+        + new_arrival_delta * (1 - F.ADJUSTMENT_AVERGING_FACTOR)
 
     local delta_of_delta = new_arrival_delta - (last_arrival_delta or 0)
     local delta_sign = delta_of_delta >= 0 and 1 or -1
