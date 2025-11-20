@@ -385,6 +385,8 @@ F.lines["SVL-CW"] = {
     custom_term_desc_textline = "Clockwise Loop",
     custom_term_desc_short = "Clockwise",
 
+    departure_time_adjustment = 10,
+
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
@@ -408,6 +410,8 @@ F.lines["SVL-ACW"] = {
     custom_term_desc = "Anti-clockwise Loop",
     custom_term_desc_textline = "Anti-clockwise Loop",
     custom_term_desc_short = "Anti-clockw.",
+
+    departure_time_adjustment = 10,
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
