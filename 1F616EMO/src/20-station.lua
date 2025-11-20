@@ -344,7 +344,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     line_id = line_id,
                 })
             elseif stn_line_def.reverse then
-                schedule(rwnext, {
+                schedule(rwt.sub(rwnext, 1), {
                     type = "reverse",
                     line_id = line_id,
                 })
@@ -429,7 +429,7 @@ F.stn_v2 = function(basic_def, lines_def)
             })
         elseif msg_type == "reverse" then
             atc_send("BBWR")
-            interrupt(0, {
+            interrupt(1, {
                 type = "go",
                 line_id = line_id,
             })
