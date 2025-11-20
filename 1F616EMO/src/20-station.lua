@@ -428,7 +428,7 @@ F.stn_v2 = function(basic_def, lines_def)
                 line_id = line_id,
             })
         elseif msg_type == "reverse" then
-            atc_send("R")
+            atc_send("BBWR")
             interrupt(0, {
                 type = "go",
                 line_id = line_id,
