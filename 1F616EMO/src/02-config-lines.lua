@@ -129,7 +129,7 @@ F.lines["CSL"] = {
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "SVE", "2", true },
+        { "SVE", "1", true },
         { "SDS", "1" },
         { "SHV", "1" },
         { "SAG", "1" },
