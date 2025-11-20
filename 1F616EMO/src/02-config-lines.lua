@@ -425,17 +425,19 @@ F.lines["SVL-ACW"] = {
     }),
 }
 
-F.lines["RXB"] = {
-    rc = "L-RXB",
+-- Technically on subway trains but belongs to national railway
+F.lines["RXB-SVE"] = {
+    rc = "L-RXB-SVE",
+    code = "RXB",
     name = "RelaxingBasin Shuttle",
     short_name = "RelaxingBasin",
-    N = "eYTP",
+    N = "SVE",
     S = "RXB",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "eYTP", "3", true },
+        { "SVE", "2", true },
         { "RXB",  "1", true },
     }),
 }
@@ -664,6 +666,21 @@ F.lines["VFT"] = {
         { "eSPH", "1" }, -- physically reversed but logically didn't
         { "VFT",  "2", true },
         { "eSPH", "2" }, -- physically reversed but logically didn't
+    }),
+}
+
+F.lines["RXB"] = {
+    rc = "L-RXB",
+    name = "RelaxingBasin Shuttle",
+    short_name = "RelaxingBasin",
+    N = "eYTP",
+    S = "RXB",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eYTP", "3", true },
+        { "RXB",  "1", true },
     }),
 }
 

@@ -129,7 +129,7 @@ F.station_interchange = {
     SHI = { "GRH1", "GRH2" },
     GRO = { "GRH2", "NX", "OEX", },
     OAI = { "OAI", "SPN-S1", },
-    SVE = { "CSL", "SVL", },
+    SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", },
     eOTH = { "GRH1", "SVL", },
 
