@@ -1,117 +1,242 @@
-F.stations = {
-    -- 1F616EMO Railway
-    FRI = "Furina Island",
-    SPN = "Origin Island",
-    HLY = "Lianyi Road",
+-- Dictionary of arrays/string
+-- arrays: list of names, from long to short
+-- system will pick the best suiting name for the context
+-- string: if there are no alternatives, same as { string }
+F.station_names = {
+    -- Origin Metro
+    FRI = {
+        "Furina Island",
+        "Furina Isl.",
+    },
+    SPN = {
+        "Origin Island",
+        "Origin Isl.",
+        "Origin",
+    },
+    HLY = {
+        "Lianyi Road",
+        "Lianyi Rd.",
+    },
     SCL = "Scorchland",
-    ISN = "Origin North",
-    SPS = "Origin South",
-    ALF = "Alcantaramark's Factory",
-    RXF = "RelaxingFarm",
+    ISN = {
+        "Origin North",
+        "Origin N.",
+    },
+    SPS = {
+        "Origin South",
+        "Origin S.",
+    },
+    ALF = {
+        "Alcantaramark's Factory",
+        "Alcantaramark's",
+    },
+    RXF = {
+        "RelaxingFarm",
+        "RelaxFarm",
+        "Rx Farm",
+    },
     HAI = "Have Idea",
-    NLU = "North Luciopoli",
-    YTP = "Yantian Road",
-    eYTP = "Yantian Road",
-    SVE = "dloke's Hill",
-    eSVE = "Eastern SmushyVille",
-    SDS = "South Downtown",
-    RXB = "RelaxingBasin",
-    SHV = "ShroomVille",
-    SAG = "Sandy Grove",
-    SAE = "Sandy Edge",
-    ACP = "Acacia Plains",
+    NLU = {
+        "North Luciopoli",
+        "Luciopoli N.",
+    },
+    YTP = {
+        "Yantian Road",
+        "Yantian Rd.",
+    },
+    MOF = {
+        "Mountain Foot",
+        "Mt. Foot",
+    },
+    OVV = {
+        "Oval Valley",
+        "Oval Vly.",
+    },
+
+    -- Acacia Plains Metro
+    ACP = {
+        "Acacia Plains",
+        "Acacia Plns.",
+    },
     OLV = "Oliville",
     OAI = "Oasis",
-    eOAI = "Oasis Main",
-    MOF = "Mountain Foot",
-    WOM = "Woodman",
-    OVV = "Oval Valley",
-    GRH = "Grape Hills",
-    eGRH = "Grape Hills",
-    SHI = "Shino",
-    SCC = "Scattered Cliff",
-    GRO = "Grand Groma",
-    eGRO = "Groma",
-    KIH = "Kitkahood",
-    DUI = "Duck Island",
-    eSPH = "Spagetihood",
-    VFT = "Fenced Town",
-    SNL = "Snake Lakes",
-    CCB = "Coco Beach",
-    CED = "Centric Desert",
-    PIA = "Piaskowiec",
-    eOTH = "Otterhood",
-    MOT = "Mount Turkey",
-    BAJ = "Basandra Junction",
 
-    -- Emergency Stations / Platforms
-    ["EMER-SHV"] = "ShroomVille (Backup Platform)",
+    -- SmushyVille Metro
+    SVE = {
+        "dloke's Hill",
+        "dloke's",
+    },
+    SDS = {
+        "South Downtown",
+        "S. Downtown",
+    },
+    SHV = "ShroomVille",
+    SAG = {
+        "Sandy Grove",
+        "Sandy Grv.",
+    },
+    SAE = {
+        "Sandy Edge",
+        "Sandy Edg.",
+    },
+
+    -- Grape Hills Metro
+    GRH = {
+        "Grape Hills",
+        "Grape Hls.",
+    },
+    SHI = "Shino",
+    SCC = {
+        "Scattered Cliff",
+        "Scat. Cliff",
+    },
+    GRO = "Groma",
+    KIH = "Kitkahood",
+    DUI = {
+        "Duck Island",
+        "Duck Isl.",
+    },
+    VFT = {
+        "Fenced Town",
+        "Fenced Twn.",
+    },
+    SNL = {
+        "Snake Lakes",
+        "Snake Lks.",
+    },
+    CCB = {
+        "Coco Beach",
+        "Coco Bch.",
+    },
+    CED = {
+        "Centric Desert",
+        "Centric Dst.",
+    },
+    PIA = "Piaskowiec",
+
+
+    -- Intercity stations
+    eYTP = {
+        "Yantian Road",
+        "Yantian Rd.",
+    },
+    eSVE = {
+        "Eastern SmushyVille",
+        "SmushyVille E.",
+    },
+    eOAI = {
+        "Oasis Main",
+        "Oasis",
+    },
+    eGRH = {
+        "Grape Hills",
+        "Grape Hls.",
+    },
+    eGRO = "Groma",
+    eSPH = "Spagetihood",
+    eOTH = "Otterhood",
+    MOT = {
+        "Mount Turkey",
+        "Mt. Turkey",
+    },
+    BAJ = {
+        "Basandra Junction",
+        "Basandra Jct.",
+    },
+    WOM = "Woodman",
+    RXB = {
+        "RelaxingBasin",
+        "RelaxBasin",
+        "Rx Basin",
+    },
+
 
     -- Nordstetten
-    ["NO-NE"] = "Eulerstraße",
-    ["NO-IN"] = "Industriestraße",
-    ["NO-WS"] = "Wörther Straße",
-    ["NO-WO"] = "Offenburger Straße",
+    ["NO-NE"] = {
+        "Eulerstraße",
+        "Eulerstr.",
+    },
+    ["NO-IN"] = {
+        "Industriestraße",
+        "Industriestr.",
+    },
+    ["NO-WS"] = {
+        "Wörther Straße",
+        "Wörther Str.",
+    },
+    ["NO-WO"] = {
+        "Offenburger Straße",
+        "Offenburger Str.",
+    },
     ["NO-ISL"] = "Apfelbühl",
-    ["NO-T"] = "Nordstetten Hauptbahnof",
+    ["NO-T"] = {
+        "Nordstetten Hauptbahnof",
+        "Nordstetten Hbf.",
+        "Nordstetten",
+    },
     ["NO-HA"] = "Hagenauer Platz",
 
+
     -- HelenasaurusRex
-    ["HR-LUC"] = "Luciopoli Central",
-    ["HR-CIG"] = "Citrus Grove",
-    ["HR-eCIG"] = "Citrus Grove",
-    ["HR-SLU"] = "South Luciopoli",
-    ["HR-NEN"] = "New Normandy Central",
+    ["HR-LUC"] = {
+        "Luciopoli Central",
+        "Luciopoli Ctl.",
+        "Luciopoli",
+    },
+    ["HR-CIG"] = {
+        "Citrus Grove",
+        "Citrus Grv.",
+    },
+    ["HR-eCIG"] = {
+        "Citrus Grove",
+        "Citrus Grv.",
+    },
+    ["HR-SLU"] = {
+        "South Luciopoli",
+        "Luciopoli S.",
+    },
+    ["HR-NEN"] = {
+        "New Normandy Central",
+        "New Normandy Ctl.",
+        "New Normandy",
+    },
+
 
     -- Vedu_0825
-    ["VD-VFT"] = "Train Station",
+    ["VD-VFT"] = {
+        "Train Station",
+        "Train Stn.",
+    },
     ["VD-CLI"] = "Cliff",
-    ["VD-DIC"] = "Digtron Complex",
-    ["VD-CAF"] = "Cactus Farm",
+    ["VD-DIC"] = {
+        "Digtron Complex",
+        "Digtron Cmplx.",
+    },
+    ["VD-CAF"] = {
+        "Cactus Farm",
+        "Cactus Frm.",
+    },
+
 
     -- 1F616EMO Ferry
     ["FR-SPN"] = "Origin",
-    ["FR-RXF"] = "RelaxingFarm",
-    ["FR-CHF"] = "Chizuru's Farm",
-}
+    ["FR-RXF"] = {
+        "RelaxingFarm",
+        "RelaxFarm",
+        "Rx Farm",
+    },
+    ["FR-CHF"] = {
+        "Chizuru's Farm",
+        "Chizuru's Frm.",
+    },
 
-F.stations_short = {
-    HLY = "Lianyi Rd.",
-    ISN = "Spawn N.",
-    SPS = "Spawn S.",
-    ALF = "Alcantaramark's",
-    NLU = "N. Luciopoli",
-    YTP = "Yantian Rd.",
-    SCC = "Sca. Cliff",
-    RXB = "RelaxBasin",
-    BAJ = "Basandra Jct.",
 
-    eYTP = "Yantian Rd.",
-    eSVE = "E. SmushyVille",
-
-    ["EMER-SHV"] = "ShroomVille",
-
-    ["NO-NE"] = "Eulerstr.",
-    ["NO-IN"] = "Industriestr.",
-    ["NO-WS"] = "Wörther Str.",
-    ["NO-WO"] = "Offenburger Str.",
-    ["NO-T"] = "Nordstetten Hbf.",
-
-    ["HR-LUC"] = "Luciopoli",
-    ["HR-NEN"] = "N. Normandy",
-}
-
--- Usually the name of the city
-F.station_express = {
-    -- eYTP = "Spawn",
-    eSVE = "SmushyVille E.",
-    eOAI = "Oasis",
-    eGRH = "Grape Hills",
-
-    ["NO-T"] = "Nordstetten",
-
-    ["HR-LUC"] = "Luciopoli",
-    ["HR-NEN"] = "New Normandy",
+    -- Emergency Stations / Platforms
+    ["EMER-SHV"] = {
+        "ShroomVille (Backup Platform)",
+        "ShroomVille (Backup)",
+        "ShroomVille",
+    },
 }
 
 F.station_interchange = {

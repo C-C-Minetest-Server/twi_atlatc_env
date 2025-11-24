@@ -2,6 +2,31 @@
 
 F.GLOBAL_APPROACH_CORRECTION = 0
 
+function F.get_station_name(code, max_len, search, ...)
+    if not code then return end
+    max_len = max_len or math.huge
+    search = search or F.station_names
+
+    if search[code] then
+        local name_entry = search[code]
+        if type(name_entry) == "string" then
+            return name_entry
+        else
+            for _, name_option in ipairs(name_entry) do
+                if #name_option <= max_len then
+                    return name_option
+                end
+            end
+            -- Fallback to cutting the shortest name
+            return string.sub(name_entry[#name_entry], 1, max_len)
+        end
+    end
+
+    local other_searches = {...}
+    if #other_searches > 0 then
+        return F.get_station_name(code, max_len, unpack(other_searches))
+    end
+end
 
 local function get_term_id(line, dir)
     local linedata = F.lines[line]
@@ -10,51 +35,20 @@ local function get_term_id(line, dir)
     if linedata["through_" .. dir] then return get_term_id(linedata["through_" .. dir], dir) end
 end
 
-local function get_line_term_string(line, dir)
-    local linedef = F.lines[line]
-    if not linedef then return "Unknown Terminus" end
-    if linedef.custom_term_desc then return linedef.custom_term_desc end
-
-    local term_id = get_term_id(line, dir)
-    if term_id and F.stations[term_id] then
-        return "Terminus: " .. F.stations[term_id]
-    end
-    return "Unknown Terminus"
-end
-
-local function get_line_term_short_string(line, dir)
-    local linedef = F.lines[line]
-    if not linedef then return "Unknown Terminus" end
-    if linedef.custom_term_desc then return linedef.custom_term_desc end
-
-    local term_id = get_term_id(line, dir)
-    if term_id and (F.stations_short[term_id] or F.stations[term_id]) then
-        return "Terminus: " .. (F.stations_short[term_id] or F.stations[term_id])
-    end
-    return "Unknown Terminus"
-end
-
-local function get_line_term_short_disp_string(line, dir)
-    local linedef = F.lines[line]
-    if not linedef then return "Unknown" end
-    if linedef.custom_term_desc then return linedef.custom_term_desc end
-
-    local term_id = get_term_id(line, dir)
-    if term_id and (F.stations_short[term_id] or F.stations[term_id]) then
-        return (F.stations_short[term_id] or F.stations[term_id])
-    end
-    return "Unknown"
-end
-
 local outside_text = "%s\nNext stop: %s\n%s"
 local waiting_signal_text = "%s\nWaiting for train ahead..."
 
 function F.set_outside_regular(def)
+    local line = def.line
+    local linedef = F.lines[line]
+
     local dir = def.reverse and def.rev_dir or def.dir
     local next = def.reverse and def.rev_next or def.next
-    local term_name = get_line_term_string(def.line, dir)
+    local term_id = get_term_id(line, dir)
+    local term_name = linedef.custom_term_desc
+        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
     local line_name = F.lines[def.line] and F.lines[def.line].name or def.line
-    local next_name = F.stations[next] or next or ""
+    local next_name = F.get_station_name(next, nil, def.custom_station_names) or ""
     atc_set_text_outside(string.format(outside_text, line_name, next_name, term_name))
 end
 
@@ -63,10 +57,13 @@ local k105_background = "#002b36"
 function F.set_outside_k105(def)
     local line = def.line
     local linedef = F.lines[line]
+
     local dir = def.reverse and def.rev_dir or def.dir
     local next = def.reverse and def.rev_next or def.next
-    local term_name = linedef.custom_term_desc_short or F.stations[get_term_id(def.line, dir)] or "Unknown"
-    local next_name = F.stations[next] or next or ""
+    local term_id = get_term_id(line, dir)
+    local term_name = linedef.custom_term_desc
+        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
+    local next_name = F.get_station_name(next, nil, def.custom_station_names) or ""
     atc_set_text_outside(("{b:%s}{t:%s}%s{b:%s}{t:%s};%s;%s"):format(
         linedef and linedef.background_color or k105_background,
         linedef and linedef.color or k105_foreground,
@@ -80,11 +77,13 @@ function F.set_outside_subway(def)
     local linedef = F.lines[line]
 
     local dir = def.reverse and def.rev_dir or def.dir
-    local next = def.reverse and def.rev_next or def.next
-    local term_name = linedef.custom_term_desc or get_line_term_string(line, dir)
-    local term_short_name = linedef.custom_term_desc_short or get_line_term_short_disp_string(line, dir)
+    local next_id = def.reverse and def.rev_next or def.next
+    local term_id = get_term_id(line, dir)
+    local term_name = linedef.custom_term_desc
+        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
+    local term_short_name = linedef.custom_term_desc_short or F.get_station_name(term_id, 11, def.custom_station_names)
     local line_name = linedef and linedef.name or def.line
-    local next_name = F.stations[next] or next or ""
+    local next_name = F.get_station_name(next_id)
     if term_name then
         atc_set_text_outside(string.format(
             "%s\n" .. outside_text,
@@ -136,7 +135,7 @@ local function generate_interchange_string(stn, curr_line, through_line_id)
             if via ~= curr_line and F.station_interchange[dest] then
                 rtn = rtn ..
                     "\nComplementary station: " ..
-                    (F.stations[dest] or dest) .. " via " ..
+                    (F.get_station_name(dest) or dest) .. " via " ..
                     (F.lines[via] and F.lines[via].name or via) ..
                     ", access: \n"
                 local counter = 0
@@ -238,7 +237,7 @@ F.stn_v2 = function(basic_def, lines_def)
             local line_id = stn_line_def.line
             atc_set_ars_disable(true)
             atc_set_lzb_tsr(1)
-            local stn_name = F.stations[here] or here
+            local stn_name = F.get_station_name(here) or here
             atc_set_text_inside(
                 "Stopping at: " ..
                 stn_name ..
@@ -361,7 +360,7 @@ F.stn_v2 = function(basic_def, lines_def)
 
             atc_send("B0WO" .. (stn_line_def.door_dir or "C") .. (stn_line_def.kick and "K" or ""))
 
-            local stn_name = F.stations[here] or here
+            local stn_name = F.get_station_name(here) or here
             local through = stn_line_def.reverse and stn_line_def.rev_through or stn_line_def.through or nil
             atc_set_text_inside(
                 stn_name ..
@@ -460,7 +459,7 @@ F.stn_v2 = function(basic_def, lines_def)
             atc_set_ars_disable(false)
 
             if state ~= true then
-                local stn_name = F.stations[def.here] or def.here or ""
+                local stn_name = F.get_station_name(def.here) or def.here or ""
                 interrupt(0.5, {
                     type = "go",
                     line_id = line_id,
@@ -472,10 +471,10 @@ F.stn_v2 = function(basic_def, lines_def)
             atc_send("OCD1S" .. (def.speed or "M"))
 
             local next = def.reverse and def.rev_next or def.next or nil
-            local next_name = F.stations[next] or next or ""
+            local next_name = F.get_station_name(next) or next or ""
             local inside_text = ""
             if next and next_name then
-                local stn_name = F.stations[next] or next or ""
+                local stn_name = F.get_station_name(next) or next or ""
                 local through = def.reverse and def.rev_through or def.through or nil
                 inside_text = "Next stop: " .. stn_name .. generate_interchange_string(next, line_id, through)
             end
@@ -869,12 +868,7 @@ F.get_textline_display = function(def)
             if dir then
                 local term_id = get_term_id(line_id, dir)
                 if term_id then
-                    local station_name
-                    if def.custom_stations then
-                        station_name = cascade_index(def.custom_stations, F.stations)(term_id)
-                    else
-                        station_name = F.stations[term_id]
-                    end
+                    local station_name = F.get_station_name(term_id, 26, def.custom_stations)
                     term_text = "To " .. (station_name or term_id)
                 end
             end
@@ -1059,10 +1053,7 @@ F.get_track_status_textline_info_lines = function(station, track, custom_station
 
     local display_texts = {}
     for _, entry_data in ipairs(data) do
-        local line_term =
-            (custom_stations and custom_stations[entry_data.line_term])
-            or F.stations_short[entry_data.line_term]
-            or F.stations[entry_data.line_term] or entry_data.line_term
+        local line_term = F.get_station_name(entry_data.line_term, 15, custom_stations) or entry_data.line_term
         display_texts[#display_texts + 1] = string.format(
             "%-4s %-15s %s",
             entry_data.line_code,
@@ -1088,7 +1079,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
                 local line_data = F.lines[train_data.line_id]
                 local line_code = line_data and line_data.code or train_data.line_id
                 local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
-                line_term = F.stations_short[line_term] or F.stations[line_term] or line_term
+                line_term = F.get_station_name(line_term) or line_term
                 local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                     and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
                 local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -1144,12 +1135,7 @@ F.get_express_station_display_lines = function(def)
             if line_id and dir then
                 local term_id = get_term_id(line_id, dir)
                 if term_id then
-                    local station_name
-                    if def.custom_stations then
-                        station_name = cascade_index(def.custom_stations, F.stations)(term_id)
-                    else
-                        station_name = F.stations[term_id]
-                    end
+                    local station_name = F.get_station_name(term_id, 26, def.custom_stations)
                     term_text = "To " .. (station_name or term_id)
                 end
             end
@@ -1229,9 +1215,7 @@ F.get_next_arrive_train_billboard = function(def)
             break
         end
 
-        local coming_stn_name = def.custom_stations and def.custom_stations[coming_stn]
-            or F.stations_short[coming_stn]
-            or F.stations[coming_stn] or coming_stn
+        local coming_stn_name = F.get_station_name(coming_stn, 20, def.custom_stations)
 
         local coming_key = coming_stn .. ":" .. coming_track
         local coming_dest_entry = F.trains_by_destination[coming_key]
@@ -1251,7 +1235,7 @@ F.get_next_arrive_train_billboard = function(def)
         if time_left then
             time_disp = rwt.to_string(rwt.add(rwt.now(), time_left), true)
         end
-        disp_ln[#disp_ln + 1] = string.format("%-20s %s", string.sub(coming_stn_name, 1, 20), time_disp)
+        disp_ln[#disp_ln + 1] = string.format("%-20s %s", coming_stn_name, time_disp)
 
         -- Don't loop on ourselves if we hit reverse
         if coming_reverse then
