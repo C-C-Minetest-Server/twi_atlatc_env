@@ -81,7 +81,8 @@ function F.set_outside_subway(def, disp_max_len)
     local term_id = get_term_id(line, dir)
     local term_name = linedef.custom_term_desc
         or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
-    local term_short_name = linedef.custom_term_desc_short or F.get_station_name(term_id, disp_max_len, def.custom_station_names)
+    local term_short_name = linedef.custom_term_desc_short
+        or F.get_station_name(term_id, disp_max_len, def.custom_station_names)
     local line_name = linedef and linedef.name or def.line
     local next_name = F.get_station_name(next_id)
     if term_name then
