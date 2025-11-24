@@ -72,7 +72,7 @@ function F.set_outside_k105(def)
         term_name, next_name))
 end
 
-function F.set_outside_subway(def)
+function F.set_outside_subway(def, disp_max_len)
     local line = def.line
     local linedef = F.lines[line]
 
@@ -81,7 +81,7 @@ function F.set_outside_subway(def)
     local term_id = get_term_id(line, dir)
     local term_name = linedef.custom_term_desc
         or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
-    local term_short_name = linedef.custom_term_desc_short or F.get_station_name(term_id, 11, def.custom_station_names)
+    local term_short_name = linedef.custom_term_desc_short or F.get_station_name(term_id, disp_max_len, def.custom_station_names)
     local line_name = linedef and linedef.name or def.line
     local next_name = F.get_station_name(next_id)
     if term_name then
@@ -98,8 +98,10 @@ F.set_outside = function(def, train_id)
         local rc = train and train:get_rc() or ""
         if F.has_rc("WG-K105", rc) then
             F.set_outside_k105(def)
-        elseif F.has_rc("WG-01700", rc) or F.has_rc("WG-MPL16", rc) then
-            F.set_outside_subway(def)
+        elseif F.has_rc("WG-01700", rc) then
+            F.set_outside_subway(def, 11)
+        elseif F.has_rc("WG-MPL16", rc) then
+            F.set_outside_subway(def, 14)
         else
             F.set_outside_regular(def)
         end
