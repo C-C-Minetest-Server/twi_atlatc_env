@@ -803,31 +803,6 @@ F.get_station_status = F.cache_function(1, F.get_stn_status_key, function(def)
     end
 end)
 
-function F.show_lr(def, texts)
-    digiline_send(def.left_disp or "l", table.concat(texts, "\n"))
-    local rtexts = {}
-    for _, y in ipairs(texts) do
-        table.insert(rtexts, string.format("%26s", y))
-    end
-    digiline_send(def.right_disp or "r", table.concat(rtexts, "\n"))
-end
-
-function F.show_textline(_, texts)
-    local rtexts = {}
-    for _, y in ipairs(texts) do
-        table.insert(rtexts, string.format("%27s", y))
-    end
-    display(table.concat(texts, "\n"), table.concat(rtexts, "\n"))
-end
-
-function F.show_textline_r(_, texts)
-    local rtexts = {}
-    for _, y in ipairs(texts) do
-        table.insert(rtexts, string.format("%27s", y))
-    end
-    display(table.concat(rtexts, "\n"), table.concat(texts, "\n"))
-end
-
 F.get_textline_display = function(def)
     if not def.track then
         def.track = def.platform_id
