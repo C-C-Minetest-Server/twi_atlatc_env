@@ -1092,6 +1092,10 @@ F.get_station_status_textline_info_lines = function(station, tracks)
     return display_texts
 end
 
+-- Populated by 99-garbage-cleaner.lua
+F.show_advertisement = 0
+F.last_advertisement = 0
+
 F.get_express_station_display_lines = function(def)
     def.track = def.track or def.platform_id
     local dest_key = F.get_stn_status_key(def)
@@ -1127,12 +1131,17 @@ F.get_express_station_display_lines = function(def)
     else
         info_lines = def.here and def.track
         and F.get_track_status_textline_info_lines(def.here, def.track, def.custom_stations) or {}
+
+        if F.show_advertisement > 0 then
+            local ad = F.pis_advertisements[F.show_advertisement]
+            info_lines[2] = ad[1] or info_lines[2]
+            info_lines[3] = ad[2] or info_lines[3]
+        end
     end
 
     if #info_lines == 0 then
-        info_lines[1] = " "
-        info_lines[2] = "!!  TRAINS ARE DEADLY   !!"
-        info_lines[3] = "!! NEVER WALK ON TRACKS !!"
+        info_lines[2] = F.yellow_line_warning[1]
+        info_lines[3] = F.yellow_line_warning[2]
     end
 
     return {
