@@ -149,6 +149,10 @@ F.station_names = {
         "RelaxBasin",
         "Rx Basin",
     },
+    APL = {
+        "Apple Lake",
+        "Apple Lk.",
+    },
 
 
     -- Nordstetten

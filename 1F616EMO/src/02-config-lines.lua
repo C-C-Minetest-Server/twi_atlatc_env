@@ -423,6 +423,25 @@ F.lines["SVL-ACW"] = {
     }),
 }
 
+F.lines["S21"] = {
+    rc = "L-S21",
+    code = "S21",
+    name = "S-Bahn Line 21",
+    W = "APL",
+    E = "eGRO",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRO", "8", true },
+        { "MOT", "2" },
+        { "BAJ", "2B" },
+        { "APL", "2", true },
+        { "BAJ", "1B" },
+        { "MOT", "1" },
+    }),
+}
+
 -- Technically on subway trains but belongs to national railway
 F.lines["RXB-SVE"] = {
     rc = "L-RXB-SVE",

@@ -1,3 +1,9 @@
+--[[
+Symbol convention:
+!!: Warnings
+>>: Information
+]]
+
 F.yellow_line_warning = {
     "!!  TRAINS ARE DEADLY   !!",
     "!! STAY IN YELLOW LINE  !!"
