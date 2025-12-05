@@ -256,11 +256,12 @@ F.station_interchange = {
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
-    GRO = { "GRH2", "NX", "OEX", },
+    GRO = { "GRH2", "S21", "NX", "OEX", },
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", },
     eOTH = { "GRH1", "SVL", },
+    BAJ = { "S21", "NX" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
