@@ -243,6 +243,27 @@ F.station_names = {
     },
 }
 
+F.pseudo_station_names = {
+    ["CW"] = {
+        "Clockwise Loop",
+        "Clockwise",
+        "Clockw.",
+        "Clockw",
+    },
+    ["ACW"] = {
+        "Anti-Clockwise Loop",
+        "Anti-Clockwise",
+        "Anti-Clockw.",
+        "Anticlockw.",
+        "Anticlockw",
+    },
+
+    ["FR-LOOP"] = {
+        "Ferry Loop",
+        "Loop",
+    },
+}
+
 F.station_interchange = {
     SPN = { "SPN", "U1", },
     ISN = { "S1", "U1", },

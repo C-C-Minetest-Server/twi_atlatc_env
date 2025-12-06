@@ -71,9 +71,7 @@ F.lines["SPN-CW"] = {
     short_name = "Origin",
     default_dir = "CW",
     custom_dir_abbr = "CW",
-    custom_term_desc = "Clockwise Loop",
-    custom_term_desc_textline = "Clockwise Loop",
-    custom_term_desc_short = "Clockwise",
+    custom_term_desc = F.pseudo_station_names.CW,
 
     departure_time_adjustment = 2,
 
@@ -99,9 +97,7 @@ F.lines["SPN-ACW"] = {
     short_name = "Origin",
     default_dir = "ACW",
     custom_dir_abbr = "ACW",
-    custom_term_desc = "Anti-clockwise Loop",
-    custom_term_desc_textline = "Anti-clockwise Loop",
-    custom_term_desc_short = "Anti-clockw.",
+    custom_term_desc = F.pseudo_station_names.ACW,
 
     departure_time_adjustment = 2,
 
@@ -379,9 +375,7 @@ F.lines["SVL-CW"] = {
     short_name = "SmushyVille",
     default_dir = "CW",
     custom_dir_abbr = "CW",
-    custom_term_desc = "Clockwise Loop",
-    custom_term_desc_textline = "Clockwise Loop",
-    custom_term_desc_short = "Clockwise",
+    custom_term_desc = F.pseudo_station_names.CW,
 
     departure_time_adjustment = 10,
 
@@ -405,9 +399,7 @@ F.lines["SVL-ACW"] = {
     short_name = "SmushyVille",
     default_dir = "ACW",
     custom_dir_abbr = "ACW",
-    custom_term_desc = "Anti-clockwise Loop",
-    custom_term_desc_textline = "Anti-clockwise Loop",
-    custom_term_desc_short = "Anti-clockw.",
+    custom_term_desc = F.pseudo_station_names.ACW,
 
     departure_time_adjustment = 10,
 
@@ -488,9 +480,7 @@ F.lines["VD-VFT1-CW"] = {
     short_name = "Subway",
     default_dir = "CW",
     custom_dir_abbr = "CW",
-    custom_term_desc = "Clockwise Loop",
-    custom_term_desc_textline = "Clockwise Loop",
-    custom_term_desc_short = "Clockwise",
+    custom_term_desc = F.pseudo_station_names.CW,
 
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
@@ -707,7 +697,5 @@ F.lines["FR-SPN-CHF"] = {
     name = "1F616EMO Ferry: Origin-Chizuru's Farm",
     textline_name = "Origin-Chizuru's Farm",
     custom_dir_abbr = "~",
-    custom_term_desc = "Ferry Loop",
-    custom_term_desc_textline = "Loop",
-    custom_term_desc_short = "Loop",
+    custom_term_desc = F.pseudo_station_names["FR-LOOP"],
 }

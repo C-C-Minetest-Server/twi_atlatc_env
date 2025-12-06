@@ -2,24 +2,28 @@
 
 F.GLOBAL_APPROACH_CORRECTION = 0
 
+function F.process_station_name_entry(name_entry, max_len)
+    max_len = max_len or math.huge
+    if type(name_entry) == "string" then
+        return name_entry
+    else
+        for _, name_option in ipairs(name_entry) do
+            if #name_option <= max_len then
+                return name_option
+            end
+        end
+        -- Fallback to cutting the shortest name
+        return string.sub(name_entry[#name_entry], 1, max_len)
+    end
+end
+
 function F.get_station_name(code, max_len, search, ...)
     if not code then return end
-    max_len = max_len or math.huge
     search = search or F.station_names
 
     if search[code] then
         local name_entry = search[code]
-        if type(name_entry) == "string" then
-            return name_entry
-        else
-            for _, name_option in ipairs(name_entry) do
-                if #name_option <= max_len then
-                    return name_option
-                end
-            end
-            -- Fallback to cutting the shortest name
-            return string.sub(name_entry[#name_entry], 1, max_len)
-        end
+        return F.process_station_name_entry(name_entry, max_len)
     end
 
     local other_searches = {...}
@@ -45,8 +49,8 @@ function F.set_outside_regular(def)
     local dir = def.reverse and def.rev_dir or def.dir
     local next = def.reverse and def.rev_next or def.next
     local term_id = get_term_id(line, dir)
-    local term_name = linedef.custom_term_desc
-        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
+    local term_name = linedef.custom_term_desc and F.process_station_name_entry(linedef.custom_term_desc)
+        or ("Terminus: " .. (F.get_station_name(term_id) or "Unknown"))
     local line_name = F.lines[def.line] and F.lines[def.line].name or def.line
     local next_name = F.get_station_name(next, nil, def.custom_station_names) or ""
     atc_set_text_outside(string.format(outside_text, line_name, next_name, term_name))
@@ -61,8 +65,8 @@ function F.set_outside_k105(def)
     local dir = def.reverse and def.rev_dir or def.dir
     local next = def.reverse and def.rev_next or def.next
     local term_id = get_term_id(line, dir)
-    local term_name = linedef.custom_term_desc
-        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
+    local term_name = linedef.custom_term_desc and F.process_station_name_entry(linedef.custom_term_desc)
+        or ("Terminus: " .. (F.get_station_name(term_id) or "Unknown"))
     local next_name = F.get_station_name(next, nil, def.custom_station_names) or ""
     atc_set_text_outside(("{b:%s}{t:%s}%s{b:%s}{t:%s};%s;%s"):format(
         linedef and linedef.background_color or k105_background,
@@ -79,9 +83,10 @@ function F.set_outside_subway(def, disp_max_len)
     local dir = def.reverse and def.rev_dir or def.dir
     local next_id = def.reverse and def.rev_next or def.next
     local term_id = get_term_id(line, dir)
-    local term_name = linedef.custom_term_desc
-        or (term_id and ("Terminus: " .. F.get_station_name(term_id))) or "Unknown Terminus"
-    local term_short_name = linedef.custom_term_desc_short
+    local term_name = linedef.custom_term_desc and F.process_station_name_entry(linedef.custom_term_desc)
+        or ("Terminus: " .. (F.get_station_name(term_id) or "Unknown"))
+    local term_short_name = linedef.custom_term_desc
+        and F.process_station_name_entry(linedef.custom_term_desc, disp_max_len)
         or F.get_station_name(term_id, disp_max_len, def.custom_station_names)
     local line_name = linedef and linedef.name or def.line
     local next_name = F.get_station_name(next_id)
@@ -839,9 +844,10 @@ F.get_textline_display = function(def)
     elseif line_id then
         local linedef = F.lines[line_id]
 
-        local term_text =
-            linedef.custom_term_desc_textline or linedef.custom_term_desc_short or linedef.custom_term_desc
-        if not term_text then
+        local term_text
+        if linedef and linedef.custom_term_desc then
+            term_text = F.process_station_name_entry(linedef.custom_term_desc, 29)
+        else
             term_text = "Unknown Terminus"
             if dir then
                 local term_id = get_term_id(line_id, dir)
@@ -949,8 +955,10 @@ F.set_status_textline = function(lines)
                 local linedef = F.lines[line_id]
                 disp = disp .. (linedef and linedef.code or line_id)
 
-                local term_text = linedef and (linedef.custom_term_desc_short or linedef.custom_term_desc)
-                if not term_text then
+                local term_text
+                if linedef and linedef.custom_term_desc then
+                    term_text = F.process_station_name_entry(linedef.custom_term_desc, 11)
+                else
                     if dir then
                         local term_id = get_term_id(line_id, dir)
                         term_text = "-> " .. (term_id or "??")
@@ -1001,7 +1009,7 @@ end, function(status_key)
             local line_dir = train_data.line_dir or nil
             local line_data = F.lines[train_data.line_id]
             local line_code = line_data and line_data.code or train_data.line_id
-            local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or nil
+            local line_term = line_data and line_data.custom_term_desc or line_data[line_dir] or nil
             local avg_time = S.station_from_checkpoint[status_key]
                 and S.station_from_checkpoint[status_key][train_data.latest]
             local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -1031,11 +1039,11 @@ F.get_track_status_textline_info_lines = function(station, track, custom_station
 
     local display_texts = {}
     for _, entry_data in ipairs(data) do
-        local line_term = F.get_station_name(entry_data.line_term, 15, custom_stations) or entry_data.line_term
+        local line_term = entry_data.line_term
         display_texts[#display_texts + 1] = string.format(
             "%-4s %-15s %s",
             entry_data.line_code,
-            string.sub(line_term, 1, 15),
+            F.process_station_name_entry(line_term, 15),
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end
@@ -1056,7 +1064,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
                 local line_dir = train_data.line_dir or nil
                 local line_data = F.lines[train_data.line_id]
                 local line_code = line_data and line_data.code or train_data.line_id
-                local line_term = line_data and line_data.custom_term_desc_short or line_data[line_dir] or "Unknown"
+                local line_term = line_data and line_data.custom_term_desc or line_data[line_dir] or "Unknown"
                 line_term = F.get_station_name(line_term) or line_term
                 local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                     and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
@@ -1085,7 +1093,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
             "%-2s %-4s %-12s %s",
             entry_data.track_id,
             entry_data.line_code,
-            string.sub(entry_data.line_term, 1, 12),
+            F.process_station_name_entry(entry_data.line_term, 12),
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end
@@ -1108,11 +1116,10 @@ F.get_express_station_display_lines = function(def)
         local stn_event, time_left, line_id, dir = F.get_station_status(def)
         local linedef = F.lines[line_id]
 
-        local term_text = linedef and
-            linedef.custom_term_desc_textline or
-            linedef.custom_term_desc_short or
-            linedef.custom_term_desc
-        if not term_text then
+        local term_text
+        if linedef and linedef.custom_term_desc then
+            term_text = F.process_station_name_entry(linedef.custom_term_desc, 29)
+        else
             term_text = "Unknown Terminus"
             if line_id and dir then
                 local term_id = get_term_id(line_id, dir)
