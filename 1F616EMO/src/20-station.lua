@@ -3,10 +3,10 @@
 F.GLOBAL_APPROACH_CORRECTION = 0
 
 function F.process_station_name_entry(name_entry, max_len)
-    max_len = max_len or math.huge
     if type(name_entry) == "string" then
-        return string.sub(name_entry, 1, max_len)
+        return max_len and string.sub(name_entry, 1, max_len) or name_entry
     else
+        max_len = max_len or math.huge
         for _, name_option in ipairs(name_entry) do
             if #name_option <= max_len then
                 return name_option
