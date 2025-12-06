@@ -241,6 +241,15 @@ F.station_names = {
         "ShroomVille (Backup)",
         "ShroomVille",
     },
+
+
+    -- Special
+    ["XX-UNK"] = {
+        "Unknown Station",
+        "Unknown Stn.",
+        "Unknown",
+        "???",
+    }
 }
 
 F.pseudo_station_names = {

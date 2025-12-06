@@ -5,7 +5,7 @@ F.GLOBAL_APPROACH_CORRECTION = 0
 function F.process_station_name_entry(name_entry, max_len)
     max_len = max_len or math.huge
     if type(name_entry) == "string" then
-        return name_entry
+        return string.sub(name_entry, 1, max_len)
     else
         for _, name_option in ipairs(name_entry) do
             if #name_option <= max_len then
@@ -1064,8 +1064,12 @@ F.get_station_status_textline_info_lines = function(station, tracks)
                 local line_dir = train_data.line_dir or nil
                 local line_data = F.lines[train_data.line_id]
                 local line_code = line_data and line_data.code or train_data.line_id
-                local line_term = line_data and line_data.custom_term_desc or line_data[line_dir] or "Unknown"
-                line_term = F.get_station_name(line_term) or line_term
+                local line_term
+                if line_data and line_data.custom_term_desc then
+                    line_term = F.process_station_name_entry(line_data.custom_term_desc, 12)
+                else
+                    line_term = F.get_station_name(line_data and line_data[line_dir] or "XX-UNK", 12)
+                end
                 local avg_time = S.station_from_checkpoint[station .. ":" .. track]
                     and S.station_from_checkpoint[station .. ":" .. track][train_data.latest]
                 local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -1093,7 +1097,7 @@ F.get_station_status_textline_info_lines = function(station, tracks)
             "%-2s %-4s %-12s %s",
             entry_data.track_id,
             entry_data.line_code,
-            F.process_station_name_entry(entry_data.line_term, 12),
+            entry_data.line_term,
             rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
         )
     end
