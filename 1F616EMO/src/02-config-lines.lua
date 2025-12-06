@@ -698,4 +698,10 @@ F.lines["FR-SPN-CHF"] = {
     textline_name = "Origin-Chizuru's Farm",
     custom_dir_abbr = "~",
     custom_term_desc = F.pseudo_station_names["FR-LOOP"],
+
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "FR-SPN", "1" },
+        { "FR-CHF",  "1" },
+    }),
 }
