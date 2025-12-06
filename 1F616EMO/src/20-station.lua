@@ -1009,7 +1009,12 @@ end, function(status_key)
             local line_dir = train_data.line_dir or nil
             local line_data = F.lines[train_data.line_id]
             local line_code = line_data and line_data.code or train_data.line_id
-            local line_term = line_data and line_data.custom_term_desc or line_data[line_dir] or nil
+            local line_term
+                if line_data and line_data.custom_term_desc then
+                    line_term = F.process_station_name_entry(line_data.custom_term_desc, 12)
+                else
+                    line_term = F.get_station_name(get_term_id(train_data.line_id, line_dir) or "XX-UNK", 12)
+                end
             local avg_time = S.station_from_checkpoint[status_key]
                 and S.station_from_checkpoint[status_key][train_data.latest]
             local time_left = avg_time and (avg_time - (os.time() - latest_time)) or nil
@@ -1018,6 +1023,7 @@ end, function(status_key)
                 data[#data + 1] = {
                     atc_id = atc_id,
                     from = train_data.from,
+                    line_id = train_data.line_id,
                     line_code = line_code,
                     line_dir = line_dir,
                     line_term = line_term,
