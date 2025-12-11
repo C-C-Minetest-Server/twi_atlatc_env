@@ -310,7 +310,7 @@ F.interchange_line_alias = {
     ["SPN-CW"] = "SPN",
     ["SPN-ACW"] = "SPN",
     ["GRH1E"] = "GRH1",
-    ["VD-VFT1-CW"] = "VF-VFT1",
+    ["VF-VFT1-CW"] = "VF-VFT1",
     ["SVL-CW"] = "SVL",
     ["SVL-ACW"] = "SVL",
 }
