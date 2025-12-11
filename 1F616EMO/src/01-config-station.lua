@@ -304,6 +304,7 @@ F.station_interchange.eGRO = F.station_interchange.GRO
 F.station_interchange.eOAI = F.station_interchange.OAI
 F.station_interchange["HR-eCIG"] = F.station_interchange["HR-CIG"]
 F.station_interchange["NO-T"] = F.station_interchange["NO-WS"]
+F.station_interchange["VD-VFT"] = F.station_interchange.VFT
 
 F.interchange_line_alias = {
     ["SPN-CW"] = "SPN",
