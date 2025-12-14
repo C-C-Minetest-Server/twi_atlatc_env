@@ -9,11 +9,19 @@ F.yellow_line_warning = {
     "!! STAY IN YELLOW LINE  !!"
 }
 
+F.WFC_mourning = {
+    ">> WE MOURN THE LOSS OF <<",
+    ">> WANG FUK COURT FIRE  <<"
+}
+
 F.pis_advertisements = {
     -- Exactly 26 bytes lone, and two lines
 
     -- Stay behind yellow line
     F.yellow_line_warning,
+
+    -- Should br copied to occupy 1/3 of the ads in annual mourning
+    F.WFC_mourning,
 
     -- Join Discord server
     {
@@ -25,12 +33,5 @@ F.pis_advertisements = {
     {
         ">>  HAVE SUGGESTIONS?   <<",
         ">>   USE /report CMD    <<"
-    },
-
-    -- Tempoary: Wang Fuk Court Fire
-    -- Scheduled removal: 2025-12-13
-    {
-        ">> WE MOURN THE LOSS OF <<",
-        ">> WANG FUK COURT FIRE  <<"
     },
 }
