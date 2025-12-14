@@ -222,6 +222,10 @@ F.station_names = {
     },
 
 
+    -- Maverick2797
+    ["M27-QUO"] = "Quoralla",
+
+
     -- 1F616EMO Ferry
     ["FR-SPN"] = "Origin",
     ["FR-RXF"] = {
