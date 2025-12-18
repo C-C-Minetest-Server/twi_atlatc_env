@@ -420,17 +420,19 @@ F.lines["S21"] = {
     code = "S21",
     name = "S-Bahn Line 21",
     W = "APL",
-    E = "eGRO",
+    E = "M27-QUO",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "eGRO", "8", true },
+        { "M27-QUO", "1", true },
+        { "eGRO", "5" },
         { "MOT", "2" },
         { "BAJ", "2B" },
         { "APL", "2", true },
         { "BAJ", "1B" },
         { "MOT", "1" },
+        { "eGRO", "8" },
     }),
 }
 
