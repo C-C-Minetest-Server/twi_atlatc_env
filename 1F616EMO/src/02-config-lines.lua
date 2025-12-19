@@ -425,7 +425,7 @@ F.lines["S21"] = {
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "M27-QUO", "1", true },
+        { "M27-QUO", "3", true },
         { "eGRO", "5" },
         { "MOT", "2" },
         { "BAJ", "2B" },
