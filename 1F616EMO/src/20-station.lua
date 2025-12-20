@@ -1166,7 +1166,10 @@ F.get_express_station_display_lines = function(def)
         info_lines = def.here and def.track
         and F.get_track_status_textline_info_lines(def.here, def.track, def.custom_stations) or {}
 
-        if F.show_advertisement > 0 then
+        if F.get_activated_approach_alarm(dest_key) then
+            info_lines[2] = F.approach_warning[1] or info_lines[2]
+            info_lines[3] = F.approach_warning[2] or info_lines[3]
+        elseif F.show_advertisement > 0 then
             local ad = F.pis_advertisements[F.show_advertisement]
             info_lines[2] = ad[1] or info_lines[2]
             info_lines[3] = ad[2] or info_lines[3]

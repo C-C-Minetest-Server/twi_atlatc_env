@@ -9,6 +9,11 @@ F.yellow_line_warning = {
     "!! STAY IN YELLOW LINE  !!"
 }
 
+F.approach_warning = {
+    "!!  TRAIN APPROACHING   !!",
+    "!! STAY IN YELLOW LINE  !!"
+}
+
 F.WFC_mourning = {
     ">> WE MOURN THE LOSS OF <<",
     ">> WANG FUK COURT FIRE  <<"
