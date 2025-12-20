@@ -38,6 +38,7 @@ F.set_route_if_all_can = function(defs)
     end
     return true
 end
+
 F.checkpoint = function(checkpoint_id)
     if event.train and atc_arrow and atc_id then
         if not checkpoint_id then
@@ -48,5 +49,59 @@ F.checkpoint = function(checkpoint_id)
             end
         end
         F.register_train_on_checkpoint(checkpoint_id, atc_id)
+    end
+end
+
+F.approach_alarm_start = function(track_id)
+    __approach_callback_mode = 1
+
+    if not event.approach or event.has_entered then return end
+
+    F.activate_approach_alarm(track_id)
+end
+
+F.approach_alarm_end = function(track_id)
+    if not event.train or not atc_arrow then return end
+    F.deactivate_approach_alarm(track_id)
+end
+
+-- on LuaATC Luacontrollers
+F.controller_alarm_detect = function(watches, frequency)
+    local port = {}
+    frequency = frequency or 0.4
+
+    if event.msg == "start" then
+        local activated = false
+        for _, watch in ipairs(watches) do
+            if F.get_activated_approach_alarm(watch) then
+                activated = true
+                break
+            end
+        end
+
+        if activated then
+            port.a = true
+            port.b = true
+            port.c = true
+            port.d = true
+            set_mesecon_outputs(port)
+            digiline_send("debug", "act")
+
+            interrupt(frequency / 2, "end")
+        else
+            interrupt(1, "start")
+            digiline_send("debug", "loop")
+        end
+    elseif event.msg == "end" then
+        port.a = false
+        port.b = false
+        port.c = false
+        port.d = false
+        set_mesecon_outputs(port)
+
+        interrupt(frequency / 2, "start")
+        digiline_send("debug", "loop")
+    else
+        interrupt_safe(0, "start")
     end
 end

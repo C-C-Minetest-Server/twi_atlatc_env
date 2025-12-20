@@ -35,6 +35,7 @@ read_globals = {
     "atc_set_lzb_tsr",
     "atc_set_text_inside",
     "atc_set_text_outside",
+    "set_mesecon_outputs",
 
     "get_train",
 

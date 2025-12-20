@@ -1,5 +1,21 @@
 -- luacheck: no unused
 
+-- Appaorach alarm
+
+F.activated_approach_alarms = {}
+
+function F.activate_approach_alarm(track_id)
+    F.activated_approach_alarms[track_id] = true
+end
+
+function F.deactivate_approach_alarm(track_id)
+    F.activated_approach_alarms[track_id] = nil
+end
+
+function F.get_activated_approach_alarm(track_id)
+    return F.activated_approach_alarms[track_id]
+end
+
 F.GLOBAL_APPROACH_CORRECTION = 0
 
 function F.process_station_name_entry(name_entry, max_len)
@@ -385,6 +401,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     atc_id = atc_id,
                     line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir,
                 }
+                F.deactivate_approach_alarm(status_key)
 
                 local next = stn_line_def.reverse and stn_line_def.rev_next or stn_line_def.next or nil
                 local next_track =
