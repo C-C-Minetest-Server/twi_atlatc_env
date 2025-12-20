@@ -311,6 +311,10 @@ F.stn_v2 = function(basic_def, lines_def)
                 atc_id = atc_id,
             }
         end
+
+        if status_key then
+            F.activate_approach_alarm(status_key)
+        end
     elseif event.train and atc_arrow then
         if status_key
             and F.platform_display_control[status_key]
