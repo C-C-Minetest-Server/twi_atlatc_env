@@ -42,6 +42,7 @@ read_globals = {
     "floor",
     "abs",
     "fmod",
+    "POS",
 
     "string_split",
     "table_indexof",
