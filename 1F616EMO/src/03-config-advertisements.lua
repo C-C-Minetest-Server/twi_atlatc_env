@@ -24,20 +24,18 @@ F.pis_advertisements = {
 
     --[[ TEMPOARAY ADS GOES HERE ]]--
 
-    -- TEMPORARY: Honor to Ho Wai-Ho
-    -- Fireman passed away in Tai Po Fire
-    -- Full-honor funeral: 2025-12-19
-    -- Scheduled removal: 2025-12-21
-    {
-        ">>  FULL HONOR TO LATE  <<",
-        ">>  FIREMAN  HO WAI-HO  <<"
-    },
-
     -- TEMPORARY: Gathering idea for annual WFC fire mourning
     -- Scheduled removal: 2026-01-01
     {
         ">> IDEAS ON WFC ANNUAL <<",
         ">> MOURNING: /feedback <<"
+    },
+
+    -- TEMPORARY: Mourn those died in Taiwan knife attack
+    -- Scheduled removal: 2025-12-27
+    {
+        ">> MOURN THOSE DIED IN <<",
+        ">> TAIWAN KNIFE ATTACK <<"
     },
 
     --[[ RAILWAY SERVICE NOTICES ]]--
