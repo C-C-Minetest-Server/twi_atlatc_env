@@ -71,4 +71,10 @@ F.pis_advertisements = {
         ">>   HATE NIGHTTIME?    <<",
         ">>     USE /day CMD     <<"
     },
+
+    -- Want your ad here?
+    {
+        ">> WANT YOUR ADS HERE?  <<",
+        ">>    /mail 1F616EMO    <<"
+    },
 }
