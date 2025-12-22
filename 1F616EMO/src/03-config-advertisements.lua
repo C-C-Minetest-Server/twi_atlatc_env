@@ -14,15 +14,10 @@ F.approach_warning = {
     "!! STAY IN YELLOW LINE  !!"
 }
 
-F.WFC_mourning = {
-    ">> WE MOURN THE LOSS OF <<",
-    ">> WANG FUK COURT FIRE  <<"
-}
-
 F.pis_advertisements = {
     -- Exactly 26 bytes lone, and two lines
 
-    --[[ TEMPOARAY ADS GOES HERE ]]--
+    --[[ TEMPOARAY ADS GOES HERE ]] --
 
     -- TEMPORARY: Gathering idea for annual WFC fire mourning
     -- Scheduled removal: 2026-01-01
@@ -38,15 +33,27 @@ F.pis_advertisements = {
         ">> TAIWAN KNIFE ATTACK <<"
     },
 
-    --[[ RAILWAY SERVICE NOTICES ]]--
+    -- TEMPORARY: Marry christmas and new year greetings
+    -- Scheduled removal: 2025-01-08
+    {
+        ">> MERRY CHRISTMAS AND <<",
+        ">>  A HAPPY NEW YEAR   <<"
+    },
+
+    --[[ RAILWAY SERVICE NOTICES ]] --
 
     -- Stay behind yellow line
     F.yellow_line_warning,
 
-    --[[ OFFICIAL ADS ]]--
+    --[[ OFFICIAL ADS ]] --
 
-    -- Should be copied to occupy 1/3 of the ads in annual mourning
-    F.WFC_mourning,
+    -- WFC fire mourning
+    -- Kept forever
+    -- TODO: Proper weighting system to use during annual mourning
+    {
+        ">> WE MOURN THE LOSS OF <<",
+        ">> WANG FUK COURT FIRE  <<"
+    },
 
     -- Join Discord server
     {
