@@ -26,13 +26,6 @@ F.pis_advertisements = {
         ">> MOURNING: /feedback  <<"
     },
 
-    -- TEMPORARY: Mourn those died in Taiwan knife attack
-    -- Scheduled removal: 2025-12-27
-    {
-        ">> MOURN THOSE DIED IN  <<",
-        ">> TAIWAN KNIFE ATTACK  <<"
-    },
-
     -- TEMPORARY: Marry christmas and new year greetings
     -- Scheduled removal: 2025-01-08
     {
