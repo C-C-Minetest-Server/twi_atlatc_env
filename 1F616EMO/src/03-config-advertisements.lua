@@ -22,22 +22,22 @@ F.pis_advertisements = {
     -- TEMPORARY: Gathering idea for annual WFC fire mourning
     -- Scheduled removal: 2026-01-01
     {
-        ">> IDEAS ON WFC ANNUAL <<",
-        ">> MOURNING: /feedback <<"
+        ">> IDEAS ON WFC ANNUAL  <<",
+        ">> MOURNING: /feedback  <<"
     },
 
     -- TEMPORARY: Mourn those died in Taiwan knife attack
     -- Scheduled removal: 2025-12-27
     {
-        ">> MOURN THOSE DIED IN <<",
-        ">> TAIWAN KNIFE ATTACK <<"
+        ">> MOURN THOSE DIED IN  <<",
+        ">> TAIWAN KNIFE ATTACK  <<"
     },
 
     -- TEMPORARY: Marry christmas and new year greetings
     -- Scheduled removal: 2025-01-08
     {
-        ">> MERRY CHRISTMAS AND <<",
-        ">>  A HAPPY NEW YEAR   <<"
+        ">> MERRY CHRISTMAS  AND <<",
+        ">>   A HAPPY NEW YEAR   <<"
     },
 
     --[[ RAILWAY SERVICE NOTICES ]] --
