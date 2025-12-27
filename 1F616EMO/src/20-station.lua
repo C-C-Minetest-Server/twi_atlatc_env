@@ -305,25 +305,16 @@ F.stn_v2 = function(basic_def, lines_def)
                 end
                 train:set_rc(table.concat(rc_keep, " "))
             end
-        elseif status_key then
-            F.platform_display_control[status_key] = {
-                status = "NON",
-                atc_id = atc_id,
-            }
-        end
 
-        if status_key then
-            F.activate_approach_alarm(status_key)
+            if status_key then
+                F.activate_approach_alarm(status_key)
+            end
         end
     elseif event.train and atc_arrow then
         if status_key
             and F.platform_display_control[status_key]
             and F.platform_display_control[status_key].status == "NON" then
             F.platform_display_control[status_key] = nil
-        end
-
-        if status_key then
-            F.register_train_arrive(status_key, atc_id)
         end
 
         local stn_line_def
@@ -338,6 +329,10 @@ F.stn_v2 = function(basic_def, lines_def)
         if stn_line_def then
             local line_id = stn_line_def.line
             atc_set_ars_disable(true)
+
+            if status_key then
+                F.register_train_arrive(status_key, atc_id)
+            end
 
             if atc_speed and atc_speed > 10 then
                 atc_send("BB")
