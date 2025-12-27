@@ -453,6 +453,22 @@ F.lines["RXB-SVE"] = {
     }),
 }
 
+F.lines["LIB-BAJ"] = {
+    rc = "L-LIB-BAJ",
+    code = "LIB",
+    name = "Libreland Shuttle",
+    short_name = "Libreland",
+    W = "eLIB",
+    E = "BAJ",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eLIB", "2", true },
+        { "BAJ", "2A", true },
+    }),
+}
+
 -- HelenasaurusRex's Polislink
 
 F.lines["HR-LUC-LRT1"] = {

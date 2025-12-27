@@ -153,6 +153,7 @@ F.station_names = {
         "Apple Lake",
         "Apple Lk.",
     },
+    eLIB = "Libreland",
 
 
     -- Nordstetten
