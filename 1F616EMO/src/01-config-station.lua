@@ -296,7 +296,7 @@ F.station_interchange = {
     SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", },
     eOTH = { "GRH1", "SVL", },
-    BAJ = { "S21", "NX" },
+    BAJ = { "S21", "LIB-BAJ", "NX" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
