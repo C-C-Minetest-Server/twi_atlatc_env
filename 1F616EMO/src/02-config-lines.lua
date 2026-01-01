@@ -324,7 +324,7 @@ F.lines["NX"] = {
         -- station, track, reverse point
         { "eGRO", "7", true },
         { "BAJ",  "2B" },
-        { "eEAN", "4", true },
+        { "eEAN", "3", true },
         { "BAJ",  "1A" },
     }),
 }
