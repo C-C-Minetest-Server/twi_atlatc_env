@@ -316,14 +316,16 @@ F.lines["NX"] = {
     rc = "L-NX",
     name = "Newcomers Express",
     short_name = "Newcomers",
-    W = "BAJ",
+    W = "eEAN",
     E = "eGRO",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eGRO", "7", true },
-        { "BAJ",  "2A", true },
+        { "BAJ",  "2B" },
+        { "eEAN", "4", true },
+        { "BAJ",  "1A" },
     }),
 }
 
@@ -419,7 +421,7 @@ F.lines["S21"] = {
     rc = "L-S21",
     code = "S21",
     name = "S-Bahn Line 21",
-    W = "APL",
+    W = "eEAN",
     E = "M27-QUO",
 
     show_complementary_station = true,
@@ -428,8 +430,10 @@ F.lines["S21"] = {
         { "M27-QUO", "3", true },
         { "eGRO", "5" },
         { "MOT", "2" },
-        { "BAJ", "2B" },
-        { "APL", "2", true },
+        { "BAJ", "2A" },
+        { "APL", "2" },
+        { "eEAN", "4", true },
+        { "APL", "1" },
         { "BAJ", "1B" },
         { "MOT", "1" },
         { "eGRO", "8" },
@@ -465,7 +469,7 @@ F.lines["LIB-BAJ"] = {
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
         { "eLIB", "2", true },
-        { "BAJ", "2A", true },
+        { "BAJ", "2B", true },
     }),
 }
 

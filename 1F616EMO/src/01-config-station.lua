@@ -154,6 +154,7 @@ F.station_names = {
         "Apple Lk.",
     },
     eLIB = "Libreland",
+    eEAN = "Eagle Nest",
 
 
     -- Nordstetten
