@@ -298,6 +298,7 @@ F.station_interchange = {
     SAG = { "CSL", "SVL", },
     eOTH = { "GRH1", "SVL", },
     BAJ = { "S21", "LIB-BAJ", "NX" },
+    eEAN = { "S21", "NX" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
