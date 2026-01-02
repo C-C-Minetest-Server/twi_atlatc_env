@@ -424,7 +424,7 @@ F.lines["S21"] = {
     code = "S21",
     name = "S-Bahn Line 21",
     W = "eEAN",
-    E = "M27-QUO",
+    E = "M27-CFB",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
