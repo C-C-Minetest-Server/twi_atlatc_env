@@ -1,3 +1,5 @@
+assert(is_loading)
+
 F.depot = {}
 
 -- section_occupancy(id)

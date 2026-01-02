@@ -1,3 +1,5 @@
+assert(is_loading)
+
 function F.speed_routing(signal, threshold, fast, slow)
     __approach_callback_mode = 1
 

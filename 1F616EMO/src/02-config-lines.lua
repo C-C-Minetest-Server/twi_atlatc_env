@@ -1,3 +1,5 @@
+assert(is_loading)
+
 local function construct_adjacent_stations(list)
     local station_to_following_stations = {}
     for i, station in ipairs(list) do

@@ -1,3 +1,5 @@
+assert(is_loading)
+
 F.garbage_cleaner = function()
     local now = os.time()
     local sec_in_minute = now % 20

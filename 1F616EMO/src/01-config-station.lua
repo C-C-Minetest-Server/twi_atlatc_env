@@ -1,3 +1,5 @@
+assert(is_loading)
+
 -- Dictionary of arrays/string
 -- arrays: list of names, from long to short
 -- system will pick the best suiting name for the context

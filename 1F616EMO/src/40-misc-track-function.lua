@@ -1,3 +1,5 @@
+assert(is_loading)
+
 F.rev = function(speed, func)
     __approach_callback_mode = 1
 

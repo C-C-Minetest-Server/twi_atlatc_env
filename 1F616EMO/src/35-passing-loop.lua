@@ -1,3 +1,5 @@
+assert(is_loading)
+
 function F.passing_loop(def)
     __approach_callback_mode = 1
 

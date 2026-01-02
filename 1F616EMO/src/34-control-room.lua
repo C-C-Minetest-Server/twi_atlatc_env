@@ -1,3 +1,5 @@
+assert(is_loading)
+
 F.control_room_track = function(station, track)
     local displays = {}
 

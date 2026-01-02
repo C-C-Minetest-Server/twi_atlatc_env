@@ -1,3 +1,5 @@
+assert(is_loading)
+
 F.cache_dbg = {}
 
 F.cache_function = function(period, get_key, func)

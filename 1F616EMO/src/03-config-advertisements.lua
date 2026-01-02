@@ -1,3 +1,5 @@
+assert(is_loading)
+
 --[[
 Symbol convention:
 !!: Warnings

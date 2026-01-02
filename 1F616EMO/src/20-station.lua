@@ -1,5 +1,7 @@
 -- luacheck: no unused
 
+assert(is_loading)
+
 -- Appaorach alarm
 
 F.activated_approach_alarms = {}

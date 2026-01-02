@@ -51,4 +51,6 @@ read_globals = {
     "aspect_is_free",
     "merge_key_tables",
     "debug",
+
+    "is_loading",
 }
