@@ -1133,7 +1133,7 @@ F.last_advertisement = 0
 F.get_express_station_display_lines = function(def)
     def.track = def.track or def.platform_id
     local dest_key = F.get_stn_status_key(def)
-    local header = (def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":"
+    local header = def.custom_header or ((def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":")
     header = string.format("%-20s %s", header, rwt.to_string(rwt.now(), true))
 
     local info_lines

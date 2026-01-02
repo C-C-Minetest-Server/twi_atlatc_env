@@ -226,6 +226,7 @@ F.station_names = {
 
     -- Maverick2797
     ["M27-QUO"] = "Quoralla",
+    ["M27-CFB"] = "Cliffy Beach",
 
 
     -- 1F616EMO Ferry
