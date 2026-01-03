@@ -121,13 +121,13 @@ F.set_outside = function(def, train_id)
         local train = get_train(train_id)
         local rc = train and train:get_rc() or ""
         if F.has_rc("WG-K105", rc) then
-            F.set_outside_k105(def)
+            return F.set_outside_k105(def)
         elseif F.has_rc("WG-01700", rc) then
-            F.set_outside_subway(def, 11)
+            return F.set_outside_subway(def, 11)
         elseif F.has_rc("WG-MPL16", rc) then
-            F.set_outside_subway(def, 14)
+            return F.set_outside_subway(def, 14)
         else
-            F.set_outside_regular(def)
+            return F.set_outside_regular(def)
         end
     end
 end
