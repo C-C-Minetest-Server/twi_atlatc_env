@@ -319,15 +319,17 @@ F.lines["NX"] = {
     name = "Newcomers Express",
     short_name = "Newcomers",
     W = "eEAN",
-    E = "eGRO",
+    E = "M27-SOL",
 
     show_complementary_station = true,
     adjacent_stations = construct_adjacent_stations({
         -- station, track, reverse point
-        { "eGRO", "7", true },
+        { "M27-SOL", "1", true },
+        { "eGRO", "6" },
         { "BAJ",  "2B" },
         { "eEAN", "3", true },
         { "BAJ",  "1A" },
+        { "eGRO", "7" },
     }),
 }
 
