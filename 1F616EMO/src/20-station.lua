@@ -1068,7 +1068,7 @@ F.get_track_status_textline_info_lines = function(station, track, custom_station
             "%-4s %-15s %s",
             entry_data.line_code,
             F.process_station_name_entry(line_term, 15),
-            rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true)
+            string.sub(rwt.to_string(rwt.add(rwt.now(), entry_data.time_left), true), 4)
         )
     end
     return display_texts
@@ -1136,7 +1136,7 @@ F.get_express_station_display_lines = function(def)
     def.track = def.track or def.platform_id
     local dest_key = F.get_stn_status_key(def)
     local header = def.custom_header or ((def.platform_prefix or "PLATFORM") .. " " .. (def.track or "?") .. ":")
-    header = string.format("%-20s %s", header, rwt.to_string(rwt.now(), true))
+    header = string.format("%-20s %s", header, string.sub(rwt.to_string(rwt.now(), true), 4))
 
     local info_lines
     if not def.no_current_train and F.platform_display_control[dest_key]
