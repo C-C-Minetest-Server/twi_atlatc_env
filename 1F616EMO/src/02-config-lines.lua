@@ -479,6 +479,23 @@ F.lines["LIB-BAJ"] = {
     }),
 }
 
+F.lines["BLE"] = {
+    rc = "L-BLE",
+    code = "BLE",
+    name = "Bledarhood Shuttle",
+    short_name = "Bledarhood",
+    N = "eGRO",
+    S = "BLE",
+
+    show_complementary_station = true,
+    adjacent_stations = construct_adjacent_stations({
+        -- station, track, reverse point
+        { "eGRO", "1", true },
+        { "BLE", "2", true },
+    }),
+}
+
+
 -- HelenasaurusRex's Polislink
 
 F.lines["HR-LUC-LRT1"] = {

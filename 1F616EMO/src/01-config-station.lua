@@ -157,6 +157,7 @@ F.station_names = {
     },
     eLIB = "Libreland",
     eEAN = "Eagle Nest",
+    BLE = "Bledarhood",
 
 
     -- Nordstetten
@@ -296,7 +297,7 @@ F.station_interchange = {
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
-    GRO = { "GRH2", "S21", "NX", "OEX", },
+    GRO = { "GRH2", "S21", "BLE", "NX", "OEX", },
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", },
