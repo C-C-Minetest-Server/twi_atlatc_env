@@ -29,6 +29,12 @@ function F.resort_track_trains(track_key)
         local data_a = F.pis_list_of_trains[track_key][a]
         local data_b = F.pis_list_of_trains[track_key][b]
 
+        if data_a.train_status == "stopped" and data_b.train_status ~= "stopped" then
+            return true
+        elseif data_a.train_status ~= "stopped" and data_b.train_status == "stopped" then
+            return false
+        end
+
         local eta_a = data_a.estimated_time
         local eta_b = data_b.estimated_time
 
