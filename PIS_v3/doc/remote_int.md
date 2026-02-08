@@ -6,7 +6,7 @@ PIS v3 does not handle train status on its own; instead, it receives train statu
 
 Messages should be sent via external interrupt (`interrupt_pos`) from the data source. The following position accepts messages:
 
-* _TBD_
+* `"PIS_v3_ext_int"` (real pos: `POS(4179,23,-109)`)
 
 Optional: `source_id` is a string identifying the source of the event for debugging purposes. `return_to` and `return_iid` are data for returning execution status via external interrupt. The return table will be in the format `{ iid = iid, ok = true / false, err = "error message" }`.
 
