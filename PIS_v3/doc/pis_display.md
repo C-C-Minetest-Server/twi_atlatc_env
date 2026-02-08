@@ -104,9 +104,6 @@ F.get_status_textline_line({
     -- Alternative name: line
     line_id = "<line id>",
 
-    -- The station ID of the terminus
-    heading_to_id = "<station id>",
-
     -- The station name of the terminus
     -- Only used when heading_to_id is absent.
     -- other string like Clockwise can be used

@@ -59,8 +59,6 @@ The `line_code` parameter is the short code of the line the train is running. Th
 
 The `line_name` parameter is the full name of the line the train is running. It is a [variable-length string object](#variable-length-string-object).
 
-The `heading_to_id` paramater is the station ID of the terminus. If not set, `heading_to` will be used.
-
 The `heading_to` parameter is a [variable-length string object](#variable-length-string-object) of the terminus's name. For loop lines, texts like "Clockwise loop" may be used instead.
 
 The `direction_code` paramater is a short code of the train's direction, such as "W" for westbound and "ACW" for anticlockwise. Used on compat displays to show the train's direction.
@@ -83,7 +81,6 @@ The `estimated_time` parameter should be a railway time object of the time the t
 
     line_code = "<line code>",
     line_name = "<line name>",
-    heading_to_id = "<station id>",
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
     direction_code = "<direction code>",
 
@@ -98,8 +95,6 @@ The `estimated_time` parameter should be a railway time object of the time the t
 The `line_code` parameter is the short code of the line the train is running. The maximum number of characters of this field is 4. It is often the same as, though need not to be, the internal line ID of the line.
 
 The `line_name` parameter is the full name of the line the train is running. It is a [variable-length string object](#variable-length-string-object).
-
-The `heading_to_id` paramater is the station ID of the terminus. If not set, `heading_to` will be used.
 
 The `heading_to` parameter is a [variable-length string object](#variable-length-string-object) of the terminus's name. For loop lines, texts like "Clockwise loop" may be used instead.
 
@@ -123,7 +118,6 @@ The `estimated_time` parameter should be a railway time object of the time the t
 
     line_code = "<line code>",
     line_name = "<line name>",
-    heading_to_id = "<station id>",
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
     direction_code = "<direction code>",
 

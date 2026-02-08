@@ -149,15 +149,14 @@ function F.get_status_textline_line(def)
         F.pis_list_of_trains[track_key] and F.pis_list_of_trains[track_key][train_coming_id] or nil
 
     local line_id = train_coming_data and train_coming_data.line_id or def.line_id or nil
-    local heading_to_id = train_coming_data and train_coming_data.heading_to_id or def.heading_to_id or nil
     local heading_to = train_coming_data and train_coming_data.heading_to or def.heading_to or nil
 
-    disp = disp .. line_id .. " "
-    if heading_to_id then
-        disp = disp .. "-> " .. heading_to_id
-    else
-        disp = disp .. F.handle_variable_length_string(heading_to, 10)
+    if not line_id then
+        disp = disp .. "Not in service"
+        return disp
     end
+
+    disp = disp .. line_id .. " " .. F.handle_variable_length_string(heading_to or "", 10)
 
     local eta = train_coming_data and train_coming_data.estimated_time
     local append_text = eta and ((train_coming_data.train_status == "stopped" and " Dep. " or " Arr. ") ..

@@ -89,10 +89,6 @@ function F.validate_train_event(data)
                     return false, "data.line_name"
                 end
 
-                if data.heading_to_id ~= nil and type(data.heading_to_id) ~= "string" then
-                    return false, "data.heading_to_id"
-                end
-
                 if not F.validate_variable_length_string(data.heading_to) then
                     return false, "data.heading_to"
                 end
