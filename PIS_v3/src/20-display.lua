@@ -39,7 +39,7 @@ function F.get_pis_single_line(def)
             if time_diff > 0 then
                 lines[#lines + 1] = prefix .. "in " .. time_diff .. " sec."
             else
-                lines[#lines + 1] = prefix .. " now"
+                lines[#lines + 1] = prefix .. "now"
             end
         end
     else
@@ -69,30 +69,34 @@ function F.get_pis_multi_line(def)
     lines[#lines + 1] = string.format("%-20s %s",
         def.custom_header or ("PLATFORM " .. def.track_id .. ":"), rwt_to_string_minutes(rwt.now()))
 
-    for i = 1, math.min(#train_sorted_ids, 3) do
+    local i = 1
+    while i <= #train_sorted_ids do
         local train_id = train_sorted_ids[i]
         local train_data = F.pis_list_of_trains[track_key][train_id]
 
-        local station_name_length = 15
-        local format_base = "%-4s %-15s %s"
-        if train_data.train_status == "stopped" then
-            station_name_length = 13
-            format_base = "%-4s %-13s D.%s"
-        end
+        if rwt.is_before(rwt.add(rwt.now(), 10), train_data.estimated_time) then
+            local station_name_length = 15
+            local format_base = "%-4s %-15s %s"
+            if train_data.train_status == "stopped" then
+                station_name_length = 13
+                format_base = "%-4s %-13s D.%s"
+            end
 
-        lines[#lines + 1] = string.format(format_base,
-            train_data.line_code, F.handle_variable_length_string(train_data.heading_to, station_name_length),
-            rwt_to_string_minutes(train_data.estimated_time))
+            lines[#lines + 1] = string.format(format_base,
+                train_data.line_code, F.handle_variable_length_string(train_data.heading_to, station_name_length),
+                rwt_to_string_minutes(train_data.estimated_time))
 
-        if i == 1 and train_data.train_status == "approaching" and not def.no_current_train then
-            lines[#lines + 1] = F.approach_warning[1]
-            lines[#lines + 1] = F.approach_warning[2]
-            break
-        elseif F.show_advertisement ~= 0 then
-            lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][1]
-            lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][2]
-            break
+            if not lines[3] and train_data.train_status == "approaching" and not def.no_current_train then
+                lines[#lines + 1] = F.approach_warning[1]
+                lines[#lines + 1] = F.approach_warning[2]
+                break
+            elseif F.show_advertisement ~= 0 then
+                lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][1]
+                lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][2]
+                break
+            end
         end
+        i = i + 1
     end
 
     if #lines == 1 then
