@@ -4,6 +4,26 @@ local function rwt_to_string_minutes(rwt_obj)
     return string.sub(rwt.to_string(rwt_obj, true), 4)
 end
 
+local function floor_div(num, div)
+    return math.floor(num / div)
+end
+
+local function seconds_to_string(seconds_raw)
+    seconds_raw = math.floor(seconds_raw)
+    if seconds_raw <= 0 then
+        return seconds_raw .. " sec."
+    end
+
+    local minutes = floor_div(seconds_raw, 60)
+    local seconds = seconds_raw % 60
+
+    local components = {}
+    components[#components + 1] = minutes ~= 0 and (minutes .. " min.") or nil
+    components[#components + 1] = seconds .. " sec." -- So it does not blink
+
+    return table.concat(components, " ")
+end
+
 F.show_advertisement = 0
 F.last_advertisement = 0
 
@@ -37,7 +57,7 @@ function F.get_pis_single_line(def)
             local time_diff = rwt.diff(rwt.now(), train_coming_data.estimated_time)
             local prefix = train_coming_data.train_status == "stopped" and "Leaving " or "Arriving "
             if time_diff > 0 then
-                lines[#lines + 1] = prefix .. "in " .. time_diff .. " sec."
+                lines[#lines + 1] = prefix .. "in " .. seconds_to_string(time_diff)
             else
                 lines[#lines + 1] = prefix .. "now"
             end
