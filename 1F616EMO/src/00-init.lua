@@ -4,6 +4,8 @@ local F, S = F, S
 local rwt = rwt
 local sqrt, floor, abs, fmod = math.sqrt, math.floor, math.abs, math.fmod
 
+local PIS_V3_EXT_INT_POS = "PIS_v3_ext_int"
+
 local function string_split(str, delim, include_empty, max_splits, sep_is_pattern)
     delim = delim or ","
     if delim == "" then

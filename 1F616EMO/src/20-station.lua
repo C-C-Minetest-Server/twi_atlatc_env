@@ -311,6 +311,8 @@ F.stn_v2 = function(basic_def, lines_def)
             if status_key then
                 F.activate_approach_alarm(status_key)
             end
+
+            F.export_running_train_to_pis_v3(atc_id)
         end
     elseif event.train and atc_arrow then
         if status_key
@@ -426,6 +428,32 @@ F.stn_v2 = function(basic_def, lines_def)
                             line_dir,
                             atc_id)
                     end
+                end
+
+                local line_name = F.lines[line_id] and F.lines[line_id].name or line_id
+                local line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir
+                local term_id = F.lines[line_id] and F.lines[line_id][line_dir]
+                local term_name = F.lines[line_id] and F.lines[line_id].custom_term_desc or F.station_names[term_id]
+
+                if term_name then
+                    interrupt_pos(PIS_V3_EXT_INT_POS, {
+                        type = "update_train",
+                        source_id = "F.stn_v2 " .. atc_id .. " (" ..
+                            atc_pos.x .. "," .. atc_pos.y .. "," .. atc_pos.z .. ")",
+
+                        atc_id = atc_id,
+                        train_status = "stopped",
+
+                        station_id = here,
+                        track_id = basic_def.track,
+
+                        line_code = line_id,
+                        line_name = line_name,
+                        heading_to = term_name,
+                        direction_code = line_dir,
+
+                        estimated_time = rwnext,
+                    })
                 end
             end
         end
@@ -561,6 +589,8 @@ F.stn_v2 = function(basic_def, lines_def)
                     F.platform_display_control[alt_status_key] = nil
                 end
             end
+
+            F.export_running_train_to_pis_v3(atc_id)
         end
     end
 end
@@ -1009,6 +1039,82 @@ F.set_status_textline = function(lines)
                 (show_lines[i * 4 + 3] or "") .. "\n" ..
                 (show_lines[i * 4 + 4] or "")
             )
+        end
+    end
+end
+
+F.export_running_train_to_pis_v3 = function(atc_id)
+    local train_dest_key = F.trains_to_destination[atc_id]
+    if not train_dest_key then return false end
+
+    local track_data = F.trains_by_destination[train_dest_key]
+    local train_data = track_data and track_data[atc_id]
+    if not train_data then return false end
+    local latest_checkpoint = train_data.checkpoints and train_data.checkpoints[train_data.latest] and train_data.latest
+    if not latest_checkpoint then return false end
+
+    local line_id = train_data.line_id
+    local line_dir = train_data.line_dir
+    local line_data = F.lines[line_id]
+    local line_code = line_data and line_data.code or line_id
+    local line_name = line_data and line_data.name or line_code
+    local adjacent_stations = line_data and line_data.adjacent_stations
+    local this_adj_stns = adjacent_stations and adjacent_stations[train_dest_key]
+
+    if line_id and line_dir and line_code and this_adj_stns then
+        local train_dest_split = string_split(train_dest_key, ":")
+        local train_dest_station_id = train_dest_split[1]
+        local train_dest_track_id = train_dest_split[2]
+
+        local list_stns = {
+            { train_dest_station_id, train_dest_track_id },
+            unpack(this_adj_stns),
+        }
+        list_stns[#list_stns] = nil
+
+        for _, stn_table in ipairs(list_stns) do
+            if stn_table[3] then
+                line_dir = F.rev_dirs[line_dir] or line_dir
+            end
+
+            local that_station_id, that_track_id = stn_table[1], stn_table[2]
+            local that_status_key = that_station_id .. ":" .. that_track_id
+
+            local that_track_data = F.trains_by_destination[that_status_key]
+            local that_train_data = that_track_data and that_track_data[atc_id]
+
+            local that_latest_checkpoint = that_train_data.latest
+            local that_latest_time = that_train_data
+                and that_train_data.checkpoints and that_train_data.checkpoints[that_latest_checkpoint]
+
+            local that_avg_time = S.station_from_checkpoint[that_status_key]
+                and S.station_from_checkpoint[that_status_key][that_latest_checkpoint]
+            local time_left = that_latest_time and that_avg_time and (that_avg_time - (os.time() - that_latest_time))
+            local estimated_time = time_left and rwt.add(rwt.now(), time_left)
+
+            local that_line_term_id = line_data[line_dir]
+            local that_line_term_name = F.station_names[that_line_term_id]
+
+            if estimated_time then
+                interrupt_pos(PIS_V3_EXT_INT_POS, {
+                    type = "update_train",
+                    source_id = "F.export_running_train_to_pis_v3 " .. atc_id .. " (" ..
+                        atc_pos.x .. "," .. atc_pos.y .. "," .. atc_pos.z .. ")",
+
+                    atc_id = atc_id,
+                    train_status = "arriving",
+
+                    station_id = that_station_id,
+                    track_id = that_track_id,
+
+                    line_code = line_code,
+                    line_name = line_name,
+                    heading_to = that_line_term_name,
+                    direction_code = line_dir,
+
+                    estimated_time = estimated_time,
+                })
+            end
         end
     end
 end

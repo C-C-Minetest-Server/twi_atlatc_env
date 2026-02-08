@@ -10,6 +10,7 @@ read_globals = {
 
     "interrupt",
     "interrupt_safe",
+    "interrupt_pos",
     "digiline_send",
     "display",
 
@@ -53,4 +54,5 @@ read_globals = {
     "debug",
 
     "is_loading",
+    "PIS_V3_EXT_INT_POS",
 }
