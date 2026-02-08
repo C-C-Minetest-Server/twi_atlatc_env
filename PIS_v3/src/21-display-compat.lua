@@ -34,3 +34,27 @@ F.set_textline = function(def)
     local show_func = def.show_func or F.show_lr
     show_func(def, texts)
 end
+
+F.set_status_textline = function(lines)
+    local show_lines = {}
+    for i, disp_def in ipairs(lines) do
+        if type(disp_def) ~= "table" then
+            show_lines[i] = tostring(disp_def)
+        else
+            show_lines[i] = F.get_status_textline_line(disp_def)
+        end
+    end
+
+    if lines.mode == "return" then
+        return table.concat(show_lines, "\n")
+    else
+        for i = 0, math.ceil(#show_lines / 4) - 1 do
+            digiline_send((lines.display or "lcd") .. (i + 1),
+                (show_lines[i * 4 + 1] or "") .. "\n" ..
+                (show_lines[i * 4 + 2] or "") .. "\n" ..
+                (show_lines[i * 4 + 3] or "") .. "\n" ..
+                (show_lines[i * 4 + 4] or "")
+            )
+        end
+    end
+end

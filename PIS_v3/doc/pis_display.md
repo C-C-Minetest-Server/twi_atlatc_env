@@ -69,6 +69,7 @@ F.get_pis_compat({
 
     -- The line id, when there is no data.
     -- Always overriden by the data of the nearest train if present.
+    -- Alternative name: line
     line_id = "<line id>",
 
     -- The direction code, when there is no data.
@@ -76,3 +77,40 @@ F.get_pis_compat({
     direction_code = "<direction code>",
 })
 ```
+
+## `F.get_status_textline_line(def)`
+
+Get a line of station status.
+
+Visual example:
+
+```text
+1: GRH2 -> DUI     Arr. 16
+2: GRH2 -> KIH     Dep.  3
+```
+
+```lua
+F.get_status_textline_line({
+    -- The station ID.
+    -- Alternative name: here
+    station_id = "<station id>",
+
+    -- The track ID.
+    -- Alternative name: platform_id, track
+    track_id = "<track id>",
+
+    -- The line id, when there is no data.
+    -- Always overriden by the data of the nearest train if present.
+    -- Alternative name: line
+    line_id = "<line id>",
+
+    -- The station ID of the terminus
+    heading_to_id = "<station id>",
+
+    -- The station name of the terminus
+    -- Only used when heading_to_id is absent.
+    -- other string like Clockwise can be used
+    -- type: variable-length string object
+    heading_to = "<heading_to>",
+})
+````

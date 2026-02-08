@@ -10,6 +10,7 @@ F.last_advertisement = 0
 function F.handle_pis_option_alternatives(def)
     def.station_id = def.station_id or def.here or nil
     def.track_id = def.track_id or def.track or def.platform_id or nil
+    def.line_id = def.line_id or def.line or nil
 end
 
 function F.get_pis_single_line(def)
@@ -134,6 +135,36 @@ function F.get_pis_compat(def)
     end
 
     return lines
+end
+
+function F.get_status_textline_line(def)
+    F.handle_pis_option_alternatives(def)
+    local track_key = def.station_id .. ":" .. def.track_id
+    F.make_sure_sorted_trains_exist(track_key)
+
+    local disp = def.track_id .. ": "
+
+    local train_coming_id = F.pis_list_of_trains_sorted[track_key] and F.pis_list_of_trains_sorted[track_key][1]
+    local train_coming_data =
+        F.pis_list_of_trains[track_key] and F.pis_list_of_trains[track_key][train_coming_id] or nil
+
+    local line_id = train_coming_data and train_coming_data.line_id or def.line_id or nil
+    local heading_to_id = train_coming_data and train_coming_data.heading_to_id or def.heading_to_id or nil
+    local heading_to = train_coming_data and train_coming_data.heading_to or def.heading_to or nil
+
+    disp = disp .. line_id .. " "
+    if heading_to_id then
+        disp = disp .. "-> " .. heading_to_id
+    else
+        disp = disp .. F.handle_variable_length_string(heading_to, 10)
+    end
+
+    local eta = train_coming_data and train_coming_data.estimated_time
+    local append_text = eta and ((train_coming_data.train_status == "stopped" and " Dep. " or " Arr. ") ..
+        (eta and rwt.diff(rwt.now(), eta) or "?")) or ""
+    disp = string.format("%-" .. (26 - #append_text) .. "s", disp) .. append_text
+
+    return disp
 end
 
 function F.update_advertisement()
