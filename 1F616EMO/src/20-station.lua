@@ -6,8 +6,8 @@ assert(is_loading)
 
 F.activated_approach_alarms = {}
 
-function F.activate_approach_alarm(track_id)
-    F.activated_approach_alarms[track_id] = true
+function F.activate_approach_alarm(track_id, atc_id)
+    F.activated_approach_alarms[track_id] = atc_id or true
 end
 
 function F.deactivate_approach_alarm(track_id)
@@ -309,7 +309,7 @@ F.stn_v2 = function(basic_def, lines_def)
             end
 
             if status_key then
-                F.activate_approach_alarm(status_key)
+                F.activate_approach_alarm(status_key, atc_id)
             end
 
             F.export_running_train_to_pis_v3(atc_id)
@@ -430,6 +430,7 @@ F.stn_v2 = function(basic_def, lines_def)
                     end
                 end
 
+                local line_disp_id = F.lines[line_id] and F.lines[line_id].code or line_id
                 local line_name = F.lines[line_id] and F.lines[line_id].name or line_id
                 local line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir
                 local term_id = F.lines[line_id] and F.lines[line_id][line_dir]
@@ -447,7 +448,7 @@ F.stn_v2 = function(basic_def, lines_def)
                         station_id = here,
                         track_id = basic_def.track,
 
-                        line_code = line_id,
+                        line_code = line_disp_id,
                         line_name = line_name,
                         heading_to = term_name,
                         direction_code = line_dir,
@@ -1083,7 +1084,7 @@ F.export_running_train_to_pis_v3 = function(atc_id)
             local that_track_data = F.trains_by_destination[that_status_key]
             local that_train_data = that_track_data and that_track_data[atc_id]
 
-            local that_latest_checkpoint = that_train_data.latest
+            local that_latest_checkpoint = that_train_data and that_train_data.latest
             local that_latest_time = that_train_data
                 and that_train_data.checkpoints and that_train_data.checkpoints[that_latest_checkpoint]
 
@@ -1093,7 +1094,12 @@ F.export_running_train_to_pis_v3 = function(atc_id)
             local estimated_time = time_left and rwt.add(rwt.now(), time_left)
 
             local that_line_term_id = line_data[line_dir]
-            local that_line_term_name = F.station_names[that_line_term_id]
+            local that_line_term_name = line_data.custom_term_desc or F.station_names[that_line_term_id]
+
+            local train_status = "arriving"
+            if that_status_key == train_dest_key and F.get_activated_approach_alarm(train_dest_key) == atc_id then
+                train_status = "approaching"
+            end
 
             if estimated_time then
                 interrupt_pos(PIS_V3_EXT_INT_POS, {
@@ -1102,7 +1108,7 @@ F.export_running_train_to_pis_v3 = function(atc_id)
                         atc_pos.x .. "," .. atc_pos.y .. "," .. atc_pos.z .. ")",
 
                     atc_id = atc_id,
-                    train_status = "arriving",
+                    train_status = train_status,
 
                     station_id = that_station_id,
                     track_id = that_track_id,

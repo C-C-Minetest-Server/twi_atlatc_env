@@ -739,6 +739,7 @@ F.lines["RXB"] = {
 -- Ferry
 F.lines["FR-SPN-CHF"] = {
     rc = "L-FR-SPN-CHF",
+    code = "CHF",
     name = "1F616EMO Ferry: Origin-Chizuru's Farm",
     textline_name = "Origin-Chizuru's Farm",
     custom_dir_abbr = "~",

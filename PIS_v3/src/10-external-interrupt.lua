@@ -1,6 +1,18 @@
 assert(is_loading)
 
+local function rwt_copy(rwtime)
+    local rwtimet = rwt.to_table(rwtime)
+    return {
+        c = rwtimet.c or 0,
+		h = rwtimet.h or 0,
+        m = rwtimet.m or 0,
+        s = rwtimet.s or 0
+    }
+end
+
 function F.resort_track_trains(track_key)
+    if not F.pis_list_of_trains[track_key] then return end
+
     local atc_id_list = {}
 
     for atc_id in pairs(F.pis_list_of_trains[track_key]) do
@@ -26,15 +38,20 @@ function F.resort_track_trains(track_key)
             return true
         end
 
-        local rwt_diff = rwt.sub(eta_a, eta_b) -- a - b
-        return rwt_diff > 0
+        return rwt.is_before(eta_a, eta_b)
     end)
 
     F.pis_list_of_trains_sorted[track_key] = atc_id_list
 end
 
+function F.make_sure_sorted_trains_exist(track_key)
+    if not F.pis_list_of_trains_sorted[track_key] then
+        F.resort_track_trains(track_key)
+    end
+end
+
 function F.validate_train_event(data)
-    if type(data) ~= "string" then return false, "data" end
+    if type(data) ~= "table" then return false, "data" end
 
     if data.type == "update_train" or data.type == "deregister_train" then
         if type(data.atc_id) == "number" then
@@ -43,7 +60,7 @@ function F.validate_train_event(data)
             else
                 return false, "data.atc_id"
             end
-        elseif type(data.atc_id) == "string" and not string.match(data.atc_id, "^%d+$") then
+        elseif type(data.atc_id) == "string" and not data.atc_id:match("^%d+$") then
             return false, "data.atc_id"
         end
 
@@ -110,9 +127,9 @@ function F.register_train_event(data)
                 line_name = data.line_name,
                 heading_to = data.heading_to,
                 direction_code = data.direction_code,
-                estimated_time = rwt.copy(data.estimated_time),
+                estimated_time = rwt_copy(data.estimated_time),
             }
-            F.resort_track_trains(track_key)
+            F.pis_list_of_trains_sorted[track_key] = nil
 
             if data.train_status == "stopped" then
                 F.pis_train_stopped_on_track[track_key] = data.atc_id
@@ -122,7 +139,7 @@ function F.register_train_event(data)
         elseif data.train_status == "deregister" then
             if F.pis_list_of_trains[track_key] then
                 F.pis_list_of_trains[track_key][data.atc_id] = nil
-                F.resort_track_trains(track_key)
+                F.pis_list_of_trains_sorted[track_key] = nil
 
                 if F.pis_train_stopped_on_track[track_key] == data.atc_id then
                     F.pis_train_stopped_on_track[track_key] = nil
@@ -133,7 +150,7 @@ function F.register_train_event(data)
         for track_key, track_data in pairs(F.pis_list_of_trains) do
             if track_data[atc_id] then
                 track_data[atc_id] = nil
-                F.resort_track_trains(track_key)
+                F.pis_list_of_trains_sorted[track_key] = nil
 
                 if F.pis_train_stopped_on_track[track_key] == data.atc_id then
                     F.pis_train_stopped_on_track[track_key] = nil
@@ -157,7 +174,9 @@ function F.external_interrupt_handler()
     local status, err = F.register_train_event(event.message)
     if not status then
         print("ERROR when handling event from " ..
-            (type(event.source_id) == "string" and event.source_id or "an unknown source") .. ": " .. err)
+            ((type(event.message.source_id) == "string") and event.message.source_id or "an unknown source") ..
+            ": " .. err,
+            event.message)
     end
 
     if event.return_to and event.return_iid then

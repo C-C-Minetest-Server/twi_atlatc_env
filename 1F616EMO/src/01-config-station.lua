@@ -77,10 +77,7 @@ F.station_names = {
         "Sandy Grove",
         "Sandy Grv.",
     },
-    SAE = {
-        "Sandy Edge",
-        "Sandy Edg.",
-    },
+    SAE = "Sandy Edge",
 
     -- Grape Hills Metro
     GRH = {
@@ -98,10 +95,7 @@ F.station_names = {
         "Duck Island",
         "Duck Isl.",
     },
-    VFT = {
-        "Fenced Town",
-        "Fenced Twn.",
-    },
+    VFT = "Fenced Town",
     SNL = {
         "Snake Lakes",
         "Snake Lks.",
@@ -221,10 +215,7 @@ F.station_names = {
         "Digtron Complex",
         "Digtron Cmplx.",
     },
-    ["VD-CAF"] = {
-        "Cactus Farm",
-        "Cactus Frm.",
-    },
+    ["VD-CAF"] = "Cactus Farm",
 
 
     -- Maverick2797
@@ -240,10 +231,7 @@ F.station_names = {
         "RelaxFarm",
         "Rx Farm",
     },
-    ["FR-CHF"] = {
-        "Chizuru's Farm",
-        "Chizuru's Frm.",
-    },
+    ["FR-CHF"] = "Chizuru's Farm",
 
 
     -- Emergency Stations / Platforms

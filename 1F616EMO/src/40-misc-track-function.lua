@@ -59,7 +59,7 @@ F.approach_alarm_start = function(track_id)
 
     if not event.approach or event.has_entered then return end
 
-    F.activate_approach_alarm(track_id)
+    F.activate_approach_alarm(track_id, atc_id)
 end
 
 F.approach_alarm_end = function(track_id)
