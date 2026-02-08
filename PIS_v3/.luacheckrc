@@ -47,10 +47,7 @@ read_globals = {
 
     "string_split",
     "table_indexof",
-    "cascade_index",
-    "aspect_is_free",
-    "merge_key_tables",
-    "debug",
+    "interrupt_pos",
 
     "is_loading",
 }

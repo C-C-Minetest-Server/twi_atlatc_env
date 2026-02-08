@@ -8,11 +8,17 @@ Messages should be sent via external interrupt (`interrupt_pos`) from the data s
 
 * _TBD_
 
+Optional: `source_id` is a string identifying the source of the event for debugging purposes. `return_to` and `return_iid` are data for returning execution status via external interrupt. The return table will be in the format `{ iid = iid, ok = true / false, err = "error message" }`.
+
 Basic format:
 
 ```lua
 {
     type = "<message type>",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
     -- <other parameters...>
 }
 ```
@@ -28,6 +34,11 @@ Basic format:
 ```lua
 {
     type = "update_train",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
+
     atc_id = train_atc_id,
     train_status = "<status>"
 
@@ -42,7 +53,7 @@ Basic format:
 
 `"arriving"` is used when the train is estimated or scheduled to arrive at that time, but it is still too far away to actively notify passengers; `"approaching"` is used when the train is close to the station so that passengers should be actively notified. The `"approaching"` stage is optional yet recommended.
 
-As a real-life reference, `"arriving"` is used in most cases, while `"approaching"` is used when you hear "the train to &lt;somewhere&gt; is arriving, please stand behind the yellow line."
+As a real-life reference, `"arriving"` is used in most cases, while `"approaching"` is used when you hear "the train to &lt;somewhere&gt; is arriving, please stand behind the yellow line." It is usually good enough to trigger this event when `event.approach` is fired on your station track.
 
 The `line_code` parameter is the short code of the line the train is running. The maximum number of characters of this field is 4. It is often the same as, though need not to be, the internal line ID of the line.
 
@@ -50,11 +61,18 @@ The `line_name` parameter is the full name of the line the train is running. It 
 
 The `heading_to` parameter is a [variable-length string object](#variable-length-string-object) of the terminus's name. For loop lines, texts like "Clockwise loop" may be used instead.
 
-The `arriving_at` parameter should be a railway time object of the time the train is estimated to arrive and stop on the track. This parameter is required.
+The `direction_code` paramater is a short code of the train's direction, such as "W" for westbound and "ACW" for anticlockwise. Used on compat displays to show the train's direction.
+
+The `estimated_time` parameter should be a railway time object of the time the train is estimated to arrive and stop on the track. This parameter is required.
 
 ```lua
 {
     type = "update_train",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
+
     atc_id = train_atc_id,
     train_status = "arriving" / "approaching",
 
@@ -64,8 +82,9 @@ The `arriving_at` parameter should be a railway time object of the time the trai
     line_code = "<line code>",
     line_name = "<line name>",
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
+    direction_code = "<direction code>",
 
-    arriving_at = rwt.now(), -- Example
+    estimated_time = rwt.now(), -- Example
 }
 ```
 
@@ -79,11 +98,18 @@ The `line_name` parameter is the full name of the line the train is running. It 
 
 The `heading_to` parameter is a [variable-length string object](#variable-length-string-object) of the terminus's name. For loop lines, texts like "Clockwise loop" may be used instead.
 
-The `leaving_at` parameter should be a railway time object of the time the train is estimated to shut its doors. This is optional but recommended. If absent, the PIS will not hint when the train will leave.
+The `direction_code` paramater is a short code of the train's direction, such as "W" for westbound and "ACW" for anticlockwise. Used on compat displays to show the train's direction.
+
+The `estimated_time` parameter should be a railway time object of the time the train is estimated to shut its doors. This is optional but recommended. If absent, the PIS will not hint when the train will leave.
 
 ```lua
 {
     type = "update_train",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
+
     atc_id = train_atc_id,
     train_status = "stopped",
 
@@ -93,8 +119,9 @@ The `leaving_at` parameter should be a railway time object of the time the train
     line_code = "<line code>",
     line_name = "<line name>",
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
+    direction_code = "<direction code>",
 
-    leaving_at = rwt.now(), -- Example, optional
+    estimated_time = rwt.now(), -- Example, optional
 }
 ```
 
@@ -105,6 +132,11 @@ The `leaving_at` parameter should be a railway time object of the time the train
 ```lua
 {
     type = "update_train",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
+
     atc_id = train_atc_id,
     train_status = "deregister",
 
@@ -120,6 +152,11 @@ The `leaving_at` parameter should be a railway time object of the time the train
 ```lua
 {
     type = "deregister_train",
+
+    source_id = "<source identifier>",
+    return_to = POS(x, y, z),
+    return_iid = "<return identifier>",
+
     atc_id = train_atc_id,
 }
 ```

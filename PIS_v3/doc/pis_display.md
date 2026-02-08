@@ -55,7 +55,7 @@ F.get_pis_multi_line({
 
 ## `F.get_pis_compat(def)`
 
-Displays all informating in the top two lines. Suitable for places where full-sized PIS is impossible.
+Displays all information in the top two lines. Suitable for places where full-sized PIS is impossible.
 
 ```lua
 F.get_pis_compat({
@@ -71,9 +71,8 @@ F.get_pis_compat({
     -- Always overriden by the data of the nearest train if present.
     line_id = "<line id>",
 
-    -- The terminus name, when there is no data.
+    -- The direction code, when there is no data.
     -- Always overriden by the data of the nearest train if present.
-    -- type: variable-length string object
-    heading_to = "<terminus name>",
+    direction_code = "<direction code>",
 })
 ```

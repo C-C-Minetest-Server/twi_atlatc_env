@@ -5,6 +5,20 @@ assert(is_loading)
 local F, S = F, S
 local rwt = rwt
 
+function F.validate_variable_length_string(str)
+    if type(str) == "string" then return true end
+    if type(str) ~= "table" or #str <= 0 then return false end
+
+    local last_len = #str[1]
+    for i = 2, #str do
+        if #str[i] >= last_len then
+            return false
+        end
+    end
+
+    return true
+end
+
 function F.handle_variable_length_string(str, max_len)
     if type(str) == "string" then
         return max_len and string.sub(str, 1, max_len) or str
