@@ -74,7 +74,7 @@ function F.get_pis_multi_line(def)
         local train_id = train_sorted_ids[i]
         local train_data = F.pis_list_of_trains[track_key][train_id]
 
-        if rwt.is_before(rwt.add(rwt.now(), 10), train_data.estimated_time) then
+        if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
             local station_name_length = 15
             local format_base = "%-4s %-15s %s"
             if train_data.train_status == "stopped" then
