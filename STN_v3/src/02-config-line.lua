@@ -150,6 +150,7 @@ F.stn_v3_lines["BLE"] = {
 
 F.stn_v3_lines["LIB-BAJ"] = {
     rc = "L-LIB-BAJ",
+    code = "LIB",
 
     name = {
         "Libreland Shuttle",
