@@ -26,14 +26,14 @@ F.stn_v3_lines["NX"] = {
     },
 
     base_depint = "00;00;06;00", -- Full journey: 00;18;00 with 3 trains
-    base_depoff = "-00;00;04;00",
+    base_depoff = "00;00;00;00",
 
     -- Linked list of current station -> next station
     stations = {
         -- stn_id:track_id:point_id
         ["M27-SOL:1:E1"] = {
             -- Schedule information
-            depoff = "00;00;00;00",
+            depoff = "00;00;13;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 10,
@@ -45,7 +45,7 @@ F.stn_v3_lines["NX"] = {
 
         ["eGRO:6:S1"] = {
             -- Schedule information
-            depoff = "00;00;05;00",
+            depoff = "00;00;00;00",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 15,
@@ -56,7 +56,7 @@ F.stn_v3_lines["NX"] = {
 
         ["BAJ:2B:W1"] = {
             -- Schedule information
-            depoff = "00;00;07;00",
+            depoff = "00;00;02;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 10,
@@ -65,9 +65,9 @@ F.stn_v3_lines["NX"] = {
             dir = "W",
         },
 
-        ["eEAN:2:W1"] = {
+        ["eEAN:3:W1"] = {
             -- Schedule information
-            depoff = "00;00;09;00",
+            depoff = "00;00;04;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 10,
@@ -79,7 +79,7 @@ F.stn_v3_lines["NX"] = {
 
         ["BAJ:1A:E1"] = {
             -- Schedule information
-            depoff = "00;00;11;00",
+            depoff = "00;00;06;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 10,
@@ -90,7 +90,7 @@ F.stn_v3_lines["NX"] = {
 
         ["eGRO:7:N1"] = {
             -- Schedule information
-            depoff = "00;00;13;00",
+            depoff = "00;00;08;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 15,
