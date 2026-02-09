@@ -33,10 +33,10 @@ F.stn_v3_lines["NX"] = {
         -- stn_id:track_id:point_id
         ["M27-SOL:1:E1"] = {
             -- Schedule information
-            depoff = "00;00;13;30",
+            -- depoff = "00;00;13;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 10,
+            delay = 30,
             reverse = true,
 
             next = "eGRO:6:S1",
@@ -45,10 +45,10 @@ F.stn_v3_lines["NX"] = {
 
         ["eGRO:6:S1"] = {
             -- Schedule information
-            depoff = "00;00;00;00",
+            -- depoff = "00;00;00;00",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 15,
+            delay = 30,
 
             next = "BAJ:2B:W1",
             dir = "W",
@@ -56,10 +56,10 @@ F.stn_v3_lines["NX"] = {
 
         ["BAJ:2B:W1"] = {
             -- Schedule information
-            depoff = "00;00;02;30",
+            -- depoff = "00;00;02;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 10,
+            delay = 30,
 
             next = "eEAN:2:W1",
             dir = "W",
@@ -67,10 +67,10 @@ F.stn_v3_lines["NX"] = {
 
         ["eEAN:3:W1"] = {
             -- Schedule information
-            depoff = "00;00;04;30",
+            -- depoff = "00;00;04;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 10,
+            delay = 30,
             reverse = true,
 
             next = "BAJ:1A:E1",
@@ -79,10 +79,10 @@ F.stn_v3_lines["NX"] = {
 
         ["BAJ:1A:E1"] = {
             -- Schedule information
-            depoff = "00;00;06;30",
+            -- depoff = "00;00;06;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 10,
+            delay = 30,
 
             next = "eGRO:7:N1",
             dir = "E",
@@ -90,10 +90,10 @@ F.stn_v3_lines["NX"] = {
 
         ["eGRO:7:N1"] = {
             -- Schedule information
-            depoff = "00;00;08;30",
+            -- depoff = "00;00;08;30",
 
             -- Scheduled stops: Minimum door waiting time (default: 5)
-            delay = 15,
+            delay = 30,
 
             next = "M27-SOL:1:E1",
             dir = "E",
