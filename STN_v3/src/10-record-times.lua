@@ -6,7 +6,7 @@ local AVERGING_FACTOR = 0.8
 -- stn_id:track_id:point_id":a" -> table
 -- !CHK:checkpoint_identifier -> table
 -- The table: max_speed_cat -> (stn_id:track_id:point_id -> seconds)
-S.time_from_checkpoint_to_trackpoint = {}
+S.time_from_checkpoint_to_trackpoint = S.time_from_checkpoint_to_trackpoint or {}
 
 -- atc_id -> table:
 --   dest = stn_id:track_id:point_id
