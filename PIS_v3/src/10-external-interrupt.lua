@@ -99,6 +99,10 @@ function F.validate_train_event(data)
                     return false, "data.heading_to"
                 end
 
+                if data.no_to_prefix ~= nil and type(data.no_to_prefix) ~= "boolean" then
+                    return false, "data.no_to_prefix"
+                end
+
                 if not rwt.to_table(data.estimated_time)
                     and data.estimated_time ~= nil and data.train_status ~= "stopped" then
                     return false, "data.estimated_time"
@@ -133,6 +137,7 @@ function F.register_train_event(data)
                 line_name = data.line_name,
                 heading_to = data.heading_to,
                 direction_code = data.direction_code,
+                no_to_prefix = data.no_to_prefix,
                 estimated_time = rwt_copy(data.estimated_time),
             }
             F.pis_list_of_trains_sorted[track_key] = nil

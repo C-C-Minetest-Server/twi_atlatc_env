@@ -451,6 +451,7 @@ F.stn_v2 = function(basic_def, lines_def)
                         line_code = line_disp_id,
                         line_name = line_name,
                         heading_to = term_name,
+                        no_to_prefix = F.lines[line_id] and F.lines[line_id].custom_term_desc and true or false,
                         direction_code = line_dir,
 
                         estimated_time = rwnext,
@@ -1095,6 +1096,7 @@ F.export_running_train_to_pis_v3 = function(atc_id)
 
             local that_line_term_id = line_data[line_dir]
             local that_line_term_name = line_data.custom_term_desc or F.station_names[that_line_term_id]
+            local that_line_no_to_prefix = line_data.custom_term_desc and true or false
 
             local train_status = "arriving"
             if that_status_key == train_dest_key and F.get_activated_approach_alarm(train_dest_key) == atc_id then
@@ -1116,6 +1118,7 @@ F.export_running_train_to_pis_v3 = function(atc_id)
                     line_code = line_code,
                     line_name = line_name,
                     heading_to = that_line_term_name,
+                    no_to_prefix = that_line_no_to_prefix,
                     direction_code = line_dir,
 
                     estimated_time = estimated_time,
