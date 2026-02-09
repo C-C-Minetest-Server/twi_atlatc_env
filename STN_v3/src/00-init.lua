@@ -31,6 +31,11 @@ local function string_split(str, delim, include_empty, max_splits, sep_is_patter
     return items
 end
 
+F.get_rc_list = function(rc)
+    rc = rc or F.get_rc_safe()
+    return string_split(rc, " ")
+end
+
 function F.handle_variable_length_string(str, max_len)
     if type(str) == "string" then
         return max_len and string.sub(str, 1, max_len) or str

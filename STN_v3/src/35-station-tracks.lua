@@ -65,6 +65,27 @@ function F.stn_v3(params)
         F.set_external_display(train, line_id, point_id)
         train:set_text_inside("Stopping at: " .. F.get_internal_display(line_id, params.station_id))
     elseif event.train and atc_arrow and station_def then
+        -- Clear all RCs starting with S-, SN-, J-, Y-
+        -- if K-STN-CLEAR-ROUTE is present
+        if train:has_rc("K-STN-CLEAR-ROUTE") then
+            local rc_list = F.get_rc_list(train:get_rc())
+            local rc_keep = {}
+            for _, rc in ipairs(rc_list) do
+                local rc_sub2 = string.sub(rc, 1, 2)
+                local rc_sub3 = string.sub(rc, 1, 3)
+                if not (
+                        rc_sub2 == "S-"
+                        or rc_sub3 == "SN-"
+                        or rc_sub2 == "J-"
+                        or rc_sub2 == "Y-"
+                        or rc == "K-STN-CLEAR-ROUTE"
+                    ) then
+                    table.insert(rc_keep, rc)
+                end
+            end
+            train:set_rc(table.concat(rc_keep, " "))
+        end
+
         local atc = "B0W"
 
         if params.door_dir ~= "C" then
