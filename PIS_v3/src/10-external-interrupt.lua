@@ -176,20 +176,24 @@ function F.external_interrupt_handler()
     end
 
     if not event.ext_int then return end
+    if type(event.message) ~= "table" then return end
 
-    local status, err = F.register_train_event(event.message)
-    if not status then
-        print("ERROR when handling event from " ..
-            ((type(event.message.source_id) == "string") and event.message.source_id or "an unknown source") ..
-            ": " .. err,
-            event.message)
-    end
+    local batch = event.message.type == "batch" and event.message.batch or { event.message }
 
-    if event.return_to and event.return_iid then
-        interrupt_pos(event.return_to, {
-            iid = event.return_iid,
-            ok = status,
-            error = err,
-        })
+    for i, message in ipairs(batch) do
+        local status, err = F.register_train_event(message)
+        if not status then
+            print("ERROR when handling event from " ..
+                ((type(message.source_id) == "string") and message.source_id or "an unknown source") ..
+                " batch #" .. i .. ": " .. err, message)
+        end
+
+        if event.return_to and event.return_iid then
+            interrupt_pos(event.return_to, {
+                iid = event.return_iid,
+                ok = status,
+                error = err,
+            })
+        end
     end
 end
