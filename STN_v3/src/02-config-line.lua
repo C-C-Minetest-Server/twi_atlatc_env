@@ -26,7 +26,7 @@ F.stn_v3_lines["NX"] = {
     },
 
     base_depint = "00;00;06;00", -- Full journey: 00;18;00 with 3 trains
-    base_depoff = "00;00;01;00",
+    base_depoff = "-00;00;04;00",
 
     -- Linked list of current station -> next station
     stations = {
@@ -144,6 +144,39 @@ F.stn_v3_lines["BLE"] = {
 
             next = "eGRO:1:N1",
             dir = "N",
+        },
+    }
+}
+
+F.stn_v3_lines["LIB-BAJ"] = {
+    rc = "L-LIB-BAJ",
+
+    name = {
+        "Libreland Shuttle",
+        "Libreland",
+    },
+    termini = {
+        W = "eLIB",
+        E = "BAJ",
+    },
+
+    base_depint = "00;00;06;00",
+    base_depoff = "00;00;08;00",
+
+    stations = {
+        ["BAJ:2B:E1"] = {
+            depoff = "00;00;01;00",
+            delay = 10,
+            reverse = true,
+            next = "eLIB:2:N1",
+            dir = "W",
+        },
+        ["eLIB:2:N1"] = {
+            depoff = "00;00;04;45",
+            delay = 10,
+            reverse = true,
+            next = "BAJ:2B:E1",
+            dir = "E",
         },
     }
 }
