@@ -2,7 +2,6 @@ assert(is_loading)
 
 F.get_textline_display = F.get_pis_single_line
 F.get_express_station_display_lines = F.get_pis_multi_line
-F.set_textline_minimal = F.get_pis_compat
 
 function F.show_lr(def, texts)
     digiline_send(def.left_disp or "l", table.concat(texts, "\n"))
@@ -27,6 +26,11 @@ function F.show_textline_r(_, texts)
         table.insert(rtexts, string.format("%27s", y))
     end
     display(table.concat(rtexts, "\n"), table.concat(texts, "\n"))
+end
+
+F.set_textline_minimal = function(def)
+    local texts = F.get_pis_compat(def)
+    return F.show_lr(def, texts)
 end
 
 F.set_textline = function(def)

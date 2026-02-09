@@ -148,17 +148,17 @@ function F.get_pis_compat(def)
     local train_coming_data =
         F.pis_list_of_trains[track_key] and F.pis_list_of_trains[track_key][train_coming_id] or nil
 
-    local line_id = train_coming_data and train_coming_data.line_id or def.line_id or nil
+    local line_code = train_coming_data and train_coming_data.line_code or def.line_code or nil
     local direction_code = train_coming_data and train_coming_data.direction_code or def.direction_code or nil
     local eta_string = "NO DATA"
     if train_coming_data then
         local eta = train_coming_data.estimated_time
-        eta_string = (train_coming_data.train_status == "stopped" and " Dep. " or " Arr. ") ..
+        eta_string = (train_coming_data.train_status == "stopped" and "Dep. " or "Arr. ") ..
             (eta and rwt.diff(rwt.now(), eta) or "?")
     end
 
-    if line_id and direction_code then
-        lines[#lines + 1] = line_id .. " " .. direction_code .. ": " .. eta_string
+    if line_code and direction_code then
+        lines[#lines + 1] = line_code .. " " .. direction_code .. ": " .. eta_string
     else
         lines[#lines + 1] = "NOT IN SERVICE"
     end
