@@ -52,6 +52,12 @@ F.checkpoint = function(checkpoint_id)
         end
         F.register_train_on_checkpoint(checkpoint_id, atc_id)
     end
+
+    -- Hook onto PIS_v3 so to avoid track replacements
+    interrupt_pos("STN_v3_chkpt_int", {
+        atc_id = atc_id,
+        name = checkpoint_id or (atc_pos.x .. ":" .. atc_pos.y .. ":" .. atc_pos.z),
+    })
 end
 
 F.approach_alarm_start = function(track_id)
