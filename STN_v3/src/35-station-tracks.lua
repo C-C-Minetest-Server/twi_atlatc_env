@@ -101,7 +101,7 @@ function F.stn_v3(params)
         local rwtime = rwt.now()
         local rwnext
         if station_def.depoff and line_def.base_depint then
-            local door_time = line_def.delay or 5
+            local door_time = station_def.delay or 5
             local next_door_close = rwt.next_rpt(
                 rwt.add(rwtime, door_time),
                 line_def.base_depint,
@@ -110,7 +110,7 @@ function F.stn_v3(params)
 
             rwnext = next_door_close
         else
-            local door_time = line_def.delay or 10
+            local door_time = station_def.delay or 10
             rwnext = rwt.add(rwtime, door_time)
         end
 
