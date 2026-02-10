@@ -25,17 +25,10 @@ F.stn_v3_lines["NX"] = {
         E = "M27-SOL",
     },
 
-    base_depint = "00;00;06;00", -- Full journey: 00;18;00 with 3 trains
-    base_depoff = "00;00;00;00",
-
     -- Linked list of current station -> next station
     stations = {
         -- stn_id:track_id:point_id
         ["M27-SOL:1:E1"] = {
-            -- Schedule information
-            -- depoff = "00;00;13;30",
-
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
             reverse = true,
 
@@ -44,10 +37,9 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["eGRO:6:S1"] = {
-            -- Schedule information
-            -- depoff = "00;00;00;00",
+            depint = "00;00;06;00",
+            depoff = "00;00;00;00",
 
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
 
             next = "BAJ:2B:W1",
@@ -55,10 +47,6 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["BAJ:2B:W1"] = {
-            -- Schedule information
-            -- depoff = "00;00;02;30",
-
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
 
             next = "eEAN:3:W1",
@@ -66,10 +54,6 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["eEAN:3:W1"] = {
-            -- Schedule information
-            -- depoff = "00;00;04;30",
-
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
             reverse = true,
 
@@ -78,10 +62,6 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["BAJ:1A:E1"] = {
-            -- Schedule information
-            -- depoff = "00;00;06;30",
-
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
 
             next = "eGRO:7:N1",
@@ -89,10 +69,6 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["eGRO:7:N1"] = {
-            -- Schedule information
-            -- depoff = "00;00;08;30",
-
-            -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
 
             next = "M27-SOL:1:E1",
@@ -123,20 +99,16 @@ F.stn_v3_lines["BLE"] = {
         S = "BLE",
     },
 
-    base_depint = "00;00;06;00",
-    base_depoff = "00;00;02;00",
-
     stations = {
         ["eGRO:1:N1"] = {
-            depoff = "00;00;00;00",
-
-            delay = 10,
+            delay = 30,
             reverse = true,
 
             next = "BLE:2:S1",
             dir = "S",
         },
         ["BLE:2:S1"] = {
+            depint = "00;00;06;00",
             depoff = "00;00;04;30",
 
             delay = 10,
@@ -161,19 +133,16 @@ F.stn_v3_lines["LIB-BAJ"] = {
         E = "BAJ",
     },
 
-    base_depint = "00;00;06;00",
-    base_depoff = "00;00;08;00",
-
     stations = {
         ["BAJ:2B:E1"] = {
-            depoff = "00;00;01;00",
-            delay = 10,
+            delay = 30,
             reverse = true,
             next = "eLIB:2:N1",
             dir = "W",
         },
         ["eLIB:2:N1"] = {
-            depoff = "00;00;04;45",
+            depint = "00;00;06;00",
+            depoff = "00;00;00;00",
             delay = 10,
             reverse = true,
             next = "BAJ:2B:E1",

@@ -100,13 +100,9 @@ function F.stn_v3(params)
 
         local rwtime = rwt.now()
         local rwnext
-        if station_def.depoff and line_def.base_depint then
+        if station_def.depoff and station_def.depint then
             local door_time = station_def.delay or 5
-            local next_door_close = rwt.next_rpt(
-                rwt.add(rwtime, door_time),
-                line_def.base_depint,
-                rwt.add(line_def.base_depoff or rwt.new(), station_def.depoff)
-            )
+            local next_door_close = rwt.next_rpt(rwt.add(rwtime, door_time), station_def.depint, station_def.depoff)
 
             rwnext = next_door_close
         else
@@ -165,7 +161,7 @@ function F.stn_v3(params)
                 train:atc_send("A1")
             end
 
-            interrupt(1 , {
+            interrupt(1, {
                 src = "F.stn_v3",
                 type = "go",
                 line_id = line_id,

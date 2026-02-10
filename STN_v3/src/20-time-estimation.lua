@@ -53,13 +53,10 @@ function F.list_train_arrival_times(atc_id)
         local est_arrival = rwt.add(time_standpoint, average_delta)
         times_to_stations[station_pointer] = est_arrival
 
-        if station_def.depoff and line_def.base_depint then
+        if station_def.depoff and station_def.depint then
             local door_time = line_def.delay or 5
-            local next_door_close = rwt.next_rpt(
-                rwt.add(est_arrival, door_time),
-                line_def.base_depint,
-                rwt.add(line_def.base_depoff or rwt.new(), station_def.depoff)
-            )
+            local next_door_close =
+                rwt.next_rpt(rwt.add(est_arrival, door_time), station_def.depint, station_def.depoff)
 
             time_standpoint = next_door_close
         else
@@ -99,7 +96,7 @@ function F.send_train_to_pis_v3(atc_id)
         local direction_code = line_station_def.dir
         local is_approaching = track_key == train_data.dest and train_data.is_approaching
 
-        send_batch[#send_batch+1] = {
+        send_batch[#send_batch + 1] = {
             type = "update_train",
 
             source_id = "F.send_train_to_pis_v3 " .. atc_id .. " (" ..
