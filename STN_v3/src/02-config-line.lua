@@ -61,7 +61,7 @@ F.stn_v3_lines["NX"] = {
             -- Scheduled stops: Minimum door waiting time (default: 5)
             delay = 30,
 
-            next = "eEAN:2:W1",
+            next = "eEAN:3:W1",
             dir = "W",
         },
 
