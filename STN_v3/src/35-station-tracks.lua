@@ -5,7 +5,7 @@ F.lines_on_stopping_point = {}
 
 for line_id, line_def in pairs(F.stn_v3_lines) do
     local stations = line_def.stations
-    for point_id in pairs(stations) do
+    for point_id in pairs(stations or {}) do
         F.lines_on_stopping_point[point_id] = F.lines_on_stopping_point[point_id] or {}
         table.insert(F.lines_on_stopping_point[point_id], line_id)
     end

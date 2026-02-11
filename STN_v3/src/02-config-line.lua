@@ -86,6 +86,50 @@ F.stn_v3_lines["NX"] = {
     ]]
 }
 
+F.stn_v3_lines["OEX"] = {
+    rc = "L-OEX",
+    code = "OEX",
+    name = {
+        "Origin Express",
+        "Origin Exp.",
+        "Origin",
+    },
+
+    termini = {
+        W = "eGRO",
+        E = "HR-NEN",
+    },
+
+    stations = {
+        ["eGRO:3:N1"] = {
+            depint = "00;00;06;00",
+            depoff = "00;00;01;00",
+
+            delay = 10,
+            reverse = true,
+
+            next = "eYTP:3:S1",
+            dir = "E",
+        },
+        ["eYTP:3:S1"] = {
+            delay = 30,
+            next = "HR-NEN:2:S1",
+            dir = "E",
+        },
+        ["HR-NEN:2:S1"] = {
+            delay = 30,
+            next = "eYTP:4:N1",
+            reverse = true,
+            dir = "W",
+        },
+        ["eYTP:4:N1"] = {
+            delay = 30,
+            next = "eGRO:3:N1",
+            dir = "W",
+        },
+    },
+}
+
 F.stn_v3_lines["BLE"] = {
     rc = "L-BLE",
 
@@ -149,4 +193,34 @@ F.stn_v3_lines["LIB-BAJ"] = {
             dir = "E",
         },
     }
+}
+
+-- (As of now) display only
+F.stn_v3_lines["SPN"] = {
+    code = "SPN",
+    name = {
+        "Origin Subway: Origin Line",
+        "Origin Line",
+        "Origin",
+    },
+}
+
+F.stn_v3_lines["SPN-S1"] = {
+    code = "S1",
+    name = {
+        "Originsphere S-Bahn: Line 1",
+        "Origin S-Bahn: Line 1",
+        "S-Bahn Line 1",
+        "S1",
+    },
+}
+
+F.stn_v3_lines["SVL"] = {
+    code = "SVL",
+    name = {
+        "Originsphere S-Bahn: SmushyVille Loop",
+        "Origin S-Bahn: SmushyVille Loop",
+        "SmushyVille Loop",
+        "SmushyVille",
+    },
 }
