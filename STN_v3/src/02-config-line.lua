@@ -107,6 +107,7 @@ F.stn_v3_lines["OEX"] = {
 
             delay = 10,
             reverse = true,
+            kick = true,
 
             next = "eYTP:3:S1",
             dir = "E",
