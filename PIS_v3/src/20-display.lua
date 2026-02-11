@@ -185,12 +185,12 @@ function F.get_status_textline_line(def)
         return disp
     end
 
-    disp = disp .. line_code .. " " .. F.handle_variable_length_string(heading_to or "", 10)
-
     local eta = train_coming_data and train_coming_data.estimated_time
-    local append_text = eta and ((train_coming_data.train_status == "stopped" and " Dep. " or " Arr. ") ..
-        (eta and rwt.diff(rwt.now(), eta) or "?")) or ""
-    disp = string.format("%-" .. (26 - #append_text) .. "s", disp) .. append_text
+    local append_text = eta
+        and ((train_coming_data.train_status == "stopped" and " D." or " ") .. rwt_to_string_minutes(eta)) or ""
+
+    disp = disp .. line_code .. " " .. F.handle_variable_length_string(heading_to or "", 19 - #append_text)
+    disp = string.format("%-" .. (26 - #append_text) ..  "s", disp) .. append_text
 
     return disp
 end
