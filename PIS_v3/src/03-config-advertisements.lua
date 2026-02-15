@@ -21,6 +21,13 @@ F.pis_advertisements = {
 
     --[[ TEMPOARAY ADS GOES HERE ]] --
 
+    -- Happy Chinese New Year
+    -- Expire: 2026-03-04 (after Lantern Festival)
+    {
+        ">>    HAPPY CHINESE     <<",
+        ">>       NEW YEAR       <<"
+    },
+
     --[[ RAILWAY SERVICE NOTICES ]] --
 
     -- Stay behind yellow line
