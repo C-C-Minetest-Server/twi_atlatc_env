@@ -52,7 +52,7 @@ end
 function F.set_external_display(train, line_id, point_id)
     if train:has_rc("WG-01700") then
         return F.set_external_display_subway(train, line_id, point_id, 11)
-    elseif train:has_rc("WG-MPL16") then
+    elseif train:has_rc("WG-MPL16") or train:has_rc("WG-30000") then
         return F.set_external_display_subway(train, line_id, point_id, 14)
     else
         return F.set_external_display_regular(train, line_id, point_id)
