@@ -29,7 +29,10 @@ F.stn_v3_lines["NX"] = {
     stations = {
         -- stn_id:track_id:point_id
         ["M27-SOL:1:E1"] = {
-            delay = 30,
+            depint = "00;00;06;00",
+            depoff = "00;00;02;00",
+
+            delay = 10,
             reverse = true,
 
             next = "eGRO:6:S1",
@@ -37,8 +40,6 @@ F.stn_v3_lines["NX"] = {
         },
 
         ["eGRO:6:S1"] = {
-            depint = "00;00;06;00",
-            depoff = "00;00;00;00",
 
             delay = 30,
 
