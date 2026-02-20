@@ -28,6 +28,13 @@ F.pis_advertisements = {
         ">>       NEW YEAR       <<"
     },
 
+    -- Deprecation of MultiCraft
+    -- Expire: After deprecation of MC clients
+    {
+        "!!  MULTICRAFT CLIENTS  !!",
+        "!!  DEPRECATED IN MAY  !!",
+    },
+
     --[[ RAILWAY SERVICE NOTICES ]] --
 
     -- Stay behind yellow line
