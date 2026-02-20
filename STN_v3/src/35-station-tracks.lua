@@ -78,6 +78,7 @@ function F.stn_v3(params)
                         or rc_sub3 == "SN-"
                         or rc_sub2 == "J-"
                         or rc_sub2 == "Y-"
+                        or rc_sub2 == "B-"
                         or rc == "K-STN-CLEAR-ROUTE"
                     ) then
                     table.insert(rc_keep, rc)

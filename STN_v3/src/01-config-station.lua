@@ -152,6 +152,10 @@ F.station_names = {
     eLIB = "Libreland",
     eEAN = "Eagle Nest",
     BLE = "Bledarhood",
+    CCP = {
+        "Coco Beach Pier",
+        "Coco Pier",
+    },
 
 
     -- Nordstetten
@@ -292,6 +296,7 @@ F.station_interchange = {
     eOTH = { "GRH1", "SVL", },
     BAJ = { "S21", "LIB-BAJ", "NX" },
     eEAN = { "S21", "NX" },
+    CCB = { "GRH1", "CCP-CCB" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 

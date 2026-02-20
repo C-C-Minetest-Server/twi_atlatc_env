@@ -562,6 +562,13 @@ F.lines["SVL"] = {
     }),
 }
 
+-- Handled in STN_v3 (Display only)
+F.lines["CCP-CCB"] = {
+    code = "CCP",
+    name = "Coco Beach Pier Shuttle",
+    textline_name = "Coco Pier Shuttle",
+}
+
 -- Carts (Display only)
 
 F.lines["ALFC"] = {

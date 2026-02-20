@@ -196,6 +196,38 @@ F.stn_v3_lines["LIB-BAJ"] = {
     }
 }
 
+F.stn_v3_lines["CCP-CCB"] = {
+    rc = "L-CCP-CCB",
+    code = "CCP",
+    name = {
+        "Coco Beach Pier Shuttle",
+        "Coco Pier Shuttle",
+        "Coco Beach Pier",
+        "Coco Pier",
+    },
+    termini = {
+        N = "CCB",
+        S = "CCP",
+    },
+
+    stations = {
+        ["CCB:2:N1"] = {
+            delay = 10,
+            reverse = true,
+            next = "CCP:1:S1",
+            dir = "S",
+        },
+        ["CCP:1:S1"] = {
+            depint = "00;00;06;00",
+            depoff = "00;00;00;00",
+            delay = 10,
+            reverse = true,
+            next = "CCB:2:N1",
+            dir = "N",
+        },
+    },
+}
+
 -- (As of now) display only
 F.stn_v3_lines["SPN"] = {
     code = "SPN",
