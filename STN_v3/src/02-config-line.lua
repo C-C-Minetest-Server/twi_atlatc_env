@@ -30,7 +30,7 @@ F.stn_v3_lines["NX"] = {
         -- stn_id:track_id:point_id
         ["M27-SOL:1:E1"] = {
             depint = "00;00;06;00",
-            depoff = "00;00;02;00",
+            depoff = "00;00;02;20",
 
             delay = 10,
             reverse = true,
