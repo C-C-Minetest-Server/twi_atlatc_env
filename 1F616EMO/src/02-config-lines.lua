@@ -314,25 +314,6 @@ F.lines["NO2"] = {
 
 -- Express
 
-F.lines["NX"] = {
-    rc = "L-NX",
-    name = "Newcomers Express",
-    short_name = "Newcomers",
-    W = "eEAN",
-    E = "M27-SOL",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "M27-SOL", "1", true },
-        { "eGRO", "6" },
-        { "BAJ",  "2B" },
-        { "eEAN", "3", true },
-        { "BAJ",  "1A" },
-        { "eGRO", "7" },
-    }),
-}
-
 F.lines["OEX"] = {
     rc = "L-OEX",
     name = "Origin Express",
@@ -463,39 +444,6 @@ F.lines["RXB-SVE"] = {
     }),
 }
 
-F.lines["LIB-BAJ"] = {
-    rc = "L-LIB-BAJ",
-    code = "LIB",
-    name = "Libreland Shuttle",
-    short_name = "Libreland",
-    W = "eLIB",
-    E = "BAJ",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eLIB", "2", true },
-        { "BAJ", "2B", true },
-    }),
-}
-
-F.lines["BLE"] = {
-    rc = "L-BLE",
-    code = "BLE",
-    name = "Bledarhood Shuttle",
-    short_name = "Bledarhood",
-    N = "eGRO",
-    S = "BLE",
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eGRO", "1", true },
-        { "BLE", "2", true },
-    }),
-}
-
-
 -- HelenasaurusRex's Polislink
 
 F.lines["HR-LUC-LRT1"] = {
@@ -563,10 +511,34 @@ F.lines["SVL"] = {
 }
 
 -- Handled in STN_v3 (Display only)
+
+F.lines["NX"] = {
+    name = "Newcomers Express",
+    short_name = "Newcomers",
+    W = "eEAN",
+    E = "M27-SOL",
+}
+
+F.lines["BLE"] = {
+    code = "BLE",
+    name = "Bledarhood Shuttle",
+    short_name = "Bledarhood",
+    N = "eGRO",
+    S = "BLE",
+}
+
 F.lines["CCP-CCB"] = {
     code = "CCP",
     name = "Coco Beach Pier Shuttle",
     textline_name = "Coco Pier Shuttle",
+}
+
+F.lines["LIB-BAJ"] = {
+    code = "LIB",
+    name = "Libreland Shuttle",
+    short_name = "Libreland",
+    W = "eLIB",
+    E = "BAJ",
 }
 
 -- Carts (Display only)
