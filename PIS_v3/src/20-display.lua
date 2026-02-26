@@ -210,4 +210,12 @@ function F.update_advertisement()
         F.last_advertisement = F.show_advertisement
         F.show_advertisement = 0
     end
+
+    -- Send advertisment to 1F616EMO
+    local EXT_INT_TARGET = "1F616EMO ads recv"
+    local ad = F.pis_advertisements[F.show_advertisement]
+    interrupt_pos(EXT_INT_TARGET, {
+        type = "ads_upd",
+        ad = ad,
+    })
 end
