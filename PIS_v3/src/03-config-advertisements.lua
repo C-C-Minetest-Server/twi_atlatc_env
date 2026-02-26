@@ -32,7 +32,7 @@ F.pis_advertisements = {
     -- Expire: After deprecation of MC clients
     {
         "!!  MULTICRAFT CLIENTS  !!",
-        "!!  DEPRECATED IN MAY  !!",
+        "!!  DEPRECATED IN MAY   !!",
     },
 
     --[[ RAILWAY SERVICE NOTICES ]] --
