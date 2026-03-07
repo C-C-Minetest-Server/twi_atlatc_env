@@ -156,6 +156,7 @@ F.station_names = {
         "Coco Beach Pier",
         "Coco Pier",
     },
+    DEP = "Desert Pride",
 
 
     -- Nordstetten
@@ -283,7 +284,7 @@ F.station_interchange = {
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", "RXIC", },
     ALF = { "SPN", "ALFC", },
-    YTP = { "SPN", "SPN-S1", "SVL", "OEX", },
+    YTP = { "SPN", "SPN-S1", "SPN-S2", "SVL", "OEX", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "SPN-S1", },
     VFT = { "GRH1", "VD-VFT1" },

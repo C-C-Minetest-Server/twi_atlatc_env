@@ -541,6 +541,14 @@ F.lines["LIB-BAJ"] = {
     E = "BAJ",
 }
 
+F.lines["SPN-S2"] = {
+    code = "S2",
+    name = "Originsphere S-Bahn: Line 2",
+    short_name = "S-Bahn Line 2",
+    N = "DEP",
+    S = "HR-NEN",
+}
+
 -- Carts (Display only)
 
 F.lines["ALFC"] = {
