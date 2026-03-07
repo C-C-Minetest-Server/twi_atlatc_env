@@ -229,6 +229,64 @@ F.stn_v3_lines["CCP-CCB"] = {
     },
 }
 
+-- Originsphere S-Bahn
+
+F.stn_v3_lines["SPN-S2"] = {
+    rc = "L-SPN-S2",
+    code = "S2",
+    name = {
+        "Originsphere S-Bahn: Line 2",
+        "Origin S-Bahn: Line 2",
+        "S-Bahn Line 2",
+        "S2",
+    },
+    termini = {
+        N = "DEP",
+        S = "HR-NEN",
+    },
+
+    stations = {
+        ["DEP:2:N1"] ={
+            delay = 15,
+            reverse = true,
+            next = "eYTP:5:S2",
+            dir = "S",
+            on_leave_rc = "J-YTP-NO-YTP B-eYTP-T5S K-STN-CLEAR-ROUTE",
+        },
+        ["eYTP:5:S2"] = {
+            delay = 15,
+            next = "HR-LUC:1:S1",
+            dir = "S",
+            on_leave_rc = "B-HR-LUC-T1S K-STN-CLEAR-ROUTE",
+        },
+        ["HR-LUC:1:S1"] = {
+            delay = 15,
+            next = "HR-NEN:1:S1",
+            dir = "S",
+            on_leave_rc = "B-HR-NEN-T1S K-STN-CLEAR-ROUTE"
+        },
+        ["HR-NEN:1:S1"] = {
+            delay = 15,
+            reverse = true,
+            next = "HR-LUC:6:N1",
+            dir = "N",
+            on_leave_rc = "B-HR-LUC-T6N K-STN-CLEAR-ROUTE",
+        },
+        ["HR-LUC:6:N1"] = {
+            delay = 15,
+            next = "eYTP:6:N1",
+            dir = "N",
+            on_leave_rc = "B-eYTP-T6N K-STN-CLEAR-ROUTE",
+        },
+        ["eYTP:6:N1"] = {
+            delay = 15,
+            next = "DEP:2:N1",
+            dir = "N",
+            on_leave_rc = "J-YTP-NO-DEP B-DEP-T2N K-STN-CLEAR-ROUTE",
+        },
+    }
+}
+
 -- (As of now) display only
 F.stn_v3_lines["SPN"] = {
     code = "SPN",

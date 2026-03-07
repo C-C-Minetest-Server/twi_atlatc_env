@@ -156,6 +156,12 @@ function F.stn_v3(params)
         end
 
         if event.msg.type == "enable_ars" then
+            if station_def.on_leave_rc then
+                local rc = train:get_rc()
+                rc = rc .. " " .. station_def.on_leave_rc
+                train:set_rc(rc)
+            end
+
             if station_def.reverse then
                 train:atc_send("BBWRA1")
             else
