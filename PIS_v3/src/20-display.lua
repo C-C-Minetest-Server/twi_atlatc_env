@@ -50,12 +50,12 @@ function F.get_pis_single_line(def)
     local heading_to = train_coming_data and train_coming_data.heading_to or def.heading_to or nil
 
     if line_name and heading_to then
-        lines[#lines + 1] = F.handle_variable_length_string(line_name, 29)
+        lines[#lines + 1] = F.handle_variable_length_string(line_name, 26)
 
         if train_coming_data.no_to_prefix then
-            lines[#lines + 1] = F.handle_variable_length_string(heading_to, 29)
+            lines[#lines + 1] = F.handle_variable_length_string(heading_to, 26)
         else
-            lines[#lines + 1] = "To " .. F.handle_variable_length_string(heading_to, 26)
+            lines[#lines + 1] = "To " .. F.handle_variable_length_string(heading_to, 23)
         end
 
         if train_coming_data and train_coming_data.estimated_time then
