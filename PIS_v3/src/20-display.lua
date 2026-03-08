@@ -115,7 +115,7 @@ function F.get_pis_multi_line(def)
                 lines[#lines + 1] = F.approach_warning[1]
                 lines[#lines + 1] = F.approach_warning[2]
                 break
-            elseif F.show_advertisement ~= 0 then
+            elseif not def.no_advertisments and F.show_advertisement ~= 0 then
                 lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][1]
                 lines[#lines + 1] = F.pis_advertisements[F.show_advertisement][2]
                 break
@@ -125,8 +125,10 @@ function F.get_pis_multi_line(def)
     end
 
     if #lines == 1 then
-        local show_lines =
-            F.show_advertisement == 0 and F.yellow_line_warning or F.pis_advertisements[F.show_advertisement]
+        local show_lines = F.yellow_line_warning
+        if not def.no_advertisments and F.show_advertisement ~= 0 then
+            show_lines = F.pis_advertisements[F.show_advertisement]
+        end
 
         lines[#lines + 1] = " "
         lines[#lines + 1] = show_lines[1]
