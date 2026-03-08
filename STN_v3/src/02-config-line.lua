@@ -247,7 +247,7 @@ F.stn_v3_lines["SPN-S2"] = {
 
     stations = {
         ["DEP:2:N1"] ={
-            depint = "00;00;03;00",
+            depint = "00;00;05;00",
             depoff = "00;00;00;00",
             delay = 15,
             reverse = true,
