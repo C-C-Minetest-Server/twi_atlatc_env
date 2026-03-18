@@ -208,6 +208,7 @@ F.station_names = {
         "New Normandy Ctl.",
         "New Normandy",
     },
+    ["HR-SOV"] = "Sea Overlook",
 
 
     -- Vedu_0825
