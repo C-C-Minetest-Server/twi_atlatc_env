@@ -289,6 +289,35 @@ F.stn_v3_lines["SPN-S2"] = {
     }
 }
 
+-- Ferry lines
+F.stn_v3_lines["FR-PLL-SNE"] = {
+    rc = "L-FR-PLL-SNE",
+    code = "PLL",
+    name = {
+        "Snezhnaya-PL Land Ferry",
+        "PL Land Ferry",
+        "PL Land",
+    },
+    termini = {
+        N = "FR-SNE",
+        S = "FR-PLL",
+    },
+
+    stations = {
+        ["FR-SNE:1:e1"] = {
+            delay = 60,
+            reverse = true,
+            next = "FR-PLL:1:S1",
+            dir = "S",
+        },
+        ["FR-PLL:1:S1"] = {
+            delay = 60,
+            next = "FR-SNE:1:e1",
+            dir = "N",
+        },
+    }
+}
+
 -- (As of now) display only
 F.stn_v3_lines["SPN"] = {
     code = "SPN",

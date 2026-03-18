@@ -230,7 +230,7 @@ F.station_names = {
     ["M27-SOL"] = "Solandar",
 
 
-    -- 1F616EMO Ferry
+    -- 1F616EMO Ferry: Origin
     ["FR-SPN"] = "Origin",
     ["FR-RXF"] = {
         "RelaxingFarm",
@@ -238,6 +238,11 @@ F.station_names = {
         "Rx Farm",
     },
     ["FR-CHF"] = "Chizuru's Farm",
+
+
+    -- 1F616EMO Ferry: Snezhnaya
+    ["FR-SNE"] = "Snezhnaya",
+    ["FR-PLL"] = "PL Land",
 
 
     -- Emergency Stations / Platforms
