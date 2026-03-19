@@ -289,6 +289,49 @@ F.stn_v3_lines["SPN-S2"] = {
     }
 }
 
+-- Grape Hills S-Bahn
+F.stn_v3_lines["S22"] = {
+    rc = "L-S22",
+    code = "S22",
+    name = {
+        "S-Bahn Line 22",
+        "S22",
+    },
+    termini = {
+        N = "eGRO",
+        S = "SNE",
+    },
+
+    stations = {
+        ["SNE:1:W1"] = {
+            delay = 15,
+            reverse = true,
+            next = "eOTH:1:N2",
+            dir = "N",
+            on_leave_rc = "J-SV_S-WL-WL B-eOTH-T1N K-STN-CLEAR-ROUTE",
+        },
+        ["eOTH:1:N2"] = {
+            delay = 15,
+            next = "eGRO:8:N2",
+            dir = "N",
+            on_leave_rc = "J-SV_N-WL-GRH J-SV_N-GRO-GRO B-eGRO-T8N K-STN-CLEAR-ROUTE",
+        },
+        ["eGRO:8:N2"] = {
+            delay = 15,
+            reverse = true,
+            next = "eOTH:2:S1",
+            dir = "S",
+            on_leave_rc = "J-SV_N-GRO-GRO J-SV_N-WL-WL B-eOTH-T2S K-STN-CLEAR-ROUTE",
+        },
+        ["eOTH:2:S1"] = {
+            delay = 15,
+            next = "SNE:1:W1",
+            dir = "S",
+            on_leave_rc = "J-SV_S-WL-WOM B-SNE-T1W K-STN-CLEAR-ROUTE",
+        },
+    }
+}
+
 -- Ferry lines
 F.stn_v3_lines["FR-PLL-SNE"] = {
     rc = "L-FR-PLL-SNE",

@@ -157,6 +157,7 @@ F.station_names = {
         "Coco Pier",
     },
     DEP = "Desert Pride",
+    SNE = "Snezhnaya",
 
 
     -- Nordstetten
@@ -296,14 +297,15 @@ F.station_interchange = {
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
-    GRO = { "GRH2", "S21", "BLE", "NX", "OEX", },
+    GRO = { "GRH2", "S21", "S22", "BLE", "NX", "OEX", },
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", },
-    eOTH = { "GRH1", "SVL", },
+    eOTH = { "GRH1", "SVL", "S22", },
     BAJ = { "S21", "LIB-BAJ", "NX" },
     eEAN = { "S21", "NX" },
     CCB = { "GRH1", "CCP-CCB" },
+    SNE = { "S22", "FR-PLL-SNE" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
@@ -319,6 +321,7 @@ F.station_interchange.eOAI = F.station_interchange.OAI
 F.station_interchange["HR-eCIG"] = F.station_interchange["HR-CIG"]
 F.station_interchange["NO-T"] = F.station_interchange["NO-WS"]
 F.station_interchange["VD-VFT"] = F.station_interchange.VFT
+F.station_interchange["FR-SNE"] = F.station_interchange.SNE
 
 F.interchange_line_alias = {
     ["SPN-CW"] = "SPN",

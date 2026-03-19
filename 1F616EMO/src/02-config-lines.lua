@@ -549,6 +549,21 @@ F.lines["SPN-S2"] = {
     S = "HR-NEN",
 }
 
+F.lines["S22"] = {
+    code = "S22",
+    name = "S-Bahn Line 22",
+    N = "eGRO",
+    S = "SNE",
+}
+
+F.lines["FR-PLL-SNE"] = {
+    code = "PLL",
+    name = "Snezhnaya-PL Land Ferry",
+    short_nane = "PL Land Ferry",
+    N = "FR-SNE",
+    S = "FR-PLL",
+}
+
 -- Carts (Display only)
 
 F.lines["ALFC"] = {

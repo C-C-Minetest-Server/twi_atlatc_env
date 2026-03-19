@@ -157,6 +157,7 @@ F.station_names = {
         "Coco Pier",
     },
     DEP = "Desert Pride",
+    SNE = "Snezhnaya",
 
 
     -- Nordstetten
@@ -239,6 +240,11 @@ F.station_names = {
     ["FR-CHF"] = "Chizuru's Farm",
 
 
+    -- 1F616EMO Ferry: Snezhnaya
+    ["FR-SNE"] = "Snezhnaya",
+    ["FR-PLL"] = "PL Land",
+
+
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = {
         "ShroomVille (Backup Platform)",
@@ -298,6 +304,7 @@ F.station_interchange = {
     BAJ = { "S21", "LIB-BAJ", "NX" },
     eEAN = { "S21", "NX" },
     CCB = { "GRH1", "CCP-CCB" },
+    SNE = { "S22", "FR-PLL-SNE" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
