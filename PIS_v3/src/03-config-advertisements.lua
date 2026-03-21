@@ -43,6 +43,12 @@ F.pis_advertisements = {
         ">> WANG FUK COURT FIRE  <<"
     },
 
+    -- WFC fire mourning 2
+    {
+        ">> WANG FUK COURT FIRE  <<",
+        ">> IS MAN-MADE DISASTER <<",
+    },
+
     -- Join Discord server
     {
         ">>   JOIN OUR DISCORD   <<",
