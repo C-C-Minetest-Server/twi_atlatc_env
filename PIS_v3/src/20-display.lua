@@ -101,15 +101,23 @@ function F.get_pis_multi_line(def)
 
         if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
             local station_name_length = 15
-            local format_base = "%-4s %-15s %s"
+            local line_code_display = string.format("%-4s", train_data.line_code) .. " "
+            local arrive_time_string = rwt_to_string_minutes(train_data.estimated_time)
+
             if train_data.train_status == "stopped" then
                 station_name_length = 13
-                format_base = "%-4s %-13s D.%s"
+                arrive_time_string = "D." .. arrive_time_string
             end
 
-            lines[#lines + 1] = string.format(format_base,
-                train_data.line_code, F.handle_variable_length_string(train_data.heading_to, station_name_length),
-                rwt_to_string_minutes(train_data.estimated_time))
+            if def.no_line_id then
+                line_code_display = ""
+                station_name_length = station_name_length + 5
+            end
+
+            lines[#lines + 1] = line_code_display ..
+                string.format("%-" .. station_name_length .. "s",
+                    F.handle_variable_length_string(train_data.heading_to, station_name_length)) ..
+                " " .. arrive_time_string
 
             if not lines[3] and train_data.train_status == "approaching" and not def.no_current_train then
                 lines[#lines + 1] = F.approach_warning[1]
