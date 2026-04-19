@@ -24,9 +24,15 @@ F.gpu.render_font(F.screen_approaching_overlay_alt, "STAY IN YELLOW LINE", 37, 1
 
 -- 192x64 buffer to three screens
 function F.wide_buffer_to_screen(buf, screen1, screen2, screen3)
-    digiline_send(screen1, F.gpu.to_screen(buf, 1, 1, 64, 64, 0))
-    digiline_send(screen2, F.gpu.to_screen(buf, 65, 1, 64, 64, 0))
-    digiline_send(screen3, F.gpu.to_screen(buf, 129, 1, 64, 64, 0))
+    digiline_send(screen1, buf)
+
+    buf.offset_x = 64
+    digiline_send(screen2, buf)
+
+    buf.offset_x = 128
+    digiline_send(screen3, buf)
+
+    buf.offset_x = nil
 end
 
 
