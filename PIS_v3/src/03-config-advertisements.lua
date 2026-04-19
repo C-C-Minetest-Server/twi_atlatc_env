@@ -79,3 +79,44 @@ F.pis_advertisements = {
         ">>    /mail 1F616EMO    <<"
     },
 }
+
+F.marquee_advertisements = {
+    --[[ TEMPOARAY ADS GOES HERE ]] --
+
+    -- Deprecation of MultiCraft
+    -- Expire: After deprecation of MC clients
+    {
+        "MultiCraft clients will not be able to connect in May.",
+    },
+
+    --[[ RAILWAY SERVICE NOTICES ]] --
+
+    {
+        "Running trains are deadly. Stand behind the yellow lines.",
+    },
+
+    -- WFC fire mourning
+    {
+        "We mourn the loss in the Wang Fuk Court fire."
+    },
+
+    {
+        "Join our Discord server: discord.gg/bFhZuwQxDX",
+    },
+
+    {
+        "Any suggestions? Run /report",
+    },
+
+    {
+        "You should use newcomers plots within 14 days after buying it.",
+    },
+
+    {
+        "Hate nighttime? Use /day command to make it day.",
+    },
+
+    {
+        "Want your ads here? /mail 1F616EMO",
+    },
+}
