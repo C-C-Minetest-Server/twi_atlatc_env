@@ -2,9 +2,6 @@ assert(is_loading)
 
 F.gpu = {}
 
--- We work on integer representation until it's time to send it
--- i.e. the only place we would like to see string form is in to_array
-
 -- Basic I/O
 
 -- Constructor of new buffer
@@ -196,4 +193,16 @@ function F.gpu.get_string_buffer(str, color)
 
     F.gpu.render_font(buf, str, 1, 1, color)
     return buf
+end
+
+-- Instrument them all with tracy
+for name, func in pairs(F.gpu) do
+    local function new_func(...)
+        tracy.ZoneBeginN("PIS_v3::F.gpu." .. name)
+        local results = { func(...) }
+        tracy.ZoneEnd()
+        return unpack(results)
+    end
+
+    F.gpu[name] = new_func
 end

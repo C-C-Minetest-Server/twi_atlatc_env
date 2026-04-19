@@ -24,15 +24,11 @@ F.gpu.render_font(F.screen_approaching_overlay_alt, "STAY IN YELLOW LINE", 37, 1
 
 -- 192x64 buffer to three screens
 function F.wide_buffer_to_screen(buf, screen1, screen2, screen3)
-    digiline_send(screen1, buf)
-
-    buf.offset_x = 64
-    digiline_send(screen2, buf)
-
-    buf.offset_x = 128
-    digiline_send(screen3, buf)
-
-    buf.offset_x = nil
+    tracy.ZoneBeginN("Send Buffer to Screen")
+    digiline_send(screen1, F.gpu.to_screen(buf, 1, 1, 64, 64, 0))
+    digiline_send(screen2, F.gpu.to_screen(buf, 65, 1, 64, 64, 0))
+    digiline_send(screen3, F.gpu.to_screen(buf, 129, 1, 64, 64, 0))
+    tracy.ZoneEnd()
 end
 
 
@@ -50,6 +46,8 @@ F.marquee_buffer = F.gpu.new_buffer(MARQUEE_MAX_CHAR * 6, 12, MARQUEE_BKG)
 
 -- Run every 0.5 seconds by panel self-interrupt
 function F.update_marquee()
+    tracy.ZoneBeginN("Update Marquee")
+
     while #F.marquee_current < 1 do
         local ad_id
         repeat
@@ -60,6 +58,8 @@ function F.update_marquee()
     end
 
     if F.marquee_shift then
+        tracy.ZoneBeginN("Marquee Render Char")
+
         -- Append one char to the internal buffer
         F.gpu.fill(F.marquee_buffer_int, MARQUEE_BKG, MARQUEE_MAX_CHAR * 6 + 1, 1, 6, 12)
         F.gpu.render_font(F.marquee_buffer_int, string.sub(F.marquee_current, 1, 1), MARQUEE_MAX_CHAR * 6 + 1, 1, MARQUEE_COLOR)
@@ -67,18 +67,26 @@ function F.update_marquee()
         -- Apply to the public buffer
         F.gpu.overlay_buf(F.marquee_buffer, F.marquee_buffer_int, -2, 1)
 
+        tracy.ZoneEnd()
+
         -- Eat one character away
         F.marquee_current = string.sub(F.marquee_current, 2)
     else
+        tracy.ZoneBeginN("Marquee Shift Buffer")
+
         -- left shift everything in the internal buffer
         -- A trick that works very well
         F.gpu.overlay_buf(F.marquee_buffer_int, F.marquee_buffer_int, -5, 1)
 
         -- Apply to the public buffer
         F.gpu.overlay_buf(F.marquee_buffer, F.marquee_buffer_int, 1, 1)
+
+        tracy.ZoneEnd()
     end
 
     F.marquee_shift = not F.marquee_shift
+
+    tracy.ZoneEnd()
 end
 
 local function seconds_to_string_shorter(seconds_raw)
@@ -100,6 +108,8 @@ end
 function F.get_screen_buffer(def)
     F.handle_pis_option_alternatives(def)
 
+    tracy.ZoneBeginN("Get Screen Buffer")
+
     local track_key = def.station_id .. ":" .. def.track_id
     local list_of_trains = F.pis_list_of_trains[track_key]
     local train_stopped_id = F.pis_train_stopped_on_track[track_key]
@@ -108,19 +118,24 @@ function F.get_screen_buffer(def)
     local buf
     local mode = "idle"
 
+    tracy.ZoneBeginN("Buffer Setup")
     if train_stopped_data and not def.no_current_train then
         buf = F.gpu.copy_buffer(F.screen_arrived_background)
         mode = "arrived"
     else
         buf = F.gpu.copy_buffer(F.screen_background)
     end
+    tracy.ZoneEnd()
 
     -- Header
+    tracy.ZoneBeginN("Render Headers")
     F.gpu.render_font(buf, def.custom_header or ("PLATFORM " .. def.track_id .. ":"), 4, 3, 0)
     F.gpu.render_font(buf, rwt_to_string_minutes(rwt.now()), 192 - 1 - 5 * 6, 3, 0)
+    tracy.ZoneEnd()
 
 
     if mode == "arrived" then
+        tracy.ZoneBeginN("Arrived Mode Composition")
         local line_code = train_stopped_data.line_code
         local line_name = train_stopped_data.line_name
         local heading_to = train_stopped_data.heading_to
@@ -142,8 +157,13 @@ function F.get_screen_buffer(def)
         F.gpu.render_font(buf, (train_stopped_data.no_to_prefix and "" or "To ") .. dest_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12 * 2, 0)
         F.gpu.render_font(buf, time_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12 * 3, 0)
 
+        tracy.ZoneEnd()
+        tracy.ZoneEnd() -- End Get Screen Buffer
+
         return buf
     end
+
+    tracy.ZoneBeginN("Train List Rendering")
 
     F.make_sure_sorted_trains_exist(track_key)
     local train_sorted_ids = F.pis_list_of_trains_sorted[track_key] or {}
@@ -194,5 +214,7 @@ function F.get_screen_buffer(def)
         F.gpu.overlay_buf(buf, F.marquee_buffer, 4, 3 + 12 * 4)
     end
 
+    tracy.ZoneEnd()
+    tracy.ZoneEnd() -- End Get Screen Buffer
     return buf
 end
