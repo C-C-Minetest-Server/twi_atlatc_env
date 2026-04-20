@@ -1,7 +1,7 @@
 assert(is_loading)
 
 -- From digistuff/gpu-font.lua
-F.screen_chars = {
+local screen_chars = {
     [32] = {
         { false, false, false, false, false, },
         { false, false, false, false, false, },
@@ -1333,3 +1333,14 @@ F.screen_chars = {
         { false, false, false, false, false, },
     },
 }
+
+F.screen_chars = {}
+
+for code, layer in pairs(screen_chars) do
+    F.screen_chars[code] = {
+        w = 5, h = 12,
+        layers = { { content = layer } },
+    }
+end
+
+screen_chars = nil

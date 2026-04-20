@@ -7,20 +7,24 @@ F.gpu.fill(F.screen_background, 0xDEDEDE, 3, 3, 64 * 3 - 4, 64 - 4) -- bkg
 F.gpu.fill(F.screen_background, 0xC2C2C2, 3, 15, 64 * 3 - 4, 12) -- strip 1
 F.gpu.fill(F.screen_background, 0xC2C2C2, 3, 39, 64 * 3 - 4, 12) -- strip 2
 F.gpu.fill(F.screen_background, 0x00ABFF, 3, 64 - 13, 64 * 3 - 4, 12) -- marquee bkg
+F.gpu.squash_layers(F.screen_background)
 
 F.screen_arrived_background = F.gpu.copy_buffer(F.screen_background)
 F.gpu.fill(F.screen_arrived_background, 0xADADAD, 3, 15, 4 * 6 * 2 + 6, 24) -- ID background
 F.gpu.render_font(F.screen_arrived_background, "Walk inside and stop moving.", 12, 4 + 12 * 4, 0x94FF6F) -- hard-coded message
+F.gpu.squash_layers(F.screen_arrived_background)
 
 F.screen_approaching_overlay = F.gpu.new_buffer(188, 24)
 F.gpu.fill(F.screen_approaching_overlay, 0xDDDD00, 1, 1, 188, 24)
 F.gpu.render_font(F.screen_approaching_overlay, "TRAIN APPROACHING", 43, 1, 0xBE0302)
 F.gpu.render_font(F.screen_approaching_overlay, "STAY IN YELLOW LINE", 37, 13, 0xBE0302)
+F.gpu.squash_layers(F.screen_approaching_overlay)
 
 F.screen_approaching_overlay_alt = F.gpu.new_buffer(188, 24)
 F.gpu.fill(F.screen_approaching_overlay_alt, 0xDDDD00, 1, 1, 188, 24)
 F.gpu.render_font(F.screen_approaching_overlay_alt, "TRAIN APPROACHING", 43, 1, 0)
 F.gpu.render_font(F.screen_approaching_overlay_alt, "STAY IN YELLOW LINE", 37, 13, 0)
+F.gpu.squash_layers(F.screen_approaching_overlay_alt)
 
 -- 192x64 buffer to three screens
 -- It is proved via Tracy profiling that sending partial buffer is more efficient
@@ -63,18 +67,21 @@ function F.update_marquee()
         F.gpu.render_font(F.marquee_buffer_int, string.sub(F.marquee_current, 1, 1), MARQUEE_MAX_CHAR * 6 + 1, 1, MARQUEE_COLOR)
 
         -- Apply to the public buffer
-        F.gpu.overlay_buf(F.marquee_buffer, F.marquee_buffer_int, -2, 1)
+        F.gpu.overlay_apply(F.marquee_buffer, F.marquee_buffer_int, -2, 1)
 
         -- Eat one character away
         F.marquee_current = string.sub(F.marquee_current, 2)
     else
         -- left shift everything in the internal buffer
         -- A trick that works very well
-        F.gpu.overlay_buf(F.marquee_buffer_int, F.marquee_buffer_int, -5, 1)
+        F.gpu.overlay_apply(F.marquee_buffer_int, F.marquee_buffer_int, -5, 1)
 
         -- Apply to the public buffer
-        F.gpu.overlay_buf(F.marquee_buffer, F.marquee_buffer_int, 1, 1)
+        F.gpu.overlay_apply(F.marquee_buffer, F.marquee_buffer_int, 1, 1)
     end
+
+    F.gpu.squash_layers(F.marquee_buffer_int)
+    F.gpu.squash_layers(F.marquee_buffer)
 
     F.marquee_shift = not F.marquee_shift
     -- tracy: ZoneEnd

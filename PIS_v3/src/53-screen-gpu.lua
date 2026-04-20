@@ -5,59 +5,143 @@ F.gpu = {}
 -- We work on integer representation until it's time to send it
 -- i.e. the only place we would like to see string form is in to_array
 
--- Basic I/O
+--[[
+We avoid excess creation of new tables by creating new layers that stores new information
+in a buffer.
+]]
 
--- Constructor of new buffer
+function F.gpu._new_layer_raw(w, h, background)
+    local layer_content = {}
+    for i = 1, h do
+        local layer_row = {}
+        for j = 1, w do
+            layer_row[#layer_row + 1] = background
+        end
+        layer_content[#layer_content + 1] = layer_row
+    end
+    return {
+        content = layer_content
+    }
+end
+
 function F.gpu.new_buffer(w, h, background)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.new_buffer
-
-    local buf = {}
-    background = type(background) == "number" and background or false
-
-    for i = 1, h do
-        local buf_row = {}
-        for j = 1, w do
-            buf_row[#buf_row + 1] = background
-        end
-        buf[#buf + 1] = buf_row
-    end
+    local buf = { w = w, h = h, layers = {} }
+    buf.layers[1] = F.gpu._new_layer_raw(w, h, background)
 
     -- tracy: ZoneEnd
     return buf
 end
 
--- Deep copy a buffer
+function F.gpu.add_layer(buf)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.add_layer
+    buf.layers[#buf.layers+1] = F.gpu._new_layer_raw(buf.w, buf.h, false)
+    -- tracy: ZoneEnd
+end
+
 function F.gpu.copy_buffer(buf)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.copy_buffer
 
-    local new_buf = {}
+    local new_buf = { w = buf.w, h = buf.h, layers = {} }
 
-    for i, buf_row in ipairs(buf) do
-        new_buf[i] = {}
-        for j, pix in ipairs(buf_row) do
-            new_buf[i][j] = pix
-        end
+    -- Shallow copy the layers
+    for i, layer in ipairs(buf.layers) do
+        new_buf.layers[i] = layer
     end
+
+    new_buf.top_layer_immutable = true
 
     -- tracy: ZoneEnd
     return new_buf
 end
 
--- Convert the buffer into something recognized by digiscreen
--- x:y+w+h (we don't validate whether the buffe is big enough)
-function F.gpu.to_screen(buf, x, y, w, h, background)
-    -- tracy: ZoneBeginN PIS_v3::F.gpu.to_screen
+function F.gpu.read_pixel(buf, x, y)
+    assert(x >= 1 and x <= buf.w, "Invalid x coordinate")
+    assert(y >= 1 and y <= buf.h, "Invalid y coordinate")
+    for i = #buf.layers, 1, -1 do
+        local layer = buf.layers[i]
+        local lookup_x = x + (layer.offset_x or 0)
+        local lookup_y = y + (layer.offset_y or 0)
+        local layer_content = layer.content
 
+        if layer_content[lookup_y] and layer_content[lookup_y][lookup_x] ~= nil and layer_content[lookup_y][lookup_x] ~= false then
+            return layer_content[lookup_y][lookup_x]
+        end
+    end
+
+    return false
+end
+
+function F.gpu.write_pixel(buf, x, y, color)
+    assert(x >= 1 and x <= buf.w, "Invalid x coordinate")
+    assert(y >= 1 and y <= buf.h, "Invalid y coordinate")
+
+    if buf.top_layer_immutable then
+        buf.top_layer_immutable = nil
+        F.gpu.add_layer(buf)
+    end
+    
+    buf.layers[#buf.layers].content[y][x] = color
+end
+
+function F.gpu.overlay_apply(buf, buf2, x, y, apply)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.overlay_apply
+    for i = 1, buf2.h do
+        for j = 1, buf2.w do
+            local pix = F.gpu.read_pixel(buf2, j, i)
+            local write_x = j + x - 1
+            local write_y = i + y - 1
+
+            if apply then
+                pix = apply(j, i, pix)
+            end
+
+            if write_x >= 1 and write_x <= buf.w and write_y >= 1 and write_y <= buf.h then
+                F.gpu.write_pixel(buf, write_x, write_y, pix)
+            end
+        end
+    end
+    -- tracy: ZoneEnd
+end
+
+function F.gpu.overlay_buf(buf, buf2, x, y)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.overlay_buf
+    buf.top_layer_immutable = true
+
+    for _, layer in ipairs(buf2.layers) do
+        buf.layers[#buf.layers+1] = {
+            offset_x = x - 1 + (layer.offset_x or 0),
+            offset_y = y - 1 + (layer.offset_y or 0),
+            content = layer.content
+        }
+    end
+    -- tracy: ZoneEnd
+end
+
+function F.gpu.squash_layers(buf)
+    if #buf.layers <= 1 then return end
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.squash_layers
+    local new_layer = F.gpu._new_layer_raw(buf.w, buf.h, false)
+    for y = 1, buf.h do
+        for x = 1, buf.w do
+            new_layer.content[y][x] = F.gpu.read_pixel(buf, x, y)
+        end
+    end
+    buf.layers = { new_layer }
+    -- tracy: ZoneEnd
+end
+
+function F.gpu.to_screen(buf, x, y, w, h, bkg)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.to_screen
     local arr = {}
-    background = background or 0
+    bkg = bkg or 0
 
     for i = y, y + h - 1 do
         local arr_row = {}
-        local buf_row = buf[i]
         for j = x, x + w - 1 do
-            local pix = buf_row[j]
+            local pix = F.gpu.read_pixel(buf, j, i)
             if pix == false then
-                pix = background
+                pix = bkg
             end
             arr_row[#arr_row + 1] = string.format("%06X", pix)
         end
@@ -68,51 +152,16 @@ function F.gpu.to_screen(buf, x, y, w, h, background)
     return arr
 end
 
--- Overlay etc
-
--- Overlay buf2 onto buf
-function F.gpu.overlay_buf(buf, buf2, x, y, apply)
-    -- tracy: ZoneBeginN PIS_v3::F.gpu.overlay_buf
-
-    for i, buf2_row in ipairs(buf2) do
-        for j, buf2_pix in ipairs(buf2_row) do
-            local new_x = j + x - 1
-            local new_y = i + y - 1
-
-            -- It is possible that we are out of range
-            -- e.g. when overlaying a marquee, shifting part of it out of bound
-            -- In that case, just ignore it
-
-            local buf_row = buf[new_y]
-            if buf[new_y] and buf[new_y][new_x] ~= nil then
-                if apply then
-                    buf2_pix = apply(j, i, buf2_pix)
-                end
-
-                if buf2_pix ~= false then
-                    buf[new_y][new_x] = buf2_pix
-                end
-            end
-        end
-    end
-
-    -- tracy: ZoneEnd
-end
-
 function F.gpu.apply(buf, func)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.apply
-
-    for y, buf_row in ipairs(buf) do
-        for x, pix in ipairs(buf_row) do
-            buf[y][x] = func(x, y, pix)
+    for y = 1, buf.h do
+        for x = 1, buf.w do
+            F.gpu.write_pixel(buf, x, y, func(x, y, F.gpu.read_pixel(buf, x, y)))
         end
     end
-
     -- tracy: ZoneEnd
 end
 
--- Apply color on non-false bits of a buffer
--- Used to apply color onto fonts or change an icon into monochrome
 function F.gpu.apply_color(buf, color)
     return F.gpu.apply(buf, function(x, y, pix)
         if pix then
@@ -122,17 +171,13 @@ function F.gpu.apply_color(buf, color)
     end)
 end
 
--- Shapes and bulk drawings
-
 function F.gpu.fill(buf, color, x, y, w, h)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.fill
-
     for i = y, y + h - 1 do
         for j = x, x + w - 1 do
-            buf[i][j] = color
+            F.gpu.write_pixel(buf, j, i, color)
         end
     end
-
     -- tracy: ZoneEnd
 end
 
@@ -142,7 +187,7 @@ function F.gpu.rectangle(buf, color, x, y, w, h)
     -- Top and bottom lines
     for _, i in ipairs({ y, y + h - 1 }) do
         for j = x, x + w - 1 do
-            buf[i][j] = color
+            F.gpu.write_pixel(buf, j, i, color)
         end
     end
 
@@ -150,15 +195,13 @@ function F.gpu.rectangle(buf, color, x, y, w, h)
         -- The remaining two sides
         for i = y + 1, y + h - 2 do
             for _, j in ipairs({ x, x + w - 1 }) do
-                buf[i][j] = color
+                F.gpu.write_pixel(buf, j, i, color)
             end
         end
     end
 
     -- tracy: ZoneEnd
 end
-
--- Scaling
 
 -- Create an enlarged version of a buffer
 -- This is a generator
@@ -168,8 +211,8 @@ function F.gpu.int_enlarge(buf, ratio)
     -- Input validation: ratio should be a positive integer
     ratio = math.max(1, math.floor(ratio or 1))
     
-    local old_h = #buf
-    local old_w = #buf[1]
+    local old_h = buf.h
+    local old_w = buf.w
     
     -- Calculate new dimensions
     local new_w = old_w * ratio
@@ -178,8 +221,9 @@ function F.gpu.int_enlarge(buf, ratio)
     -- Create the new target buffer
     local new_buf = F.gpu.new_buffer(new_w, new_h, false)
     
-    for y, row in ipairs(buf) do
-        for x, pix in ipairs(row) do
+    for y = 1, buf.h do
+        for x = 1, buf.w do
+            local pix = F.gpu.read_pixel(buf, x, y)
             -- If the pixel is not transparent, fill the corresponding block
             if pix ~= false then
                 -- Calculate the starting bounds in the new buffer
@@ -216,8 +260,8 @@ function F.gpu.render_font(buf, str, x, y, color)
 
         local char = string.byte(str, i)
         if char ~= 32 then -- short-circuit spaces
-            local font = F.screen_chars[char] or F.screen_icons.font_not_found
-            F.gpu.overlay_buf(buf, font, offset_x, y, function(x, y, pix)
+            local font = F.screen_chars[char] or F.screen_chars[32]
+            F.gpu.overlay_apply(buf, font, offset_x, y, function(x, y, pix)
                 if pix == false then return false end
                 return color
             end)
@@ -238,3 +282,4 @@ function F.gpu.get_string_buffer(str, color)
     F.gpu.render_font(buf, str, 1, 1, color)
     return buf
 end
+
