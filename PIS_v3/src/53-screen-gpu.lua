@@ -40,7 +40,6 @@ function F.gpu.copy_buffer(buf)
     end
 
     -- tracy: ZoneEnd
-
     return new_buf
 end
 
@@ -66,7 +65,6 @@ function F.gpu.to_screen(buf, x, y, w, h, background)
     end
 
     -- tracy: ZoneEnd
-
     return arr
 end
 
@@ -142,12 +140,12 @@ function F.gpu.rectangle(buf, color, x, y, w, h)
         end
     end
 
-    if h < 2 then return end
-
-    -- The remaining two sides
-    for i = y + 1, y + h - 2 do
-        for _, j in ipairs({ x, x + w - 1 }) do
-            buf[i][j] = color
+    if h >= 2 then
+        -- The remaining two sides
+        for i = y + 1, y + h - 2 do
+            for _, j in ipairs({ x, x + w - 1 }) do
+                buf[i][j] = color
+            end
         end
     end
 
@@ -187,10 +185,10 @@ function F.gpu.int_enlarge(buf, ratio)
             end
         end
     end
-    
-    return new_buf
 
     -- tracy: ZoneEnd
+    
+    return new_buf
 end
 
 -- Fonts
@@ -200,6 +198,7 @@ function F.gpu.render_font(buf, str, x, y, color)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.render_font
 
     if type(str) ~= "string" then
+        -- tracy: ZoneEnd
         error("string expected", 2)
     end
 

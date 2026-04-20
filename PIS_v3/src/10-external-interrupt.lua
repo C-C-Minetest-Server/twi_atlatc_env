@@ -12,7 +12,10 @@ end
 
 function F.resort_track_trains(track_key)
     -- tracy: ZoneBeginN PIS_v3::F.resort_track_trains
-    if not F.pis_list_of_trains[track_key] then return end
+    if not F.pis_list_of_trains[track_key] then
+        -- tracy: ZoneEnd
+        return
+    end
 
     local atc_id_list = {}
 
@@ -23,6 +26,8 @@ function F.resort_track_trains(track_key)
     if #atc_id_list == 0 then
         F.pis_list_of_trains[track_key] = nil
         F.pis_list_of_trains_sorted[track_key] = nil
+
+        -- tracy: ZoneEnd
         return
     end
 
