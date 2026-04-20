@@ -71,7 +71,7 @@ end
 -- Overlay etc
 
 -- Overlay buf2 onto buf
-function F.gpu.overlay_buf(buf, buf2, x, y)
+function F.gpu.overlay_buf(buf, buf2, x, y, apply)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.overlay_buf
 
     for i, buf2_row in ipairs(buf2) do
@@ -84,8 +84,14 @@ function F.gpu.overlay_buf(buf, buf2, x, y)
             -- In that case, just ignore it
 
             local buf_row = buf[new_y]
-            if buf2_pix ~= false and buf_row and buf_row[new_x] ~= nil then
-                buf_row[new_x] = buf2_pix
+            if buf[new_y] and buf[new_y][new_x] ~= nil then
+                if apply then
+                    buf2_pix = apply(j, i, buf2_pix)
+                end
+
+                if buf2_pix ~= false then
+                    buf[new_y][new_x] = buf2_pix
+                end
             end
         end
     end
@@ -211,9 +217,10 @@ function F.gpu.render_font(buf, str, x, y, color)
         local char = string.byte(str, i)
         if char ~= 32 then -- short-circuit spaces
             local font = F.screen_chars[char] or F.screen_icons.font_not_found
-            local buf2 = F.gpu.copy_buffer(font)
-            F.gpu.apply_color(buf2, color)
-            F.gpu.overlay_buf(buf, buf2, offset_x, y)
+            F.gpu.overlay_buf(buf, font, offset_x, y, function(x, y, pix)
+                if pix == false then return false end
+                return color
+            end)
         end
     end
 
