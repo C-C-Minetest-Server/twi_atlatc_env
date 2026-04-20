@@ -26,9 +26,7 @@ F.gpu.render_font(F.screen_approaching_overlay_alt, "STAY IN YELLOW LINE", 37, 1
 -- It is proved via Tracy profiling that sending partial buffer is more efficient
 function F.wide_buffer_to_screen(buf, screen1, screen2, screen3)
     -- tracy: ZoneBeginN PIS_v3::F.wide_buffer_to_screen
-    digiline_send(screen1, F.gpu.to_screen(buf, 1, 1, 64, 64, 0))
-    digiline_send(screen2, F.gpu.to_screen(buf, 65, 1, 64, 64, 0))
-    digiline_send(screen3, F.gpu.to_screen(buf, 129, 1, 64, 64, 0))
+    digiline_send(screen1, buf)
     -- tracy: ZoneEnd
 end
 
@@ -59,8 +57,7 @@ function F.update_marquee()
 
     if F.marquee_shift then
         -- Append one char to the internal buffer
-        F.gpu.fill(F.marquee_buffer_int, MARQUEE_BKG, MARQUEE_MAX_CHAR * 6 + 1, 1, 6, 12)
-        F.gpu.render_font(F.marquee_buffer_int, string.sub(F.marquee_current, 1, 1), MARQUEE_MAX_CHAR * 6 + 1, 1, MARQUEE_COLOR)
+        F.gpu.render_font(F.marquee_buffer_int, string.sub(F.marquee_current, 1, 1), MARQUEE_MAX_CHAR * 6 + 1, 1, MARQUEE_COLOR, MARQUEE_BKG)
 
         -- Apply to the public buffer
         F.gpu.overlay_buf(F.marquee_buffer, F.marquee_buffer_int, -2, 1)

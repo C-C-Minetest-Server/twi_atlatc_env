@@ -200,7 +200,7 @@ end
 -- Fonts
 
 -- Render a string onto the screen
-function F.gpu.render_font(buf, str, x, y, color)
+function F.gpu.render_font(buf, str, x, y, color, bkg)
     -- tracy: ZoneBeginN PIS_v3::F.gpu.render_font
 
     if type(str) ~= "string" then
@@ -209,19 +209,18 @@ function F.gpu.render_font(buf, str, x, y, color)
     end
 
     color = color or 0xFFFFFF
+    bkg = bkg or false
 
     local offset_x = x - 6
     for i = 1, #str do
         offset_x = offset_x + 6
 
         local char = string.byte(str, i)
-        if char ~= 32 then -- short-circuit spaces
-            local font = F.screen_chars[char] or F.screen_icons.font_not_found
-            F.gpu.overlay_buf(buf, font, offset_x, y, function(x, y, pix)
-                if pix == false then return false end
-                return color
-            end)
-        end
+        local font = F.screen_chars[char] or F.screen_icons.font_not_found
+        F.gpu.overlay_buf(buf, font, offset_x, y, function(x, y, pix)
+            if pix == false then return bkg end
+            return color
+        end)
     end
 
     -- tracy: ZoneEnd
