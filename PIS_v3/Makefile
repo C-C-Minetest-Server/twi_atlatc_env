@@ -1,3 +1,6 @@
+.PHONY: all
+all: env_setup.lua env_setup_tracy.lua
+
 env_setup.lua: header.lua src/*.lua
 	mv -f env_setup.lua ~env_setup.lua &>/dev/null || true
 	printf "" > env_setup.lua
@@ -15,3 +18,7 @@ env_setup.lua: header.lua src/*.lua
 		cat $$f; \
 		echo; \
 	done >> env_setup.lua
+env_setup_tracy.lua: env_setup.lua
+	sed -E 's/^([[:space:]]*)--[[:space:]]*tracy:[[:space:]]*([^[:space:]]+)([[:space:]]*(.*))?/\1tracy.\2("\4")/' env_setup.lua > env_setup_tracy.lua
+	sed -i '1a -- This env_setup.lua is compiled with tracy enabled. DO NOT USE IN PROD!' env_setup_tracy.lua
+	sed -i 's/local is_loading = true/assert(tracy)\nlocal is_loading = true/' env_setup_tracy.lua

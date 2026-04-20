@@ -23,16 +23,13 @@ F.gpu.render_font(F.screen_approaching_overlay_alt, "TRAIN APPROACHING", 43, 1, 
 F.gpu.render_font(F.screen_approaching_overlay_alt, "STAY IN YELLOW LINE", 37, 13, 0)
 
 -- 192x64 buffer to three screens
+-- It is proved via Tracy profiling that sending partial buffer is more efficient
 function F.wide_buffer_to_screen(buf, screen1, screen2, screen3)
-    digiline_send(screen1, buf)
-
-    buf.offset_x = 64
-    digiline_send(screen2, buf)
-
-    buf.offset_x = 128
-    digiline_send(screen3, buf)
-
-    buf.offset_x = nil
+    -- tracy: ZoneBeginN PIS_v3::F.wide_buffer_to_screen
+    digiline_send(screen1, F.gpu.to_screen(buf, 1, 1, 64, 64, 0))
+    digiline_send(screen2, F.gpu.to_screen(buf, 65, 1, 64, 64, 0))
+    digiline_send(screen3, F.gpu.to_screen(buf, 129, 1, 64, 64, 0))
+    -- tracy: ZoneEnd
 end
 
 
@@ -50,6 +47,7 @@ F.marquee_buffer = F.gpu.new_buffer(MARQUEE_MAX_CHAR * 6, 12, MARQUEE_BKG)
 
 -- Run every 0.5 seconds by panel self-interrupt
 function F.update_marquee()
+    -- tracy: ZoneBeginN PIS_v3::F.update_marquee
     while #F.marquee_current < 1 do
         local ad_id
         repeat
@@ -79,6 +77,7 @@ function F.update_marquee()
     end
 
     F.marquee_shift = not F.marquee_shift
+    -- tracy: ZoneEnd
 end
 
 local function seconds_to_string_shorter(seconds_raw)
@@ -99,6 +98,7 @@ end
 
 function F.get_screen_buffer(def)
     F.handle_pis_option_alternatives(def)
+    -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer
 
     local track_key = def.station_id .. ":" .. def.track_id
     local list_of_trains = F.pis_list_of_trains[track_key]
@@ -108,19 +108,25 @@ function F.get_screen_buffer(def)
     local buf
     local mode = "idle"
 
+
+    -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer::copy_buffer
     if train_stopped_data and not def.no_current_train then
         buf = F.gpu.copy_buffer(F.screen_arrived_background)
         mode = "arrived"
     else
         buf = F.gpu.copy_buffer(F.screen_background)
     end
+    -- tracy: ZoneEnd
 
     -- Header
+    -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer::render_header
     F.gpu.render_font(buf, def.custom_header or ("PLATFORM " .. def.track_id .. ":"), 4, 3, 0)
     F.gpu.render_font(buf, rwt_to_string_minutes(rwt.now()), 192 - 1 - 5 * 6, 3, 0)
+    -- tracy: ZoneEnd
 
 
     if mode == "arrived" then
+        -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer::render_arrive
         local line_code = train_stopped_data.line_code
         local line_name = train_stopped_data.line_name
         local heading_to = train_stopped_data.heading_to
@@ -142,57 +148,62 @@ function F.get_screen_buffer(def)
         F.gpu.render_font(buf, (train_stopped_data.no_to_prefix and "" or "To ") .. dest_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12 * 2, 0)
         F.gpu.render_font(buf, time_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12 * 3, 0)
 
-        return buf
-    end
+        -- tracy: ZoneEnd
+    else
+        -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer::render_idle
+        F.make_sure_sorted_trains_exist(track_key)
+        local train_sorted_ids = F.pis_list_of_trains_sorted[track_key] or {}
 
-    F.make_sure_sorted_trains_exist(track_key)
-    local train_sorted_ids = F.pis_list_of_trains_sorted[track_key] or {}
+        local max_line = 3
+        local pt = 1
+        local i = 1
+        while i <= max_line and pt <= #train_sorted_ids do
+            local train_id = train_sorted_ids[pt]
+            local train_data = F.pis_list_of_trains[track_key][train_id]
 
-    local max_line = 3
-    local pt = 1
-    local i = 1
-    while i <= max_line and pt <= #train_sorted_ids do
-        local train_id = train_sorted_ids[pt]
-        local train_data = F.pis_list_of_trains[track_key][train_id]
+            if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
+                local station_name_length = 20
+                local station_name_pos = 4 + 5 * 6
+                local arrive_time_string = rwt_to_string_minutes(train_data.estimated_time)
 
-        if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
-            local station_name_length = 20
-            local station_name_pos = 4 + 5 * 6
-            local arrive_time_string = rwt_to_string_minutes(train_data.estimated_time)
+                if def.no_line_id then
+                    station_name_length = station_name_length + 5
+                    station_name_pos = station_name_pos - 5 * 6
+                else
+                    -- Line code
+                    F.gpu.render_font(buf, train_data.line_code, 4, 3 + 12 * i, 0)
+                end
 
-            if def.no_line_id then
-                station_name_length = station_name_length + 5
-                station_name_pos = station_name_pos - 5 * 6
-            else
-                -- Line code
-                F.gpu.render_font(buf, train_data.line_code, 4, 3 + 12 * i, 0)
+                if train_data.train_status == "stopped" then
+                    station_name_length = station_name_length - 4
+                    F.gpu.render_font(buf, "Dep." .. arrive_time_string, 192 - 1 - 9 * 6, 3 + 12 * i, 0)
+                else
+                    F.gpu.render_font(buf, arrive_time_string, 192 - 1 - 5 * 6, 3 + 12 * i, 0)
+                end
+
+                local station_nae_str = F.handle_variable_length_string(train_data.heading_to, station_name_length)
+                F.gpu.render_font(buf, station_nae_str, station_name_pos, 3 + 12 * i, 0)
+
+                if i == 1 and train_data.train_status == "approaching" then
+                    max_line = 2
+                    local overlay = os.time() % 2 == 0 and F.screen_approaching_overlay or F.screen_approaching_overlay_alt
+                    F.gpu.overlay_buf(buf, overlay, 3, 39)
+                end
+
+                i = i + 1
             end
 
-            if train_data.train_status == "stopped" then
-                station_name_length = station_name_length - 4
-                F.gpu.render_font(buf, "Dep." .. arrive_time_string, 192 - 1 - 9 * 6, 3 + 12 * i, 0)
-            else
-                F.gpu.render_font(buf, arrive_time_string, 192 - 1 - 5 * 6, 3 + 12 * i, 0)
-            end
-
-            local station_nae_str = F.handle_variable_length_string(train_data.heading_to, station_name_length)
-            F.gpu.render_font(buf, station_nae_str, station_name_pos, 3 + 12 * i, 0)
-
-            if i == 1 and train_data.train_status == "approaching" then
-                max_line = 2
-                local overlay = os.time() % 2 == 0 and F.screen_approaching_overlay or F.screen_approaching_overlay_alt
-                F.gpu.overlay_buf(buf, overlay, 3, 39)
-            end
-
-            i = i + 1
+            pt = pt + 1
         end
 
-        pt = pt + 1
+        if max_line == 3 then
+            F.gpu.overlay_buf(buf, F.marquee_buffer, 4, 3 + 12 * 4)
+        end
+
+        -- tracy: ZoneEnd
     end
 
-    if max_line == 3 then
-        F.gpu.overlay_buf(buf, F.marquee_buffer, 4, 3 + 12 * 4)
-    end
+    -- tracy: ZoneEnd
 
     return buf
 end

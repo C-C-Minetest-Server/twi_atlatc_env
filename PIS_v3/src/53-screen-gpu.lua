@@ -9,6 +9,8 @@ F.gpu = {}
 
 -- Constructor of new buffer
 function F.gpu.new_buffer(w, h, background)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.new_buffer
+
     local buf = {}
     background = type(background) == "number" and background or false
 
@@ -20,11 +22,14 @@ function F.gpu.new_buffer(w, h, background)
         buf[#buf + 1] = buf_row
     end
 
+    -- tracy: ZoneEnd
     return buf
 end
 
 -- Deep copy a buffer
 function F.gpu.copy_buffer(buf)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.copy_buffer
+
     local new_buf = {}
 
     for i, buf_row in ipairs(buf) do
@@ -34,12 +39,16 @@ function F.gpu.copy_buffer(buf)
         end
     end
 
+    -- tracy: ZoneEnd
+
     return new_buf
 end
 
 -- Convert the buffer into something recognized by digiscreen
 -- x:y+w+h (we don't validate whether the buffe is big enough)
 function F.gpu.to_screen(buf, x, y, w, h, background)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.to_screen
+
     local arr = {}
     background = background or 0
 
@@ -56,6 +65,8 @@ function F.gpu.to_screen(buf, x, y, w, h, background)
         arr[#arr+1] = arr_row
     end
 
+    -- tracy: ZoneEnd
+
     return arr
 end
 
@@ -63,6 +74,8 @@ end
 
 -- Overlay buf2 onto buf
 function F.gpu.overlay_buf(buf, buf2, x, y)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.overlay_buf
+
     for i, buf2_row in ipairs(buf2) do
         for j, buf2_pix in ipairs(buf2_row) do
             local new_x = j + x - 1
@@ -78,14 +91,20 @@ function F.gpu.overlay_buf(buf, buf2, x, y)
             end
         end
     end
+
+    -- tracy: ZoneEnd
 end
 
 function F.gpu.apply(buf, func)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.apply
+
     for y, buf_row in ipairs(buf) do
         for x, pix in ipairs(buf_row) do
             buf[y][x] = func(x, y, pix)
         end
     end
+
+    -- tracy: ZoneEnd
 end
 
 -- Apply color on non-false bits of a buffer
@@ -102,14 +121,20 @@ end
 -- Shapes and bulk drawings
 
 function F.gpu.fill(buf, color, x, y, w, h)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.fill
+
     for i = y, y + h - 1 do
         for j = x, x + w - 1 do
             buf[i][j] = color
         end
     end
+
+    -- tracy: ZoneEnd
 end
 
 function F.gpu.rectangle(buf, color, x, y, w, h)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.rectangle
+
     -- Top and bottom lines
     for _, i in ipairs({ y, y + h - 1 }) do
         for j = x, x + w - 1 do
@@ -125,6 +150,8 @@ function F.gpu.rectangle(buf, color, x, y, w, h)
             buf[i][j] = color
         end
     end
+
+    -- tracy: ZoneEnd
 end
 
 -- Scaling
@@ -132,6 +159,8 @@ end
 -- Create an enlarged version of a buffer
 -- This is a generator
 function F.gpu.int_enlarge(buf, ratio)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.int_enlarge
+
     -- Input validation: ratio should be a positive integer
     ratio = math.max(1, math.floor(ratio or 1))
     
@@ -160,12 +189,16 @@ function F.gpu.int_enlarge(buf, ratio)
     end
     
     return new_buf
+
+    -- tracy: ZoneEnd
 end
 
 -- Fonts
 
 -- Render a string onto the screen
 function F.gpu.render_font(buf, str, x, y, color)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.render_font
+
     if type(str) ~= "string" then
         error("string expected", 2)
     end
@@ -184,6 +217,8 @@ function F.gpu.render_font(buf, str, x, y, color)
             F.gpu.overlay_buf(buf, buf2, offset_x, y)
         end
     end
+
+    -- tracy: ZoneEnd
 end
 
 -- Constructor that returns a new buffer for that string
