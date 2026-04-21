@@ -110,4 +110,8 @@ F.get_status_textline_line({
     -- type: variable-length string object
     heading_to = "<heading_to>",
 })
-````
+```
+
+## `F.get_screen_buffer(def)`
+
+Digiscreen version of `F.get_pis_multi_line(def)`.
