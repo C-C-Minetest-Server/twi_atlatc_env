@@ -43,6 +43,50 @@ function F.gpu.copy_buffer(buf)
     return new_buf
 end
 
+-- Localize functions for speed (Upvalues)
+local bit = bit
+local b_rshift = bit.rshift
+local b_band = bit.band
+local s_char = string.char
+local t_concat = table.concat
+
+-- Export to digiscreens via the new string-based protocol
+-- Awaiting profiling to check if this can reduce copy time in handle_async 
+function F.gpu.to_screen(buf, bkg)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.to_screen
+
+    local h = #buf
+    local w = #buf[1]
+
+    local rtn = {}
+    rtn[1] = "BUFBYTES"
+    
+    -- Packing Width and Height (uint16)
+    rtn[2] = s_char(b_band(b_rshift(w, 8), 0xFF), b_band(w, 0xFF))
+    rtn[3] = s_char(b_band(b_rshift(h, 8), 0xFF), b_band(h, 0xFF))
+
+    local count = 4
+
+    for i = 1, h do
+        local row = buf[i]
+        for j = 1, w do
+            local pix = row[j] or bkg
+            
+            -- Extracting RGB channels using bit library
+            -- R: shift 16, G: shift 8, B: no shift
+            rtn[count] = s_char(
+                b_band(b_rshift(pix, 16), 0xFF), 
+                b_band(b_rshift(pix, 8), 0xFF), 
+                b_band(pix, 0xFF)
+            )
+            count = count + 1
+        end
+    end
+
+    -- tracy: ZoneEnd
+    return t_concat(rtn)
+end
+
 -- Overlay etc
 
 -- Overlay buf2 onto buf
