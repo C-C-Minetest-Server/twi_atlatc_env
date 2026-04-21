@@ -158,6 +158,72 @@ function F.gpu.rectangle(buf, color, x, y, w, h)
     -- tracy: ZoneEnd
 end
 
+function F.gpu._circle_plot_point(buf, color, xc, yc, x, y)
+    buf[yc+y][xc+x] = color
+    buf[yc+y][xc-x] = color
+    buf[yc-y][xc+x] = color
+    buf[yc-y][xc-x] = color
+    buf[yc+x][xc+y] = color
+    buf[yc+x][xc-y] = color
+    buf[yc-x][xc+y] = color
+    buf[yc-x][xc-y] = color
+end
+
+function F.gpu.circle(buf, color, xc, yc, r)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.circle
+    local x = 0
+    local y = r
+    local d = 3 - 2 * r
+    F.gpu._circle_plot_point(buf, color, xc, yc, x, y)
+
+    while y >= x do
+        if d > 0 then
+            y = y - 1
+            d = d + 4 * (x - y) + 10
+        else
+            d = d + 4 * x + 6
+        end
+
+        x = x + 1
+
+        F.gpu._circle_plot_point(buf, color, xc, yc, x, y)
+    end
+
+    -- tracy: ZoneEnd
+end
+
+function F.gpu.line(buf, color, x0, y0, x1, y1)
+    -- tracy: ZoneBeginN PIS_v3::F.gpu.line
+
+    local dx = math.abs(x1 - x0)
+    local dy = math.abs(y1 - y0)
+    local sx = x0 < x1 and 1 or -1
+    local sy = y0 < y1 and 1 or -1
+    local err = dx - dy
+
+    while true do
+        -- Safety check to ensure we are within buffer bounds
+        if buf[y0] and buf[y0][x0] ~= nil then
+            buf[y0][x0] = color
+        end
+
+        if x0 == x1 and y0 == y1 then break end
+        
+        local e2 = 2 * err
+        if e2 > -dy then
+            err = err - dy
+            x0 = x0 + sx
+        end
+        if e2 < dx then
+            err = err + dx
+            y0 = y0 + sy
+        end
+    end
+
+    -- tracy: ZoneEnd
+end
+
+
 -- Scaling
 
 -- Create an enlarged version of a buffer
