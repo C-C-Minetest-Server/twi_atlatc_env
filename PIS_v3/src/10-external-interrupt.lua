@@ -103,6 +103,14 @@ function F.validate_train_event(data)
                     return false, "data.line_name"
                 end
 
+                if data.line_color ~= nil and (type(data.line_color) ~= "number" or data.line_color < 0 or data.line_color > 0xFFFFFF) then
+                    return false, "data.line_color"
+                end
+
+                if data.line_background_color ~= nil and (type(data.line_background_color) ~= "number" or data.line_background_color < 0 or data.line_background_color > 0xFFFFFF) then
+                    return false, "data.line_background_color"
+                end
+            
                 if not F.validate_variable_length_string(data.heading_to) then
                     return false, "data.heading_to"
                 end
@@ -143,6 +151,8 @@ function F.register_train_event(data)
                 train_status = data.train_status,
                 line_code = data.line_code,
                 line_name = data.line_name,
+                line_color = data.line_color,
+                line_background_color = data.line_background_color,
                 heading_to = data.heading_to,
                 direction_code = data.direction_code,
                 no_to_prefix = data.no_to_prefix,

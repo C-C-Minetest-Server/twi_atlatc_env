@@ -142,6 +142,8 @@ function F.stn_v3(params)
 
             line_code = line_def.code or line_id,
             line_name = line_def.name or line_def.code or line_id,
+            line_color = line_def.color,
+            line_background_color = line_def.background_color,
             heading_to = terminus_name,
             direction_code = train_dir,
 

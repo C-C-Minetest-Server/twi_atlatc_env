@@ -69,6 +69,21 @@ local function merge_key_tables(tables)
     return rtn
 end
 
+F.color_to_number = function(color)
+    if type(color) == "number" and color >= 0 and color <= 0xFFFFFF then
+        return color
+    end
+
+    if type(color) == "string" then
+        if color:sub(1, 1) == "#" then
+            color = color:sub(2)
+        end
+        return tonumber(color, 16) or 0
+    end
+
+    return 0
+end
+
 F.has_rc = function(query, rc_list) -- query = string, single entry
     if not rc_list then return false end
     for word in rc_list:gmatch("[^%s]+") do

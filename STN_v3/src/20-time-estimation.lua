@@ -91,6 +91,8 @@ function F.send_train_to_pis_v3(atc_id)
 
         local line_code = line_def.code or string.sub(line_id, 1, 4)
         local line_name = line_def.name or line_id
+        local line_color = line_def.color
+        local line_background_color = line_def.background_color
         local term_code = line_def.termini[line_station_def.dir]
         local heading_to = F.station_names[term_code]
         local direction_code = line_station_def.dir
@@ -110,6 +112,8 @@ function F.send_train_to_pis_v3(atc_id)
 
             line_code = line_code,
             line_name = line_name,
+            line_color = line_color,
+            line_background_color = line_background_color,
             heading_to = heading_to,
             direction_code = direction_code,
 

@@ -432,6 +432,8 @@ F.stn_v2 = function(basic_def, lines_def)
 
                 local line_disp_id = F.lines[line_id] and F.lines[line_id].code or line_id
                 local line_name = F.lines[line_id] and F.lines[line_id].name or line_id
+                local line_color = F.lines[line_id] and F.lines[line_id].color and F.color_to_number(F.lines[line_id].color) or nil
+                local line_background_data = F.lines[line_id] and F.lines[line_id].background_color and F.color_to_number(F.lines[line_id].background_color) or nil
                 local line_dir = stn_line_def.reverse and stn_line_def.rev_dir or stn_line_def.dir
                 local term_id = F.lines[line_id] and F.lines[line_id][line_dir]
                 local term_name = F.lines[line_id] and F.lines[line_id].custom_term_desc or F.station_names[term_id]
@@ -450,6 +452,8 @@ F.stn_v2 = function(basic_def, lines_def)
 
                         line_code = line_disp_id,
                         line_name = line_name,
+                        line_color = line_color,
+                        line_background_color = line_background_data,
                         heading_to = term_name,
                         no_to_prefix = F.lines[line_id] and F.lines[line_id].custom_term_desc and true or false,
                         direction_code = line_dir,
@@ -1060,6 +1064,8 @@ F.export_running_train_to_pis_v3 = function(atc_id)
     local line_data = F.lines[line_id]
     local line_code = line_data and line_data.code or line_id
     local line_name = line_data and line_data.name or line_code
+    local line_color = line_data and line_data.color and F.color_to_number(line_data.color) or nil
+    local line_background_color = line_background_data and line_background_data.color and F.color_to_number(line_background_data.color) or nil
     local adjacent_stations = line_data and line_data.adjacent_stations
     local this_adj_stns = adjacent_stations and adjacent_stations[train_dest_key]
 
@@ -1117,6 +1123,8 @@ F.export_running_train_to_pis_v3 = function(atc_id)
 
                     line_code = line_code,
                     line_name = line_name,
+                    line_color = line_color,
+                    line_background_color = line_background_color,
                     heading_to = that_line_term_name,
                     no_to_prefix = that_line_no_to_prefix,
                     direction_code = line_dir,

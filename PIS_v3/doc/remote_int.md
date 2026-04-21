@@ -59,6 +59,8 @@ The `line_code` parameter is the short code of the line the train is running. Th
 
 The `line_name` parameter is the full name of the line the train is running. It is a [variable-length string object](#variable-length-string-object).
 
+The `line_color` and `line_background_color` parameters are the colors or the lines in hex numbers. Often used by the Digiscreen displays.
+
 The `heading_to` parameter is a [variable-length string object](#variable-length-string-object) of the terminus's name. For loop lines, texts like "Clockwise loop" may be used instead.
 
 The `no_to_prefix` paramater is used to supress `"To "` from appearing in front of `heading_to` in displays.
@@ -83,6 +85,8 @@ The `estimated_time` parameter should be a railway time object of the time the t
 
     line_code = "<line code>",
     line_name = "<line name>",
+    line_color = 0x000000,
+    line_background_color = 0xFFFFFF,
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
     no_to_prefix = false,
     direction_code = "<direction code>",
