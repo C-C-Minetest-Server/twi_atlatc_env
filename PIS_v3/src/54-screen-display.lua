@@ -204,3 +204,72 @@ function F.get_screen_buffer(def)
 
     return buf
 end
+
+function F.get_station_billboard_buffer(defs)
+    -- tracy: ZoneBeginN PIS_v3::F.get_station_billboard_buffer
+    local station_id = assert(type(defs.station_id) == "string" and defs.station_id)
+    local track_ids = assert(type(defs.track_ids) == "table" and defs.track_ids)
+
+    local width = 64 * 3
+    local height = 64 * assert(type(defs.height) == "number" and defs.height)
+
+    local effective_height = height - 4
+    local max_body_lines = math.floor(effective_height / 12)
+
+    local buf = F.gpu.new_buffer(width, height, 0xDEDEDE)
+
+    for i = 2, max_body_lines, 2 do
+        F.gpu.fill(buf, 0xC2C2C2, 2, (i - 1) * 12 + 2, width - 2, 12)
+    end
+
+    F.gpu.rectangle(buf, 0xA0A0A0, 1, 1, width, height)
+    F.gpu.rectangle(buf, 0xA0A0A0, 2, 2, width - 2, height - 2)
+
+    local header_text = "#  Line Destination"
+    F.gpu.render_font(buf, header_text, 4, 3, 0)
+    F.gpu.render_font(buf, rwt_to_string_minutes(rwt.now()), 192 - 1 - 5 * 6, 3, 0)
+
+    local trains = {}
+    for _, track_id in ipairs(track_ids) do
+        local track_key = station_id .. ":" .. track_id
+        F.make_sure_sorted_trains_exist(track_key)
+        local train_sorted_ids = F.pis_list_of_trains_sorted[track_key] or {}
+
+        for _, train_id in ipairs(train_sorted_ids) do
+            local train_data = F.pis_list_of_trains[track_key][train_id]
+            if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
+                trains[#trains + 1] = { track_id, train_data }
+            end
+        end
+    end
+
+    table.sort(trains, function(a, b)
+        if a[2].train_status == "stopped" and b[2].train_status ~= "stopped" then
+            return true
+        elseif a[2].train_status ~= "stopped" and b[2].train_status == "stopped" then
+            return false
+        end
+        return rwt.is_before(a[2].estimated_time, b[2].estimated_time)
+    end)
+
+    for i = 1, math.min(max_body_lines - 1, #trains) do
+        local train_data = trains[i]
+        local station_name_length = 18
+        local arrive_time_anchor = width - 1 - 5 * 6
+        local arrive_time_string = rwt_to_string_minutes(train_data[2].estimated_time)
+
+        if train_data[2].train_status == "stopped" then
+            station_name_length = station_name_length - 2
+            arrive_time_anchor = arrive_time_anchor - 2 * 6
+            arrive_time_string = "D." .. arrive_time_string
+        end
+
+        F.gpu.render_font(buf, train_data[1], 4, 3 + 12 * i, 0)
+        F.gpu.render_font(buf, train_data[2].line_code, 4 + 6 * 3, 3 + 12 * i, 0)
+        F.gpu.render_font(buf, string.format("%-" .. station_name_length .. "s", F.handle_variable_length_string(train_data[2].heading_to, station_name_length)), 4 + 6 * 3 + 5 * 6, 3 + 12 * i, 0)
+        F.gpu.render_font(buf, arrive_time_string, arrive_time_anchor, 3 + 12 * i, 0)
+    end
+
+    -- tracy: ZoneEnd
+    return buf
+end
