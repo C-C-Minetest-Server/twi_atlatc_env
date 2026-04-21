@@ -43,31 +43,6 @@ function F.gpu.copy_buffer(buf)
     return new_buf
 end
 
--- Convert the buffer into something recognized by digiscreen
--- x:y+w+h (we don't validate whether the buffe is big enough)
-function F.gpu.to_screen(buf, x, y, w, h, background)
-    -- tracy: ZoneBeginN PIS_v3::F.gpu.to_screen
-
-    local arr = {}
-    background = background or 0
-
-    for i = y, y + h - 1 do
-        local arr_row = {}
-        local buf_row = buf[i]
-        for j = x, x + w - 1 do
-            local pix = buf_row[j]
-            if pix == false then
-                pix = background
-            end
-            arr_row[#arr_row + 1] = string.format("%06X", pix)
-        end
-        arr[#arr+1] = arr_row
-    end
-
-    -- tracy: ZoneEnd
-    return arr
-end
-
 -- Overlay etc
 
 -- Overlay buf2 onto buf
