@@ -43,6 +43,11 @@ function F.gpu.copy_buffer(buf)
     return new_buf
 end
 
+-- Compat
+function F.gpu.to_screen(buf)
+    return buf
+end
+
 -- Overlay etc
 
 -- Overlay buf2 onto buf
