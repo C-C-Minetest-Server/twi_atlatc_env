@@ -298,7 +298,7 @@ F.stn_v3_lines["S22"] = {
         "S22",
     },
     termini = {
-        N = "eGRO",
+        N = "MAP",
         S = "SNE",
     },
 
@@ -318,7 +318,31 @@ F.stn_v3_lines["S22"] = {
         },
         ["eGRO:8:N2"] = {
             delay = 15,
+            next = "LIV:2:W1",
+            dir = "N",
+            on_leave_rc = "J-GRO-LIV-LIV B-LIV-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["LIV:2:W1"] = {
+            delay = 15,
+            next = "MAP:4:W1",
+            dir = "N",
+            on_leave_rc = "B-MAP-T4W K-STN-CLEAR-ROUTE",
+        },
+        ["MAP:4:W1"] = {
+            delay = 15,
+            next = "LIV:1:E1",
             reverse = true,
+            dir = "S",
+            on_leave_rc = "B-LIV-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["LIV:1:E1"] = {
+            delay = 15,
+            next = "eGRO:5:N2",
+            dir = "S",
+            on_leave_rc = "J-LIV-GRO-GRO B-eGRO-T5S K-STN-CLEAR-ROUTE",
+        },
+        ["eGRO:5:N2"] = {
+            delay = 15,
             next = "eOTH:2:S1",
             dir = "S",
             on_leave_rc = "J-SV_N-GRO-GRO J-SV_N-WL-WL B-eOTH-T2S K-STN-CLEAR-ROUTE",
