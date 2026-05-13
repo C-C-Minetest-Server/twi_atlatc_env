@@ -308,12 +308,11 @@ F.station_interchange = {
     eEAN = { "S21", "NX" },
     CCB = { "GRH1", "CCP-CCB" },
     SNE = { "S22", "FR-PLL-SNE" },
+    MAP = { "S22", "NX" },
 
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
     ["HR-CIG"] = { "HR-LUC-LRT1", "SPN-S1" },
-
-    ["M27-SOL"] = { "S21", "NX" },
 }
 F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE

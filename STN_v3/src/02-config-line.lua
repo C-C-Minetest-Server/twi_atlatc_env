@@ -22,15 +22,15 @@ F.stn_v3_lines["NX"] = {
     },
     termini = {
         W = "eEAN",
-        E = "M27-SOL",
+        E = "MAP",
     },
 
     -- Linked list of current station -> next station
     stations = {
         -- stn_id:track_id:point_id
-        ["M27-SOL:1:E1"] = {
+        ["MAP:2:W1"] = {
             depint = "00;00;06;00",
-            depoff = "00;00;03;10",
+            depoff = "00;00;02;00",
 
             delay = 10,
             reverse = true,
@@ -72,7 +72,7 @@ F.stn_v3_lines["NX"] = {
         ["eGRO:7:N1"] = {
             delay = 30,
 
-            next = "M27-SOL:1:E1",
+            next = "MAP:2:W1",
             dir = "E",
         },
     },
