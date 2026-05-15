@@ -385,6 +385,34 @@ F.stn_v3_lines["FR-PLL-SNE"] = {
     }
 }
 
+F.stn_v3_lines["FR-SLV-LIB"] = {
+    rc = "L-FR-SLV-LIB",
+    code = "SLV",
+    name = {
+        "Smallville-Libreland Ferry",
+        "Smallville Ferry",
+        "Smallville",
+    },
+    termini = {
+        N = "FR-SLV",
+        S = "FR-LIB",
+    },
+
+    stations = {
+        ["FR-LIB:1:e1"] = {
+            delay = 60,
+            next = "FR-SLV:1:E1",
+            dir = "N",
+            reverse = true,
+        },
+        ["FR-SLV:1:E1"] = {
+            delay = 60,
+            next = "FR-LIB:1:e1",
+            dir = "S",
+        },
+    },
+}
+
 -- (As of now) display only
 F.stn_v3_lines["SPN"] = {
     code = "SPN",

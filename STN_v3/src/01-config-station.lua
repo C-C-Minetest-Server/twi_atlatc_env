@@ -248,6 +248,11 @@ F.station_names = {
     ["FR-PLL"] = "PL Land",
 
 
+    -- 1F616EMO Ferry: Libreland
+    ["FR-LIB"] = "Libreland",
+    ["FR-SLV"] = "Smallville",
+
+
     -- Emergency Stations / Platforms
     ["EMER-SHV"] = {
         "ShroomVille (Backup Platform)",
