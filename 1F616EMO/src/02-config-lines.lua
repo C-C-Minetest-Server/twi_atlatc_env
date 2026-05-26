@@ -516,7 +516,7 @@ F.lines["NX"] = {
     name = "Newcomers Express",
     short_name = "Newcomers",
     W = "eEAN",
-    E = "M27-SOL",
+    E = "MAP",
 }
 
 F.lines["BLE"] = {
