@@ -356,6 +356,21 @@ F.stn_v3_lines["S22"] = {
     }
 }
 
+-- Maverick2797 Railway
+F.stn_v3_lines["M27-XSS"] = {
+    code = "XSS",
+    name = {
+        "Cross-Server Sleeper",
+        "X-Server Sleeper",
+        "XS Sleeper",
+        "XSS",
+    },
+    termini = {
+        CW = "M27-VER",
+        ACW = "M27-SOL",
+    },
+}
+
 -- Ferry lines
 F.stn_v3_lines["FR-PLL-SNE"] = {
     rc = "L-FR-PLL-SNE",

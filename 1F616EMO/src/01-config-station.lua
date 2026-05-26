@@ -228,6 +228,7 @@ F.station_names = {
     ["M27-QUO"] = "Quoralla",
     ["M27-CFB"] = "Cliffy Beach",
     ["M27-SOL"] = "Solandar",
+    ["M27-VER"] = "Verdan",
 
 
     -- 1F616EMO Ferry
@@ -290,17 +291,17 @@ F.station_interchange = {
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", "RXIC", },
     ALF = { "SPN", "ALFC", },
-    YTP = { "SPN", "SPN-S1", "SPN-S2", "SVL", "OEX", },
+    YTP = { "SPN", "SPN-S1", "SPN-S2", "SVL", "OEX", "M27-XSS", },
     ACP = { "CEN", "OAI", },
     OVV = { "S1", "SPN-S1", },
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
-    GRO = { "GRH2", "S21", "BLE", "NX", "OEX", },
+    GRO = { "GRH2", "S21", "S22", "BLE", "NX", "OEX", "M27-XSS", },
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", "RXB-SVE", },
-    SAG = { "CSL", "SVL", },
-    eOTH = { "GRH1", "SVL", },
+    SAG = { "CSL", "SVL", "M27-XSS", },
+    eOTH = { "GRH1", "SVL", "S22", },
     BAJ = { "S21", "LIB-BAJ", "NX" },
     eEAN = { "S21", "NX" },
     CCB = { "GRH1", "CCP-CCB" },
@@ -310,6 +311,8 @@ F.station_interchange = {
     ["NO-WS"] = { "NO1", "NO2", "SPN-S1", },
 
     ["HR-CIG"] = { "HR-LUC-LRT1", "SPN-S1" },
+
+    ["M27-SOL"] = { "S21", "M27-XSS", },
 }
 F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE

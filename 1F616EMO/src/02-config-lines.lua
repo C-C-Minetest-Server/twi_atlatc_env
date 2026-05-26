@@ -564,6 +564,12 @@ F.lines["FR-PLL-SNE"] = {
     S = "FR-PLL",
 }
 
+F.lines["M27-XSS"] = {
+    code = "XSS",
+    name = "Cross-Server Sleeper",
+    short_name = "X-Server Sleeper",
+}
+
 -- Carts (Display only)
 
 F.lines["ALFC"] = {
