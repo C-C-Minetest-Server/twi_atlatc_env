@@ -552,7 +552,7 @@ F.lines["SPN-S2"] = {
 F.lines["S22"] = {
     code = "S22",
     name = "S-Bahn Line 22",
-    N = "eGRO",
+    N = "MAP",
     S = "SNE",
 }
 
