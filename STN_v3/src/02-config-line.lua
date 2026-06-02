@@ -358,6 +358,7 @@ F.stn_v3_lines["S22"] = {
 
 -- Maverick2797 Railway
 F.stn_v3_lines["M27-XSS"] = {
+    rc = "L-XSS",
     code = "XSS",
     name = {
         "Cross-Server Sleeper",
@@ -366,9 +367,66 @@ F.stn_v3_lines["M27-XSS"] = {
         "XSS",
     },
     termini = {
-        CW = "M27-VER",
-        ACW = "M27-SOL",
+        ACW = "M27-VER",
+        CW = "M27-SOL",
     },
+
+    stations = {
+        ["M27-VER:1:N2"] = {
+            depint = "00;00;05;30",
+            depoff = "00;00;00;00",
+            delay = 60,
+            reverse = true,
+            next = "eYTP:3:S2",
+            dir = "CW",
+            on_leave_rc = "J-YTP-NO-YTP J-YTP-YTP_N-YTP B-eYTP-T3S K-STN-CLEAR-ROUTE",
+        },
+        ["eYTP:3:S2"] = {
+            delay = 10,
+            next = "SAG:3:W2",
+            dir = "CW",
+            on_leave_rc = "J-YTP-YTP_S-SV_S B-SAG-T3W K-STN-CLEAR-ROUTE",
+        },
+        ["SAG:3:W2"] = {
+            delay = 10,
+            next = "eGRO:7:N2",
+            dir = "CW",
+            on_leave_rc = "J-SV_S-WL-WL J-SV_N-WL-GRH J-SV_N-GRO-GRO B-eGRO-T7N K-STN-CLEAR-ROUTE",
+        },
+        ["eGRO:7:N2"] = {
+            delay = 10,
+            next = "M27-SOL:2:E2",
+            dir = "CW",
+            on_leave_rc = "B-M27-SOL-T2E K-STN-CLEAR-ROUTE",
+        },
+        ["M27-SOL:2:E2"] = {
+            depint = "00;00;05;30",
+            depoff = "00;00;02;45",
+            delay = 60,
+            reverse = false, -- marked as false explicitly to show train doesn't reverse at terminus unlike most other stations
+            next = "eGRO:6:S2",
+            dir = "ACW",
+            on_leave_rc = "B-eGRO-T6S K-STN-CLEAR-ROUTE",
+        },
+        ["eGRO:6:S2"] = {
+            delay = 10,
+            next = "SAG:5:E2",
+            dir = "ACW",
+            on_leave_rc = "J-SV_N-GRO-GRH J-SV_N-WL-WL J-SV_S-WL-SAG B-SAG-T5E K-STN-CLEAR-ROUTE",
+        },
+        ["SAG:5:E2"] = {
+            delay = 10,
+            next = "eYTP:4:N2",
+            dir = "ACW",
+            on_leave_rc = "J-YTP-YTP_S-YTP B-eYTP-T4N K-STN-CLEAR-ROUTE",
+        },
+        ["eYTP:4:N2"] = {
+            delay = 10,
+            next = "M27-VER:1:N2",
+            dir = "ACW",
+            on_leave_rc = "J-YTP-YTP_N-NO J-YTP-NO-DEP B-M27-VER-T1N K-STN-CLEAR-ROUTE",
+        },
+    }
 }
 
 -- Ferry lines
