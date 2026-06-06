@@ -160,7 +160,12 @@ F.station_names = {
     SNE = "Snezhnaya",
     LIV = "Lilac Valley",
     MAP = "Mannagrass Peninsula",
-    WEW = "Wemmbu's Wall",
+    WEW = {
+        "Wemmbu's Wall",
+        "Wemmbu Wall",
+        "Wemmbu's",
+        "Wemmbu",
+    },
 
 
     -- Nordstetten
