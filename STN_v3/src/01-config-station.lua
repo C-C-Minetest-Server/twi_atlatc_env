@@ -160,6 +160,7 @@ F.station_names = {
     SNE = "Snezhnaya",
     LIV = "Lilac Valley",
     MAP = "Mannagrass Peninsula",
+    WEW = "Wemmbu's Wall",
 
 
     -- Nordstetten
@@ -305,7 +306,7 @@ F.station_interchange = {
     VFT = { "GRH1", "VD-VFT1" },
     GRH = { "GRH1", "GRH2",  },
     SHI = { "GRH1", "GRH2" },
-    GRO = { "GRH2", "S21", "S22", "BLE", "NX", "OEX", "M27-XSS", },
+    GRO = { "GRH2", "GRH4", "S21", "S22", "BLE", "NX", "OEX", "M27-XSS", },
     OAI = { "OAI", "SPN-S1", },
     SVE = { "CSL", "SVL", "RXB-SVE", },
     SAG = { "CSL", "SVL", "M27-XSS", },

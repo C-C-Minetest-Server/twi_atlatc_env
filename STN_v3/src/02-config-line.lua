@@ -2,6 +2,42 @@ assert(is_loading)
 
 F.stn_v3_lines = {}
 
+-- Grape Hills Subway
+
+F.stn_v3_lines["GRH4"] = {
+    rc = "L-GRH4",
+    code = "GRH4",
+    name = {
+        "Grape Hills Line 4",
+        "Grape Hills 4",
+        "GRH Line 4",
+        "GRH4",
+    },
+    termini = {
+        N = "WEW",
+        S = "GRO",
+    },
+
+    stations = {
+        ["WEW:1:W1"] = {
+            delay = 10,
+            reverse = true,
+            next = "GRO:4:S1",
+            dir = "S",
+
+            on_leave_rc = "B-GRO-T4S K-STN-CLEAR-ROUTE",
+        },
+        ["GRO:4:S1"] = {
+            delay = 10,
+            reverse = true,
+            next = "WEW:1:W1",
+            dir = "N",
+
+            on_leave_rc = "B-WEW-T1W K-STN-CLEAR-ROUTE",
+        },
+    },
+}
+
 --[[
 eGRO-related lines:
 NX: 3 trains, interval 6 minutes, offset 1 minute
