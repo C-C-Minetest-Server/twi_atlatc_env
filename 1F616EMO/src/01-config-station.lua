@@ -158,6 +158,9 @@ F.station_names = {
     },
     DEP = "Desert Pride",
     SNE = "Snezhnaya",
+    LIV = "Lilac Valley",
+    MAP = "Mannagrass Peninsula",
+    WEW = "Wemmbu's Wall",
 
 
     -- Nordstetten

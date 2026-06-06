@@ -512,6 +512,15 @@ F.lines["SVL"] = {
 
 -- Handled in STN_v3 (Display only)
 
+F.lines["GRH4"] = {
+    code = "GRH4",
+    name = "Grape Hills Line 4",
+    textline_name = "Grape Hills 4",
+    short_name = "Grape Hills 4",
+    N = "WEW",
+    S = "GRO",
+}
+
 F.lines["NX"] = {
     name = "Newcomers Express",
     short_name = "Newcomers",
