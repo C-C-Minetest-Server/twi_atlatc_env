@@ -159,7 +159,11 @@ F.station_names = {
     DEP = "Desert Pride",
     SNE = "Snezhnaya",
     LIV = "Lilac Valley",
-    MAP = "Mannagrass Peninsula",
+    MAP = {
+        "Mannagrass Peninsula",
+        "Mannagrass Peni.",
+        "Mannagrass Peni",
+    },
     WEW = {
         "Wemmbu's Wall",
         "Wemmbu Wall",
