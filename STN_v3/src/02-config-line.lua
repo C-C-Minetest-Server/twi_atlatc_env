@@ -224,7 +224,7 @@ F.stn_v3_lines["LIB-BAJ"] = {
         },
         ["eLIB:2:N1"] = {
             depint = "00;00;06;00",
-            depoff = "00;00;00;00",
+            depoff = "00;00;01;00",
             delay = 10,
             reverse = true,
             next = "BAJ:2B:E1",
