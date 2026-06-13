@@ -95,7 +95,7 @@ function F.get_pis_multi_line(def)
         def.custom_header or ("PLATFORM " .. def.track_id .. ":"), rwt_to_string_minutes(rwt.now()))
 
     local i = 1
-    while i <= #train_sorted_ids do
+    while i <= math.min(#train_sorted_ids, 3) do
         local train_id = train_sorted_ids[i]
         local train_data = F.pis_list_of_trains[track_key][train_id]
 
