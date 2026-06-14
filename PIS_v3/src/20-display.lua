@@ -4,17 +4,13 @@ local function rwt_to_string_minutes(rwt_obj)
     return string.sub(rwt.to_string(rwt_obj, true), 4)
 end
 
-local function floor_div(num, div)
-    return math.floor(num / div)
-end
-
 local function seconds_to_string(seconds_raw)
     seconds_raw = math.floor(seconds_raw)
     if seconds_raw <= 0 then
         return seconds_raw .. " sec."
     end
 
-    local minutes = floor_div(seconds_raw, 60)
+    local minutes = math.floor(seconds_raw / 60)
     local seconds = seconds_raw % 60
 
     local components = {}

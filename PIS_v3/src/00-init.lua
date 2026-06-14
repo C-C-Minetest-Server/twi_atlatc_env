@@ -41,6 +41,43 @@ function F.handle_variable_length_string(str, max_len)
     return string.sub(str[#str], 1, max_len)
 end
 
+do
+    local formspec_escapes = {
+        ["\\"] = "\\\\",
+        ["["] = "\\[",
+        ["]"] = "\\]",
+        [";"] = "\\;",
+        [","] = "\\,",
+        ["$"] = "\\$",
+        [":"] = "\\:",
+        ["^"] = "\\^",
+    }
+    function F.formspec_escape(text)
+        -- Use explicit character set instead of dot here because it doubles the performance
+        return text and ("").gsub(text, "[\\%[%];,$]", formspec_escapes)
+    end
+    function F.formspec_escape_combine(text)
+        -- Use explicit character set instead of dot here because it doubles the performance
+        return text and ("").gsub(text, "[\\%[%];,$:^]", formspec_escapes)
+    end
+end
+
+function F.seconds_to_string_shorter(seconds_raw)
+    seconds_raw = math.floor(seconds_raw)
+    if seconds_raw <= 0 then
+        return seconds_raw .. " sec."
+    end
+
+    local minutes = math.floor(seconds_raw / 60)
+    local seconds = seconds_raw % 60
+
+    local components = {}
+    components[#components + 1] = minutes ~= 0 and (minutes .. " m") or nil
+    components[#components + 1] = seconds .. " sec." -- So it does not blink
+
+    return table.concat(components, " ")
+end
+
 --[[ { [station_id:track_id] = { [atc_id] = {
     train_status = "arriving" / "approaching" / "stopped",
     line_code = "<line code>",

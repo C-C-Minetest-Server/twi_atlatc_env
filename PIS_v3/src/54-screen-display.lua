@@ -77,22 +77,6 @@ function F.update_marquee()
     -- tracy: ZoneEnd
 end
 
-local function seconds_to_string_shorter(seconds_raw)
-    seconds_raw = math.floor(seconds_raw)
-    if seconds_raw <= 0 then
-        return seconds_raw .. " sec."
-    end
-
-    local minutes = floor_div(seconds_raw, 60)
-    local seconds = seconds_raw % 60
-
-    local components = {}
-    components[#components + 1] = minutes ~= 0 and (minutes .. " m") or nil
-    components[#components + 1] = seconds .. " sec." -- So it does not blink
-
-    return table.concat(components, " ")
-end
-
 function F.get_screen_buffer(def)
     F.handle_pis_option_alternatives(def)
     -- tracy: ZoneBeginN PIS_v3::F.get_screen_buffer
@@ -139,7 +123,7 @@ function F.get_screen_buffer(def)
         local line_name_str = F.handle_variable_length_string(line_name, 21)
         local dest_str_len = train_stopped_data.no_to_prefix and 21 or 18
         local dest_str = F.handle_variable_length_string(heading_to, dest_str_len)
-        local time_str = "Leaving " .. (time_diff > 0 and ("in " .. seconds_to_string_shorter(time_diff)) or "now")
+        local time_str = "Leaving " .. (time_diff > 0 and ("in " .. F.seconds_to_string_shorter(time_diff)) or "now")
 
         F.gpu.render_font(buf, line_name_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12, 0)
         F.gpu.render_font(buf, (train_stopped_data.no_to_prefix and "" or "To ") .. dest_str, 3 + 4 * 6 * 2 + 6 + 2, 4 + 12 * 2, 0)
