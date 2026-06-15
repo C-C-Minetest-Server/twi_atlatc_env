@@ -58,9 +58,9 @@ function F.get_flat_display(def)
 
         -- Basic information
         local time_diff = rwt.diff(rwt.now(), train_stopped_data.estimated_time)
-        local line_name_str = F.handle_variable_length_string(line_name, 21)
+        local line_name_str = F.handle_variable_length_string(line_name, 21, true)
         local dest_str_len = train_stopped_data.no_to_prefix and 21 or 18
-        local dest_str = F.handle_variable_length_string(heading_to, dest_str_len)
+        local dest_str = F.handle_variable_length_string(heading_to, dest_str_len, true)
         local time_str = "Leaving " .. (time_diff > 0 and ("in " .. F.seconds_to_string_shorter(time_diff)) or "now")
         local full_str = line_name_str ..
             (train_stopped_data.no_to_prefix and "\n" or "\nTo ") .. dest_str .. "\n" .. time_str
@@ -95,12 +95,13 @@ function F.get_flat_display(def)
 
                 if def.no_line_id then
                     station_name_length = station_name_length + 5
-                    left_txts[#left_txts+1] = F.handle_variable_length_string(train_data.heading_to, station_name_length)
+                    left_txts[#left_txts+1] =
+                        F.handle_variable_length_string(train_data.heading_to, station_name_length, true)
                 else
                     -- Line code
                     left_txts[#left_txts+1] = string.format(
                         "%-4s %s", train_data.line_code,
-                        F.handle_variable_length_string(train_data.heading_to, station_name_length)
+                        F.handle_variable_length_string(train_data.heading_to, station_name_length, true)
                     )
                 end
 
