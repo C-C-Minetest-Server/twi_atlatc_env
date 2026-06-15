@@ -19,7 +19,7 @@ function F.flat_update_marquee()
     F.flat_marquee_text = string.sub(F.flat_marquee_text, 2)
 end
 
-function F.get_flat_display(def)
+function F.get_flat_display_buffer(def)
     F.handle_pis_option_alternatives(def)
 
     local track_key = def.station_id .. ":" .. def.track_id
@@ -129,8 +129,12 @@ function F.get_flat_display(def)
         end
     end
 
+    return buf
+end
+
+function F.get_flat_display(def)
     return {
-        texture_front = F.flat.render_texture(buf),
+        texture_front = F.flat.render_texture(F.get_flat_display_buffer(def)),
         visual_size = { x = 3, y = 1, z = 1 },
     }
 end
