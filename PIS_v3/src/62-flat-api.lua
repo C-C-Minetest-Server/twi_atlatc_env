@@ -4,56 +4,6 @@ local UNIFONT_TEX = "signs_lib_uni%02x.png\\^[sheet\\:16x16\\:%d,%d"
 
 F.flat = {}
 
--- AI-generated
-local function peek_utf8(str, index)
-    index = index or 1
-    if index > #str then
-        return nil, nil -- Out of bounds
-    end
-
-    local byte1 = string.byte(str, index)
-    local code, next_index
-
-    -- 1-byte ASCII (0xxxxxxx)
-    if byte1 < 0x80 then
-        code = byte1
-        next_index = index + 1
-
-    -- 2-byte sequence (110xxxxx 10xxxxxx)
-    elseif byte1 >= 0xC0 and byte1 < 0xE0 then
-        if index + 1 > #str then return nil, nil end
-        local byte2 = string.byte(str, index + 1)
-        
-        code = ((byte1 - 0xC0) * 64) + (byte2 - 0x80)
-        next_index = index + 2
-
-    -- 3-byte sequence (1110xxxx 10xxxxxx 10xxxxxx)
-    elseif byte1 >= 0xE0 and byte1 < 0xF0 then
-        if index + 2 > #str then return nil, nil end
-        local byte2 = string.byte(str, index + 1)
-        local byte3 = string.byte(str, index + 2)
-        
-        code = ((byte1 - 0xE0) * 4096) + ((byte2 - 0x80) * 64) + (byte3 - 0x80)
-        next_index = index + 3
-
-    -- 4-byte sequence (11110xxx 10xxxxxx 10xxxxxx 10xxxxxx)
-    elseif byte1 >= 0xF0 and byte1 < 0xF8 then
-        if index + 3 > #str then return nil, nil end
-        local byte2 = string.byte(str, index + 1)
-        local byte3 = string.byte(str, index + 2)
-        local byte4 = string.byte(str, index + 3)
-        
-        code = ((byte1 - 0xF0) * 262144) + ((byte2 - 0x80) * 4096) + ((byte3 - 0x80) * 64) + (byte4 - 0x80)
-        next_index = index + 4
-
-    else
-        -- Invalid UTF-8 starting byte or continuation byte passed as start
-        return nil, nil
-    end
-
-    return code, next_index
-end
-
 function F.flat.new_buffer(w, h, base_texture)
     return {
         w = w,
@@ -92,7 +42,8 @@ function F.flat.get_text_texture(str, color)
 
     local i = 1
     while i <= #str do
-        local code, new_i = peek_utf8(str, i)
+        local code, new_i = F.peek_utf8(str, i)
+        if not code then break end
         i = new_i
         if code == 0x0A then
             linews[#linews+1] = ptx
