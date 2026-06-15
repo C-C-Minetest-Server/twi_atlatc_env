@@ -10,15 +10,34 @@ function F.flat.new_buffer(w, h, base_texture)
         h = h,
         base_texture = base_texture,
         parts = {},
+        flat_buffer = true,
     }
 end
 
 function F.flat.overlay_texture(buf, x, y, texture)
-    buf.parts[#buf.parts + 1] = {
-        x = x,
-        y = y,
-        texture = texture,
-    }
+    if type(texture) == "table" and texture.flat_buffer then
+        if texture.base_texture and texture.base_texture ~= "" then
+            buf.parts[#buf.parts + 1] = {
+                x = x,
+                y = y,
+                texture = texture.base_texture,
+            }
+        end
+
+        for _, part in ipairs(texture.parts) do
+            buf.parts[#buf.parts + 1] = {
+                x = x + part.x,
+                y = y + part.y,
+                texture = part.texture,
+            }
+        end
+    else
+        buf.parts[#buf.parts + 1] = {
+            x = x,
+            y = y,
+            texture = texture,
+        }
+    end
 end
 
 function F.flat.render_texture(buf)
