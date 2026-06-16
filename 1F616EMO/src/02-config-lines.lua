@@ -498,19 +498,14 @@ F.lines["SPN"] = {
     }),
 }
 
+-- Handled in STN_v3 (Display only)
+
 F.lines["SVL"] = {
     code = "SVL",
     name = "SmushyVille Loop",
     textline_name = "SmushyVille Loop",
     short_name = "SmushyVille",
-
-    adjacent_stations = merge_key_tables({
-        F.lines["SVL-CW"].adjacent_stations,
-        F.lines["SVL-ACW"].adjacent_stations,
-    }),
 }
-
--- Handled in STN_v3 (Display only)
 
 F.lines["GRH4"] = {
     code = "GRH4",

@@ -325,6 +325,94 @@ F.stn_v3_lines["SPN-S2"] = {
     }
 }
 
+F.stn_v3_lines["SVL-CW"] = {
+    rc = "L-SVL-CW",
+    code = "SVL",
+    name = {
+        "SmushyVille Loop",
+        "SmushyVille Lp.",
+        "SmushyVille Lp",
+        "SmushyVille",
+    },
+    termini = { CW = F.pseudo_station_names.CW },
+    no_to_prefix = true,
+
+    stations = {
+        ["eYTP:1:S1"] = {
+            delay = 12,
+            next = "eSVE:1:W1",
+            dir = "CW",
+
+            depint = "00;00;03;00",
+            depoff = "00;00;00;00",
+        },
+        ["eSVE:1:W1"] = {
+            delay = 12,
+            next = "SAG:4:W1",
+            dir = "CW",
+        },
+        ["SAG:4:W1"] = {
+            delay = 12,
+            next = "eOTH:1:N2",
+            dir = "CW",
+        },
+        ["eOTH:1:N2"] = {
+            delay = 12,
+            next = "eSPH:1:E1",
+            dir = "CW",
+        },
+        ["eSPH:1:E1"] = {
+            delay = 12,
+            next = "eYTP:1:S1",
+            dir = "CW",
+        },
+    }
+}
+
+F.stn_v3_lines["SVL-ACW"] = {
+    rc = "L-SVL-ACW",
+    code = "SVL",
+    name = {
+        "SmushyVille Loop",
+        "SmushyVille Lp.",
+        "SmushyVille Lp",
+        "SmushyVille",
+    },
+    termini = { ACW = F.pseudo_station_names.ACW },
+    no_to_prefix = true,
+
+    stations = {
+        ["eSPH:2:W1"] = {
+            delay = 12,
+            next = "eOTH:2:S1",
+            dir = "ACW",
+        },
+        ["eOTH:2:S1"] = {
+            delay = 12,
+            next = "SAG:6:E1",
+            dir = "ACW",
+        },
+        ["SAG:6:E1"] = {
+            delay = 12,
+            next = "eSVE:2:E1",
+            dir = "ACW",
+        },
+        ["eSVE:2:E1"] = {
+            delay = 12,
+            next = "eYTP:2:N1",
+            dir = "ACW",
+        },
+        ["eYTP:2:N1"] = {
+            delay = 12,
+            next = "eSPH:2:W1",
+            dir = "ACW",
+
+            depint = "00;00;03;00",
+            depoff = "00;00;00;00",
+        },
+    }
+}
+
 -- Grape Hills S-Bahn
 F.stn_v3_lines["S22"] = {
     rc = "L-S22",
