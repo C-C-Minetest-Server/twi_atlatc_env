@@ -354,54 +354,6 @@ F.lines["SPN-S1"] = {
     }),
 }
 
-F.lines["SVL-CW"] = {
-    rc = "L-SVL-CW",
-    code = "SVL",
-    name = "SmushyVille Loop",
-    textline_name = "SmushyVille Loop",
-    short_name = "SmushyVille",
-    default_dir = "CW",
-    custom_dir_abbr = "CW",
-    custom_term_desc = F.pseudo_station_names.CW,
-
-    departure_time_adjustment = 10,
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eYTP", "1" },
-        { "eSVE", "1" },
-        { "SAG", "4" },
-        { "eOTH", "1" },
-        { "eSPH", "1" },
-        -- { "ABM", "1" },
-    }),
-}
-
-F.lines["SVL-ACW"] = {
-    rc = "L-SVL-ACW",
-    code = "SVL",
-    name = "SmushyVille Loop",
-    textline_name = "SmushyVille Loop",
-    short_name = "SmushyVille",
-    default_dir = "ACW",
-    custom_dir_abbr = "ACW",
-    custom_term_desc = F.pseudo_station_names.ACW,
-
-    departure_time_adjustment = 10,
-
-    show_complementary_station = true,
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "eYTP", "2" },
-        -- { "ABM", "2" },
-        { "eSPH", "2" },
-        { "eOTH", "2" },
-        { "SAG", "6" },
-        { "eSVE", "2" },
-    }),
-}
-
 F.lines["S21"] = {
     rc = "L-S21",
     code = "S21",
