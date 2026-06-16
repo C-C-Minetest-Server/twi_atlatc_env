@@ -16,9 +16,8 @@ function F.set_external_display_regular(train, line_id, point_id)
 
     local train_dir = station_def.dir
     local terminus_id = line_def.termini[train_dir]
-    local terminus_name = F.station_names[terminus_id]
-    disp_lines[#disp_lines + 1] = terminus_name
-        and ("Terminus: " .. F.handle_variable_length_string(terminus_name)) or terminus_id
+    local terminus_name = F.handle_variable_length_string(F.station_names[terminus_id] or terminus_id)
+    disp_lines[#disp_lines + 1] = line_def.no_to_prefix and terminus_name or ("Terminus: " .. terminus_name)
 
     train:set_text_outside(table.concat(disp_lines, "\n"))
 end
