@@ -94,7 +94,8 @@ function F.send_train_to_pis_v3(atc_id)
         local line_color = line_def.color
         local line_background_color = line_def.background_color
         local term_code = line_def.termini[line_station_def.dir]
-        local heading_to = F.station_names[term_code]
+        local heading_to = F.station_names[term_code] or term_code
+        local no_to_prefix = line_def.no_to_prefix
         local direction_code = line_station_def.dir
         local is_approaching = track_key == train_data.dest and train_data.is_approaching
 
@@ -115,6 +116,7 @@ function F.send_train_to_pis_v3(atc_id)
             line_color = line_color,
             line_background_color = line_background_color,
             heading_to = heading_to,
+            no_to_prefix = no_to_prefix,
             direction_code = direction_code,
 
             estimated_time = eta,
