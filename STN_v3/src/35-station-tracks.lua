@@ -125,7 +125,8 @@ function F.stn_v3(params)
 
         local train_dir = station_def.dir
         local terminus_id = line_def.termini[train_dir]
-        local terminus_name = F.station_names[terminus_id]
+        local terminus_name = F.station_names[terminus_id] or terminus_id
+        local no_to_prefix = line_def.no_to_prefix
 
         F.register_train_arrival(atc_id, point_id)
         interrupt_pos(PIS_V3_EXT_INT_POS, {
@@ -145,6 +146,7 @@ function F.stn_v3(params)
             line_color = line_def.color,
             line_background_color = line_def.background_color,
             heading_to = terminus_name,
+            no_to_prefix = no_to_prefix,
             direction_code = train_dir,
 
             estimated_time = rwnext,
