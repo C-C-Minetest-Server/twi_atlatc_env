@@ -422,7 +422,7 @@ F.stn_v3_lines["S22"] = {
         "S22",
     },
     termini = {
-        N = "MAP",
+        N = "SUG",
         S = "SNE",
     },
 
@@ -454,8 +454,20 @@ F.stn_v3_lines["S22"] = {
         },
         ["MAP:4:W1"] = {
             delay = 15,
-            next = "LIV:1:E1",
+            next = "SUG:4:W1",
+            dir = "W",
+            on_leave_rc = "B-SUG-T4W K-STN-CLEAR-ROUTE",
+        },
+        ["SUG:4:W1"] = {
+            delay = 15,
+            next = "MAP:3:E1",
             reverse = true,
+            dir = "S",
+            on_leave_rc = "B-MAP-T3E K-STN-CLEAR-ROUTE",
+        },
+        ["MAP:3:E1"] = {
+            delay = 15,
+            next = "LIV:1:E1",
             dir = "S",
             on_leave_rc = "B-LIV-T1E K-STN-CLEAR-ROUTE",
         },
