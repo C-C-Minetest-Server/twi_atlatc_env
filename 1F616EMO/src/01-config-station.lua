@@ -170,6 +170,7 @@ F.station_names = {
         "Wemmbu's",
         "Wemmbu",
     },
+    SUG = "Sugidama",
 
 
     -- Nordstetten
