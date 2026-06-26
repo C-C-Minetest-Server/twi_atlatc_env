@@ -21,13 +21,6 @@ F.pis_advertisements = {
 
     --[[ TEMPOARAY ADS GOES HERE ]] --
 
-    -- Deprecation of MultiCraft
-    -- Expire: After deprecation of MC clients
-    {
-        "!!  MULTICRAFT CLIENTS  !!",
-        "!!  DEPRECATED IN MAY   !!",
-    },
-
     --[[ RAILWAY SERVICE NOTICES ]] --
 
     -- Stay behind yellow line
@@ -82,12 +75,6 @@ F.pis_advertisements = {
 
 F.marquee_advertisements = {
     --[[ TEMPOARAY ADS GOES HERE ]] --
-
-    -- Deprecation of MultiCraft
-    -- Expire: After deprecation of MC clients
-    {
-        "MultiCraft clients will not be able to connect in May.",
-    },
 
     --[[ RAILWAY SERVICE NOTICES ]] --
 
