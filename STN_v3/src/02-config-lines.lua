@@ -455,7 +455,7 @@ F.stn_v3_lines["S22"] = {
         ["MAP:4:W1"] = {
             delay = 15,
             next = "SUG:4:W1",
-            dir = "W",
+            dir = "N",
             on_leave_rc = "B-SUG-T4W K-STN-CLEAR-ROUTE",
         },
         ["SUG:4:W1"] = {
