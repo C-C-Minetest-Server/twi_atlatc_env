@@ -40,7 +40,15 @@ function F.flat.overlay_texture(buf, x, y, texture)
     end
 end
 
+function F.flat.fill_color(buf, x, y, w, h, color)
+    return F.flat.overlay_texture(buf, x, y, string.format("[fill:%dx%d:%s", w, h, color))
+end
+
 function F.flat.render_texture(buf)
+    if type(buf) == "string" then
+        return buf
+    end
+
     local strparts = {}
     for i, part in ipairs(buf.parts) do
         strparts[i] = string.format("%d,%d=%s", part.x, part.y, F.formspec_escape_combine(part.texture))

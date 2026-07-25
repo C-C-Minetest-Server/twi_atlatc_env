@@ -4,6 +4,17 @@ local TEXTURE_BASE = "additional_textures_pisv3_base.png"
 local TEXTURE_APPROACHING = "additional_textures_pisv3_approaching.png"
 local TEXTURE_ARRIVED = "additional_textures_pisv3_arrived.png"
 
+local TEXTURE_PAUSED
+
+do
+    local buf = F.flat.new_buffer(252, 84, TEXTURE_BASE)
+    F.flat.fill_color(buf, 2, 2, 252 - 4, 84 - 4, "#00ABFF")
+
+    F.flat.overlay_text(buf, 252 / 2, 84 / 2, "INFORMATION SCREENS\n UNDER MAINTENANCE", "#010101", 1, "cm")
+
+    TEXTURE_PAUSED = F.flat.render_texture(buf)
+end
+
 F.flat_marquee_text = ""
 F.flat_marquee_last = 0
 
@@ -21,6 +32,11 @@ end
 
 function F.get_flat_display_buffer(def)
     F.handle_pis_option_alternatives(def)
+
+    if S.pis_global_graphical_paused or S.pis_stations_graphical_paused[def.station_id] then
+        -- Paused, return static image
+        return TEXTURE_PAUSED
+    end
 
     local track_key = def.station_id .. ":" .. def.track_id
     local list_of_trains = F.pis_list_of_trains[track_key]
