@@ -42,6 +42,16 @@ function F.seconds_to_string_shorter(seconds_raw)
     return table.concat(components, " ")
 end
 
+-- Update interval for faster-ticking displays (e.g. platform screens)
+if type(F.PIS_UPDATE_INTERVAL) ~= "number" or F.PIS_UPDATE_INTERVAL <= 0 then
+    F.PIS_UPDATE_INTERVAL = 2
+end
+
+-- Update interval for slower-ticking displays (e.g. status billboards)
+if type(F.PIS_UPDATE_INTERVAL_LONG) ~= "number" or F.PIS_UPDATE_INTERVAL_LONG <= 0 then
+    F.PIS_UPDATE_INTERVAL_LONG = 2
+end
+
 --[[ { [station_id:track_id] = { [atc_id] = {
     train_status = "arriving" / "approaching" / "stopped",
     line_code = "<line code>",

@@ -167,7 +167,8 @@ function F.get_screen_buffer(def)
 
                 if i == 1 and train_data.train_status == "approaching" and not def.no_current_train then
                     max_line = 2
-                    local overlay = os.time() % 2 == 0 and F.screen_approaching_overlay or F.screen_approaching_overlay_alt
+                    local overlay = os.time() % math.ceil(F.PIS_UPDATE_INTERVAL) == 0
+                        and F.screen_approaching_overlay or F.screen_approaching_overlay_alt
                     F.gpu.overlay_buf(buf, overlay, 3, 39)
                 end
 
