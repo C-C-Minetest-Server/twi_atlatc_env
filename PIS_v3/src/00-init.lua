@@ -49,7 +49,7 @@ end
 
 -- Update interval for slower-ticking displays (e.g. status billboards)
 if type(F.PIS_UPDATE_INTERVAL_LONG) ~= "number" or F.PIS_UPDATE_INTERVAL_LONG <= 0 then
-    F.PIS_UPDATE_INTERVAL_LONG = 2
+    F.PIS_UPDATE_INTERVAL_LONG = 5
 end
 
 --[[ { [station_id:track_id] = { [atc_id] = {
