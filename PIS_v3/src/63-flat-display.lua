@@ -8,7 +8,7 @@ local TEXTURE_PAUSED
 
 do
     local buf = F.flat.new_buffer(252, 84, TEXTURE_BASE)
-    F.flat.fill_color(buf, 2, 2, 252 - 4, 84 - 4, "#00ABFF")
+    F.flat.fill_color(buf, 2, 2, 252 - 4, 84 - 4, "#C2C2C2")
 
     F.flat.overlay_text(buf, 252 / 2, 84 / 2, "INFORMATION SCREENS\n UNDER MAINTENANCE", "#010101", 1, "cm")
 
