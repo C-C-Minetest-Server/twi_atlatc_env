@@ -124,7 +124,7 @@ function F.get_flat_display_buffer(def)
                 if i == 1 and train_data.train_status == "approaching" and not def.no_current_train then
                     max_line = 2
 
-                    F.flat.overlay_texture(buf, 2, 50, "[fill:250x32:#DDDD00")
+                    F.flat.fill_color(buf, 2, 50, 252 - 4, 32, "#DDDD00")
 
                     local color = os.time() % 2 == 0 and "#BE0302" or "#010101"
                     F.flat.overlay_text(buf, 125, 2 + 16 * 3, "TRAIN APPROACHING", color, 1, "ct")
