@@ -217,7 +217,7 @@ function F.get_flat_multi_display_buffer(arg)
     local right_txts = { "    " .. F.rwt_to_string_minutes(rwt.now()) }
 
     for _, data in ipairs(all_arrived_entries) do
-        if #left_txts >= 4 then
+        if #left_txts >= 5 then
             break
         end
 
@@ -240,7 +240,7 @@ function F.get_flat_multi_display_buffer(arg)
     end
 
     for _, data in ipairs(all_normal_entries) do
-        if #left_txts >= 4 then
+        if #left_txts >= 5 then
             break
         end
 
