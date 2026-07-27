@@ -53,16 +53,8 @@ function F.get_flat_display_buffer(def)
         buf = F.flat.new_buffer(252, 84, TEXTURE_BASE)
     end
 
-    local text_left = {
-        def.custom_header or ("PLATFORM " .. def.track_id .. ":"),
-    }
-
-    local text_right = {
-        rwt_to_string_minutes(rwt.now()),
-    }
-
     F.flat.overlay_text(buf, 2 + 2, 2, def.custom_header or ("PLATFORM " .. def.track_id .. ":"), "#010101", 1)
-    F.flat.overlay_text(buf, 251 - 4, 2, rwt_to_string_minutes(rwt.now()), "#010101", 1, "rt")
+    F.flat.overlay_text(buf, 251 - 4, 2, F.rwt_to_string_minutes(rwt.now()), "#010101", 1, "rt")
 
     if mode == "arrived" then
         local line_code = train_stopped_data.line_code
@@ -82,7 +74,7 @@ function F.get_flat_display_buffer(def)
             (train_stopped_data.no_to_prefix and "\n" or "\nTo ") .. dest_str .. "\n" .. time_str
 
         F.flat.overlay_text(buf, 76, 2 + 16, full_str, "#010101", 1)
-        
+
         F.flat.overlay_text(buf, 125, 2 + 16 * 4, "Walk inside and stop moving.", "#94FF6F", 1, "ct")
     else
         F.make_sure_sorted_trains_exist(track_key)
@@ -100,7 +92,7 @@ function F.get_flat_display_buffer(def)
 
             if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
                 local station_name_length = 20
-                local arrive_time_string = rwt_to_string_minutes(train_data.estimated_time)
+                local arrive_time_string = F.rwt_to_string_minutes(train_data.estimated_time)
 
                 if train_data.train_status == "stopped" then
                     station_name_length = station_name_length - 4

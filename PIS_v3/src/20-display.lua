@@ -1,9 +1,5 @@
 assert(is_loading)
 
-local function rwt_to_string_minutes(rwt_obj)
-    return string.sub(rwt.to_string(rwt_obj, true), 4)
-end
-
 local function seconds_to_string(seconds_raw)
     seconds_raw = math.floor(seconds_raw)
     if seconds_raw <= 0 then
@@ -34,7 +30,7 @@ function F.get_pis_single_line(def)
 
     local lines = {}
     lines[#lines + 1] = string.format("%-20s %s",
-        def.custom_header or ("PLATFORM " .. def.track_id .. ":"), rwt_to_string_minutes(rwt.now()))
+        def.custom_header or ("PLATFORM " .. def.track_id .. ":"), F.rwt_to_string_minutes(rwt.now()))
 
     local track_key = def.station_id .. ":" .. def.track_id
     F.make_sure_sorted_trains_exist(track_key)
@@ -88,7 +84,7 @@ function F.get_pis_multi_line(def)
     local train_sorted_ids = F.pis_list_of_trains_sorted[track_key] or {}
     local lines = {}
     lines[#lines + 1] = string.format("%-20s %s",
-        def.custom_header or ("PLATFORM " .. def.track_id .. ":"), rwt_to_string_minutes(rwt.now()))
+        def.custom_header or ("PLATFORM " .. def.track_id .. ":"), F.rwt_to_string_minutes(rwt.now()))
 
     local i = 1
     while i <= math.min(#train_sorted_ids, 3) do
@@ -98,7 +94,7 @@ function F.get_pis_multi_line(def)
         if rwt.is_before(rwt.now(), rwt.add(train_data.estimated_time, 10)) then
             local station_name_length = 15
             local line_code_display = string.format("%-4s", train_data.line_code) .. " "
-            local arrive_time_string = rwt_to_string_minutes(train_data.estimated_time)
+            local arrive_time_string = F.rwt_to_string_minutes(train_data.estimated_time)
 
             if train_data.train_status == "stopped" then
                 station_name_length = 13
@@ -193,7 +189,7 @@ function F.get_status_textline_line(def)
 
     local eta = train_coming_data and train_coming_data.estimated_time
     local append_text = eta
-        and ((train_coming_data.train_status == "stopped" and " D." or " ") .. rwt_to_string_minutes(eta)) or ""
+        and ((train_coming_data.train_status == "stopped" and " D." or " ") .. F.rwt_to_string_minutes(eta)) or ""
     disp = disp .. (#line_code < 4 and " " or "") .. string.format("%-3s", line_code) .. " "
     disp = disp .. F.handle_variable_length_string(heading_to or "", 26 - #disp - #append_text)
     disp = string.format("%-" .. (26 - #append_text) ..  "s", disp) .. append_text

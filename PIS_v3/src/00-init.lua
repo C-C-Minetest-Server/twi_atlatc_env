@@ -42,6 +42,10 @@ function F.seconds_to_string_shorter(seconds_raw)
     return table.concat(components, " ")
 end
 
+function F.rwt_to_string_minutes(rwt_obj)
+    return string.sub(rwt.to_string(rwt_obj, true), 4)
+end
+
 -- Update interval for faster-ticking displays (e.g. platform screens)
 if type(F.PIS_UPDATE_INTERVAL) ~= "number" or F.PIS_UPDATE_INTERVAL <= 0 then
     F.PIS_UPDATE_INTERVAL = 2
