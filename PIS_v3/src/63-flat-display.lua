@@ -145,3 +145,123 @@ function F.get_flat_display(def)
         visual_size = { x = 3, y = 1, z = 1 },
     }
 end
+
+function F.get_flat_multi_display_buffer(arg)
+    local header = assert(type(arg.header) == "string") and arg.header
+    local defs = assert(type(arg.defs) == "table") and arg.defs
+
+    local all_normal_entries = {}
+    local all_arrived_entries = {}
+    local max_display_id_len = 0
+
+    for _, def in ipairs(defs) do
+        F.handle_pis_option_alternatives(def)
+        def.display_id = type(def.display_id) == "string" and def.display_id or def.track_id
+
+        if #def.display_id > max_display_id_len then
+            max_display_id_len = #def.display_id
+        end
+
+        local track_key = def.station_id .. ":" .. def.track_id
+        local list_of_trains = F.pis_list_of_trains[track_key]
+
+        for _, entry in pairs(list_of_trains or {}) do
+            if entry.train_status == "stopped" then
+                if not arg.no_arrived then
+                    all_arrived_entries[#all_arrived_entries+1] = { def.display_id, entry }
+                end
+            elseif entry.estimated_time then
+                all_normal_entries[#all_normal_entries+1] = { def.display_id, entry }
+            end
+        end
+    end
+
+    table.sort(all_normal_entries, function(a, b)
+        local a_time = rwt.t_sec(a[2].estimated_time)
+        local b_time = rwt.t_sec(b[2].estimated_time)
+
+        if a_time == b_time then
+            return a[1] < b[1]
+        end
+
+        return a_time < b_time
+    end)
+
+    table.sort(all_arrived_entries, function(a, b)
+        if not a[2].estimated_time then
+            return true
+        end
+        if not b[2].estimated_time then
+            return false
+        end
+
+        local a_time = rwt.t_sec(a[2].estimated_time)
+        local b_time = rwt.t_sec(b[2].estimated_time)
+
+        if a_time == b_time then
+            return a[1] < b[1]
+        end
+
+        return a_time < b_time
+    end)
+
+    local station_len = 25 - max_display_id_len - 1
+    if not arg.no_line_id then
+        station_len = station_len - 4
+    end
+
+    local buf = F.flat.new_buffer(252, 84, TEXTURE_BASE)
+    F.flat.overlay_text(buf, 2 + 2, 2, header, "#010101", 1)
+    F.flat.overlay_text(buf, 251 - 4, 2, F.rwt_to_string_minutes(rwt.now()), "#010101", 1, "rt")
+    F.flat.fill_color(buf, 2, 2 + 16 * 4, 252 - 4, 16, "#DEDEDE")
+
+    local left_txts = {}
+    local right_txts = {}
+
+    for _, data in ipairs(all_arrived_entries) do
+        if #left_txts >= 4 then
+            break
+        end
+
+        local line = string.format("%-" .. max_display_id_len .. "s", data[1]) .. " "
+
+        if not arg.no_line_id then
+            line = line .. string.format("%-4s", data[2].line_code) .. " "
+        end
+
+        line = line .. F.handle_variable_length_string(data[2].heading_to, station_len - 4)
+
+        left_txts[#left_txts+1] = line
+
+        if data[2].estimated_time then
+            local arrive_time_string = F.rwt_to_string_minutes(data[2].estimated_time)
+            right_txts[#right_txts+1] = "Dep." .. arrive_time_string
+        else
+            right_txts[#right_txts+1] = ""
+        end
+    end
+
+    for _, data in ipairs(all_normal_entries) do
+        if #left_txts >= 4 then
+            break
+        end
+
+        local line = string.format("%-" .. max_display_id_len .. "s", data[1]) .. " "
+
+        if not arg.no_line_id then
+            line = line .. string.format("%-4s", data[2].line_code) .. " "
+        end
+
+        line = line .. F.handle_variable_length_string(data[2].heading_to, station_len)
+
+        left_txts[#left_txts+1] = line
+
+        local arrive_time_string = F.rwt_to_string_minutes(data[2].estimated_time)
+        right_txts[#right_txts+1] = "    " .. arrive_time_string
+    end
+
+    F.flat.overlay_text(buf, 4, 2 + 16, table.concat(left_txts, "\n"), "#010101", 1)
+    F.flat.overlay_text(buf, 251 - 4, 2 + 16, table.concat(right_txts, "\n"), "#010101", 1, "rt")
+
+    return buf
+end
