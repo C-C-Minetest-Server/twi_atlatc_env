@@ -1,7 +1,6 @@
 assert(is_loading)
 
 local TEXTURE_BASE = "additional_textures_pisv3_base.png"
-local TEXTURE_APPROACHING = "additional_textures_pisv3_approaching.png"
 local TEXTURE_ARRIVED = "additional_textures_pisv3_arrived.png"
 
 local TEXTURE_PAUSED
