@@ -211,12 +211,10 @@ function F.get_flat_multi_display_buffer(arg)
     end
 
     local buf = F.flat.new_buffer(252, 84, TEXTURE_BASE)
-    F.flat.overlay_text(buf, 2 + 2, 2, header, "#010101", 1)
-    F.flat.overlay_text(buf, 251 - 4, 2, F.rwt_to_string_minutes(rwt.now()), "#010101", 1, "rt")
     F.flat.fill_color(buf, 2, 2 + 16 * 4, 252 - 4, 16, "#DEDEDE")
 
-    local left_txts = {}
-    local right_txts = {}
+    local left_txts = { header }
+    local right_txts = { "    " .. F.rwt_to_string_minutes(rwt.now()) }
 
     for _, data in ipairs(all_arrived_entries) do
         if #left_txts >= 4 then
@@ -260,8 +258,8 @@ function F.get_flat_multi_display_buffer(arg)
         right_txts[#right_txts+1] = "    " .. arrive_time_string
     end
 
-    F.flat.overlay_text(buf, 4, 2 + 16, table.concat(left_txts, "\n"), "#010101", 1)
-    F.flat.overlay_text(buf, 251 - 4, 2 + 16, table.concat(right_txts, "\n"), "#010101", 1, "rt")
+    F.flat.overlay_text(buf, 4, 2, table.concat(left_txts, "\n"), "#010101", 1)
+    F.flat.overlay_text(buf, 251 - 4, 2, table.concat(right_txts, "\n"), "#010101", 1, "rt")
 
     return buf
 end
