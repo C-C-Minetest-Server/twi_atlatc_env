@@ -205,7 +205,7 @@ function F.get_flat_multi_display_buffer(arg)
         return a_time < b_time
     end)
 
-    local station_len = 25 - max_display_id_len - 1
+    local station_len = 23 - max_display_id_len
     if not arg.no_line_id then
         station_len = station_len - 4
     end
