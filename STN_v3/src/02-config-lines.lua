@@ -622,6 +622,35 @@ F.stn_v3_lines["FR-SLV-LIB"] = {
     },
 }
 
+F.stn_v3_lines["FR-GIV-LIB"] = {
+    rc = "L-FR-GIV-LIB",
+    code = "GIV",
+    name = {
+        "GingerVille-Libreland Ferry",
+        "GingerVille Ferry",
+        "GingerVille",
+    },
+    termini = {
+        N = "FR-LIB",
+        S = "FR-GIV",
+    },
+
+    stations = {
+        ["FR-LIB:2:e1"] = {
+            delay = 60,
+            next = "FR-GIV:1:e1",
+            dir = "S",
+            reverse = true,
+        },
+        ["FR-GIV:1:e1"] = {
+            delay = 60,
+            next = "FR-LIB:1:e1",
+            dir = "N",
+            reverse = true,
+        },
+    },
+}
+
 -- (As of now) display only
 F.stn_v3_lines["SPN"] = {
     code = "SPN",

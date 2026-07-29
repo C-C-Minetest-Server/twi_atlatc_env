@@ -263,6 +263,7 @@ F.station_names = {
     -- 1F616EMO Ferry: Libreland
     ["FR-LIB"] = "Libreland",
     ["FR-SLV"] = "Smallville",
+    ["FR-GIV"] = "GingerVille",
 
 
     -- Emergency Stations / Platforms
@@ -332,6 +333,8 @@ F.station_interchange = {
     ["HR-CIG"] = { "HR-LUC-LRT1", "SPN-S1" },
 
     ["M27-SOL"] = { "S21", "M27-XSS", },
+
+    ["FR-LIB"] = { "FR-SLV-LIB", "FR-GIV-LIB", },
 }
 F.station_interchange.eYTP = F.station_interchange.YTP
 F.station_interchange.eSVE = F.station_interchange.SVE
