@@ -177,8 +177,8 @@ function F.register_train_event(data)
         end
     elseif data.type == "deregister_train" then
         for track_key, track_data in pairs(F.pis_list_of_trains) do
-            if track_data[atc_id] then
-                track_data[atc_id] = nil
+            if track_data[data.atc_id] then
+                track_data[data.atc_id] = nil
                 F.pis_list_of_trains_sorted[track_key] = nil
 
                 if F.pis_train_stopped_on_track[track_key] == data.atc_id then
