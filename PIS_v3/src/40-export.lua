@@ -11,8 +11,11 @@ function F.export_data()
         list_of_trains[track_key] = station_data
         list_of_trains[track_key].order = F.pis_list_of_trains_sorted[track_key]
 
-        for atc_id, train_data in pairs(trains_data) do
-            station_data[atc_id] = {
+        for train_number, train_data in pairs(trains_data) do
+            station_data[train_number] = {
+                atc_id         = train_data.atc_id,
+                train_number   = train_data.train_number,
+
                 train_status   = train_data.train_status,
                 line_code      = train_data.line_code,
 

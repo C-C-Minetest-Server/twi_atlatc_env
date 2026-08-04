@@ -17,13 +17,13 @@ function F.resort_track_trains(track_key)
         return
     end
 
-    local atc_id_list = {}
+    local train_number_list = {}
 
-    for atc_id in pairs(F.pis_list_of_trains[track_key]) do
-        atc_id_list[#atc_id_list + 1] = atc_id
+    for train_number in pairs(F.pis_list_of_trains[track_key]) do
+        train_number_list[#train_number_list + 1] = train_number
     end
 
-    if #atc_id_list == 0 then
+    if #train_number_list == 0 then
         F.pis_list_of_trains[track_key] = nil
         F.pis_list_of_trains_sorted[track_key] = nil
 
@@ -31,7 +31,7 @@ function F.resort_track_trains(track_key)
         return
     end
 
-    table.sort(atc_id_list, function(a, b)
+    table.sort(train_number_list, function(a, b)
         local data_a = F.pis_list_of_trains[track_key][a]
         local data_b = F.pis_list_of_trains[track_key][b]
 
@@ -53,7 +53,7 @@ function F.resort_track_trains(track_key)
         return rwt.is_before(eta_a, eta_b)
     end)
 
-    F.pis_list_of_trains_sorted[track_key] = atc_id_list
+    F.pis_list_of_trains_sorted[track_key] = train_number_list
 
     -- tracy: ZoneEnd
 end
@@ -67,21 +67,29 @@ end
 function F.validate_train_event(data)
     if type(data) ~= "table" then return false, "data" end
 
-    if data.type == "update_train" or data.type == "deregister_train" then
+    if data.type == "update_train" then
         if type(data.atc_id) == "number" then
             if data.atc_id > 0 then
                 data.atc_id = tostring(data.atc_id)
             else
                 return false, "data.atc_id"
             end
-        elseif type(data.atc_id) == "string" and not data.atc_id:match("^%d+$") then
+        elseif data.atc_id ~= nil and (type(data.atc_id) ~= "string" or not data.atc_id:match("^%d+$")) then
             return false, "data.atc_id"
         end
 
-        if data.type == "update_train" and (data.train_status == "arriving"
-                or data.train_status == "approaching"
-                or data.train_status == "stopped"
-                or data.train_status == "deregister") then
+        if data.train_number == nil and data.atc_id then
+            data.train_number = "_ATCID-" .. data.atc_id
+        elseif type(data.train_number) ~= "string" then
+            return false, "data.train_number"
+        end
+
+        if
+            data.train_status == "arriving"
+            or data.train_status == "approaching"
+            or data.train_status == "stopped"
+            or data.train_status == "deregister"
+        then
             if type(data.station_id) ~= "string" then
                 return false, "data.station_id"
             end
@@ -127,6 +135,26 @@ function F.validate_train_event(data)
         else
             return false, "data.train_status"
         end
+    elseif data.type == "deregister_train" then
+        if type(data.atc_id) == "number" then
+            if data.atc_id > 0 then
+                data.atc_id = tostring(data.atc_id)
+            else
+                return false, "data.atc_id"
+            end
+        elseif data.atc_id ~= nil and (type(data.atc_id) ~= "string" or not data.atc_id:match("^%d+$")) then
+            return false, "data.atc_id"
+        end
+
+        if data.train_number ~= nil and type(data.train_number) ~= "string" then
+            return false, "data.train_number"
+        end
+
+        if data.atc_id and data.train_number then
+            return false, "data.atc_id and data.train_number"
+        elseif not data.atc_id and not data.train_number then
+            return false, "data.atc_id or data.train_number"
+        end
     else
         return false, "data.type"
     end
@@ -147,7 +175,9 @@ function F.register_train_event(data)
 
         if data.train_status == "arriving" or data.train_status == "approaching" or data.train_status == "stopped" then
             F.pis_list_of_trains[track_key] = F.pis_list_of_trains[track_key] or {}
-            F.pis_list_of_trains[track_key][data.atc_id] = {
+            F.pis_list_of_trains[track_key][data.train_number] = {
+                atc_id = data.atc_id,
+                train_number = data.train_number,
                 train_status = data.train_status,
                 line_code = data.line_code,
                 line_name = data.line_name,
@@ -161,28 +191,41 @@ function F.register_train_event(data)
             F.pis_list_of_trains_sorted[track_key] = nil
 
             if data.train_status == "stopped" then
-                F.pis_train_stopped_on_track[track_key] = data.atc_id
-            elseif F.pis_train_stopped_on_track[track_key] == data.atc_id then
+                F.pis_train_stopped_on_track[track_key] = data.train_number
+            elseif F.pis_train_stopped_on_track[track_key] == data.train_number then
                 F.pis_train_stopped_on_track[track_key] = nil
             end
         elseif data.train_status == "deregister" then
             if F.pis_list_of_trains[track_key] then
-                F.pis_list_of_trains[track_key][data.atc_id] = nil
+                F.pis_list_of_trains[track_key][data.train_number] = nil
                 F.pis_list_of_trains_sorted[track_key] = nil
 
-                if F.pis_train_stopped_on_track[track_key] == data.atc_id then
+                if F.pis_train_stopped_on_track[track_key] == data.train_number then
                     F.pis_train_stopped_on_track[track_key] = nil
                 end
             end
         end
     elseif data.type == "deregister_train" then
         for track_key, track_data in pairs(F.pis_list_of_trains) do
-            if track_data[data.atc_id] then
-                track_data[data.atc_id] = nil
-                F.pis_list_of_trains_sorted[track_key] = nil
+            if data.train_number then
+                if track_data[data.train_number] then
+                    track_data[data.train_number] = nil
+                    F.pis_list_of_trains_sorted[track_key] = nil
 
-                if F.pis_train_stopped_on_track[track_key] == data.atc_id then
-                    F.pis_train_stopped_on_track[track_key] = nil
+                    if F.pis_train_stopped_on_track[track_key] == data.train_number then
+                        F.pis_train_stopped_on_track[track_key] = nil
+                    end
+                end
+            elseif data.atc_id then
+                for train_number, train_data in pairs(track_data) do
+                    if train_data.atc_id == data.atc_id then
+                        track_data[train_number] = nil
+                        F.pis_list_of_trains_sorted[track_key] = nil
+
+                        if F.pis_train_stopped_on_track[track_key] == train_number then
+                            F.pis_train_stopped_on_track[track_key] = nil
+                        end
+                    end
                 end
             end
         end

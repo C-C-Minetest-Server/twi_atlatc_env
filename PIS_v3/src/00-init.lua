@@ -56,27 +56,28 @@ if type(F.PIS_UPDATE_INTERVAL_LONG) ~= "number" or F.PIS_UPDATE_INTERVAL_LONG <=
     F.PIS_UPDATE_INTERVAL_LONG = 5
 end
 
---[[ { [station_id:track_id] = { [atc_id] = {
+--[[ { [station_id:track_id] = { [train_number] = {
+    atc_id = "<atc_id, may be nil>",
+    train_number = "<train_number>",
     train_status = "arriving" / "approaching" / "stopped",
     line_code = "<line code>",
     line_name = "<line name>", -- variable-length string
     heading_to = "<heading to>", -- variable-length string
-    arriving_at = rwt(), -- "arriving" / "approaching"
-    leaving_at = rwt(), -- "stopped"
+    estimated_time = rwt(), -- "arriving" / "approaching" / "stopped"
 } } } ]]
 F.pis_list_of_trains = {}
 
--- Sorted arrays of atc_ids in ascending order of ETA
+-- Sorted arrays of train_numbers in ascending order of ETA
 -- The closer the train, the upper it's position in the array
---[[ { [station_id:track_id] = atc_id[] } ]]
+--[[ { [station_id:track_id] = train_number[] } ]]
 F.pis_list_of_trains_sorted = {}
 
--- Cache of the currently stopped train's atc_id
+-- Cache of the currently stopped train's train_number
 -- Then we avoid O(n) lookup
 -- Assume there can only be one train stopping; in the buggy state
 -- that a train is registered "stopped" before another deregisters,
 -- the later train takes presedence.
---[[ { [station_id:track_id] = atc_id or nil } ]]
+--[[ { [station_id:track_id] = train_number or nil } ]]
 F.pis_train_stopped_on_track = {}
 
 -- Set of station IDs where graphical displays are paused
