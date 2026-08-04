@@ -644,7 +644,7 @@ F.stn_v3_lines["FR-GIV-LIB"] = {
         },
         ["FR-GIV:1:e1"] = {
             delay = 60,
-            next = "FR-LIB:1:e1",
+            next = "FR-LIB:2:e1",
             dir = "N",
             reverse = true,
         },
