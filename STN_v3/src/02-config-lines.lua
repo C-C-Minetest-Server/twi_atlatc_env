@@ -509,7 +509,7 @@ F.stn_v3_lines["M27-XSS"] = {
 
     stations = {
         ["M27-VER:1:N2"] = {
-            depint = "00;00;05;30",
+            depint = "00;00;15;00",
             depoff = "00;00;00;00",
             delay = 60,
             reverse = true,
@@ -536,8 +536,8 @@ F.stn_v3_lines["M27-XSS"] = {
             on_leave_rc = "B-M27-SOL-T2E K-STN-CLEAR-ROUTE",
         },
         ["M27-SOL:2:E2"] = {
-            depint = "00;00;05;30",
-            depoff = "00;00;02;45",
+            depint = "00;00;15;00",
+            depoff = "00;00;00;00",
             delay = 60,
             reverse = false, -- marked as false explicitly to show train doesn't reverse at terminus unlike most other stations
             next = "eGRO:6:S2",
