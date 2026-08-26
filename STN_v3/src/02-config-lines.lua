@@ -221,6 +221,7 @@ F.stn_v3_lines["LIB-BAJ"] = {
             reverse = true,
             next = "eLIB:2:N1",
             dir = "W",
+            on_leave_rc = "J-SV_N-LIB-LIB B-eLIB-T2N K-STN-CLEAR-ROUTE",
         },
         ["eLIB:2:N1"] = {
             depint = "00;00;06;00",
@@ -229,6 +230,7 @@ F.stn_v3_lines["LIB-BAJ"] = {
             reverse = true,
             next = "BAJ:2B:E1",
             dir = "E",
+            on_leave_rc = "B-BAJ-T2BE K-STN-CLEAR-ROUTE",
         },
     }
 }
