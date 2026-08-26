@@ -207,11 +207,11 @@ F.stn_v3_lines["LIB-BAJ"] = {
     code = "LIB",
 
     name = {
-        "Libreland Shuttle",
+        "Libreland Line",
         "Libreland",
     },
     termini = {
-        W = "eLIB",
+        W = "SMV",
         E = "BAJ",
     },
 
@@ -224,10 +224,22 @@ F.stn_v3_lines["LIB-BAJ"] = {
             on_leave_rc = "J-SV_N-LIB-LIB B-eLIB-T2N K-STN-CLEAR-ROUTE",
         },
         ["eLIB:2:N1"] = {
-            depint = "00;00;06;00",
-            depoff = "00;00;01;00",
-            delay = 10,
+            delay = 30,
+            next = "SMV:2:N1",
+            dir = "W",
+            on_leave_rc = "B-SMV-T2N K-STN-CLEAR-ROUTE",
+        },
+        ["SMV:2:N1"] = {
+            -- depint = "00;00;06;00",
+            -- depoff = "00;00;01;00",
+            delay = 30,
+            next = "eLIB:1:S1",
             reverse = true,
+            dir = "E",
+            on_leave_rc = "B-eLIB-T1S K-STN-CLEAR-ROUTE",
+        },
+        ["eLIB:1:S1"] = {
+            delay = 30,
             next = "BAJ:2B:E1",
             dir = "E",
             on_leave_rc = "B-BAJ-T2BE K-STN-CLEAR-ROUTE",

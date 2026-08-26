@@ -171,6 +171,7 @@ F.station_names = {
         "Wemmbu",
     },
     SUG = "Sugidama",
+    SMV = "Smallville",
 
 
     -- Nordstetten
