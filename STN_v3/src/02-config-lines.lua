@@ -495,7 +495,7 @@ F.stn_v3_lines["S22"] = {
             delay = 15,
             next = "eOTH:2:S1",
             dir = "S",
-            on_leave_rc = "J-SV_N-GRO-GRO J-SV_N-WL-WL B-eOTH-T2S K-STN-CLEAR-ROUTE",
+            on_leave_rc = "J-SV_N-GRO-GRH J-SV_N-WL-WL B-eOTH-T2S K-STN-CLEAR-ROUTE",
         },
         ["eOTH:2:S1"] = {
             delay = 15,
