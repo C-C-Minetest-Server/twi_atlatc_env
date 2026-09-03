@@ -32,6 +32,9 @@ F.stn_v3_lines["GRH2"] = {
             delay = 10,
             next = "GRH:3:E1",
 
+            depint = "00;00;02;00",
+            depoff = "00;00;00;00",
+
             on_leave_rc = "B-GRH-T3E K-STN-CLEAR-ROUTE",
         },
         ["GRH:3:E1"] = {
