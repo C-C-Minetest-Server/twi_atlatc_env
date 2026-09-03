@@ -85,10 +85,6 @@ F.station_names = {
         "Grape Hls.",
     },
     SHI = "Shino",
-    SCC = {
-        "Scattered Cliff",
-        "Scat. Cliff",
-    },
     GRO = "Groma",
     KIH = "Kitkahood",
     DUI = {
