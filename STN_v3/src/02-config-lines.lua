@@ -68,7 +68,7 @@ F.stn_v3_lines["GRH2"] = {
         },
         ["GRH:2:W1"] = {
             dir = "W",
-            delay = 10,
+            delay = 30,
             next = "GRO:1:N1",
 
             on_leave_rc = "B-GRO-T1N K-STN-CLEAR-ROUTE",
