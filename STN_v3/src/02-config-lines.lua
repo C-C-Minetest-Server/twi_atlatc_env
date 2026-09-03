@@ -20,6 +20,7 @@ F.stn_v3_lines["GRH2"] = {
 
     stations = {
         ["DUI:1:N1"] = {
+            dir = "E",
             delay = 10,
             reverse = true,
             next = "GRO:2:S1",
@@ -27,24 +28,28 @@ F.stn_v3_lines["GRH2"] = {
             on_leave_rc = "B-GRO-T2S K-STN-CLEAR-ROUTE",
         },
         ["GRO:2:S1"] = {
+            dir = "E",
             delay = 10,
             next = "GRH:3:E1",
 
             on_leave_rc = "B-GRH-T3E K-STN-CLEAR-ROUTE",
         },
         ["GRH:3:E1"] = {
+            dir = "E",
             delay = 10,
             next = "SHI:2:E1",
 
             on_leave_rc = "B-SHI-T2E K-STN-CLEAR-ROUTE",
         },
         ["SHI:2:E1"] = {
+            dir = "E",
             delay = 10,
             next = "KIH:2:E1",
 
             on_leave_rc = "B-KIH-T2E K-STN-CLEAR-ROUTE",
         },
         ["KIH:2:E1"] = {
+            dir = "W",
             delay = 10,
             reverse = true,
             next = "SHI:3:W1",
@@ -52,18 +57,21 @@ F.stn_v3_lines["GRH2"] = {
             on_leave_rc = "B-SHI-T3W K-STN-CLEAR-ROUTE",
         },
         ["SHI:3:W1"] = {
+            dir = "W",
             delay = 10,
             next = "GRH:2:W1",
 
             on_leave_rc = "B-GRH-T2W K-STN-CLEAR-ROUTE",
         },
         ["GRH:2:W1"] = {
+            dir = "W",
             delay = 10,
             next = "GRO:1:N1",
 
             on_leave_rc = "B-GRO-T1N K-STN-CLEAR-ROUTE",
         },
         ["GRO:1:N1"] = {
+            dir = "W",
             delay = 10,
             next = "DUI:1:N1",
 
