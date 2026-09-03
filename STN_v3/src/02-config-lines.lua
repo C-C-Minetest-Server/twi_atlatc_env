@@ -4,6 +4,74 @@ F.stn_v3_lines = {}
 
 -- Grape Hills Subway
 
+F.stn_v3_lines["GRH2"] = {
+    rc = "L-GRH2",
+    code = "GRH2",
+    name = {
+        "Grape Hills Line 2",
+        "Grape Hills 2",
+        "GRH Line 2",
+        "GRH2",
+    },
+    termini = {
+        W = "DUI",
+        E = "KIH",
+    },
+
+    stations = {
+        ["DUI:1:N1"] = {
+            delay = 10,
+            reverse = true,
+            next = "GRO:2:S1",
+
+            on_leave_rc = "B-GRO-T2S K-STN-CLEAR-ROUTE",
+        },
+        ["GRO:2:S1"] = {
+            delay = 10,
+            next = "GRH:3:E1",
+
+            on_leave_rc = "B-GRH-T3E K-STN-CLEAR-ROUTE",
+        },
+        ["GRH:3:E1"] = {
+            delay = 10,
+            next = "SHI:2:E1",
+
+            on_leave_rc = "B-SHI-T2E K-STN-CLEAR-ROUTE",
+        },
+        ["SHI:2:E1"] = {
+            delay = 10,
+            next = "KIH:2:E1",
+
+            on_leave_rc = "B-KIH-T2E K-STN-CLEAR-ROUTE",
+        },
+        ["KIH:2:E1"] = {
+            delay = 10,
+            reverse = true,
+            next = "SHI:3:W1",
+
+            on_leave_rc = "B-SHI-T3W K-STN-CLEAR-ROUTE",
+        },
+        ["SHI:3:W1"] = {
+            delay = 10,
+            next = "GRH:2:W1",
+
+            on_leave_rc = "B-GRH-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["GRH:2:W1"] = {
+            delay = 10,
+            next = "GRO:1:N1",
+
+            on_leave_rc = "B-GRO-T1N K-STN-CLEAR-ROUTE",
+        },
+        ["GRO:1:N1"] = {
+            delay = 10,
+            next = "DUI:1:N1",
+
+            on_leave_rc = "B-DUI-T1N K-STN-CLEAR-ROUTE",
+        },
+    },
+}
+
 F.stn_v3_lines["GRH4"] = {
     rc = "L-GRH4",
     code = "GRH4",

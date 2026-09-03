@@ -252,30 +252,6 @@ F.lines["GRH1E-R-VFT"] = {
     },
 }
 
-F.lines["GRH2"] = {
-    rc = "L-GRH2",
-    name = "Grape Hills Line 2",
-    textline_name = "Grape Hills 2",
-    short_name = "GRH2",
-
-    W = "DUI",
-    E = "KIH",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "DUI", "1", true },
-        { "GRO", "2" },
-        { "SCC", "2" },
-        { "GRH", "3" },
-        { "SHI", "2" },
-        { "KIH", "2", true },
-        { "SHI", "3" },
-        { "GRH", "2" },
-        { "SCC", "1" },
-        { "GRO", "1" },
-    }),
-}
-
 F.lines["GRH3"] = {
     rc = "L-GRH3",
     name = "Grape Hills Line 3",
@@ -457,6 +433,15 @@ F.lines["SVL"] = {
     name = "SmushyVille Loop",
     textline_name = "SmushyVille Loop",
     short_name = "SmushyVille",
+}
+
+F.lines["GRH2"] = {
+    name = "Grape Hills Line 2",
+    textline_name = "Grape Hills 2",
+    short_name = "GRH2",
+
+    W = "DUI",
+    E = "KIH",
 }
 
 F.lines["GRH4"] = {
