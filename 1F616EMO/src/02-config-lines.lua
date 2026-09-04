@@ -167,105 +167,6 @@ F.lines["OAI"] = {
     }),
 }
 
--- Grape Hills Metro
-
-F.lines["GRH1"] = {
-    rc = "L-GRH1",
-    name = "Grape Hills Line 1",
-    textline_name = "Grape Hills 1",
-    short_name = "GRH1",
-
-    N = "SNL",
-    S = "VFT",
-
-    background_color = "#5555FF",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "SNL", "2", true },
-        { "SHI", "4" },
-        { "GRH", "4" },
-        { "CCB", "1" },
-        { "CED", "1" },
-        { "PIA", "1" },
-        { "VFT", "1", true },
-        { "PIA", "2" },
-        { "CED", "2" },
-        { "CCB", "4" },
-        { "GRH", "1" },
-        { "SHI", "1" },
-    }),
-}
-
-F.lines["GRH1E"] = {
-    rc = "L-GRH1E",
-    code = "GRH1",
-    name = "Grape Hills Line 1",
-    textline_name = "Grape Hills 1",
-    short_name = "GRH1",
-
-    N = "SNL",
-    S = "eOTH",
-
-    background_color = "#5555FF",
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "SNL",  "2", true },
-        { "SHI",  "4" },
-        { "GRH",  "4" },
-        { "CCB",  "1" },
-        { "CED",  "1" },
-        { "PIA",  "1" },
-        { "VFT",  "1" },
-        { "eOTH", "3", true },
-        { "VFT",  "2" },
-        { "PIA",  "2" },
-        { "CED",  "2" },
-        { "CCB",  "4" },
-        { "GRH",  "1" },
-        { "SHI",  "1" },
-    }),
-}
-
-F.lines["GRH1"].adjacent_stations["VFT:2"] = F.lines["GRH1"].adjacent_stations["VFT:1"]
-F.lines["GRH1"].adjacent_stations["eOTH:3"] = {}
-F.lines["GRH1"].adjacent_stations["eOTH:3"][#F.lines["GRH1"].adjacent_stations["eOTH:3"] + 1] = { "VFT", "2" }
-for _, entry in ipairs(F.lines["GRH1"].adjacent_stations["VFT:1"]) do
-    F.lines["GRH1"].adjacent_stations["eOTH:3"][#F.lines["GRH1"].adjacent_stations["eOTH:3"] + 1] = entry
-end
-
-F.lines["GRH1E-R-VFT"] = {
-    rc = "L-GRH1E-R-VFT",
-    code = "GRH1",
-    name = "Grape Hills Line 1",
-    textline_name = "Grape Hills 1",
-    short_name = "GRH1",
-
-    N = "SNL",
-    S = "eOTH",
-
-    background_color = "#5555FF",
-
-    adjacent_stations ={
-        ["VFT:1"] = F.lines["GRH1E"].adjacent_stations["VFT:2"],
-    },
-}
-
-F.lines["GRH3"] = {
-    rc = "L-GRH3",
-    name = "Grape Hills Line 3",
-    textline_name = "Grape Hills 3",
-    short_name = "GRH3",
-}
-
-F.lines["GRH4"] = {
-    rc = "L-GRH4",
-    name = "Grape Hills Line 4GRH4",
-    textline_name = "Grape Hills 4GRH4",
-    short_name = "GRH4",
-}
-
 -- Nordstetten Trams (Display only)
 
 F.lines["NO1"] = {
@@ -433,6 +334,17 @@ F.lines["SVL"] = {
     name = "SmushyVille Loop",
     textline_name = "SmushyVille Loop",
     short_name = "SmushyVille",
+}
+
+F.lines["GRH1"] = {
+    name = "Grape Hills Line 1",
+    textline_name = "Grape Hills 1",
+    short_name = "GRH1",
+
+    N = "SNL",
+    S = "VFT",
+
+    background_color = "#5555FF",
 }
 
 F.lines["GRH2"] = {
