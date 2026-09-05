@@ -4,6 +4,112 @@ F.stn_v3_lines = {}
 
 -- Grape Hills Subway
 
+F.stn_v3_lines["GRH1"] = {
+    rc = "L-GRH1",
+    code = "GRH1",
+    name = {
+        "Grape Hills Line 1",
+        "Grape Hills 1",
+        "GRH Line 1",
+        "GRH1",
+    },
+    termini = {
+        N = "SNL",
+        S = "VFT",
+        S_EXT = "OTH",
+    },
+
+    stations = {
+        ["SNL:2:N1"] = {
+            dir = "S",
+            reverse = true,
+            delay = 10,
+            next = "SHI:4:W1",
+
+            on_leave_rc = "B-SHI-T4W K-STN-CLEAR-ROUTE",
+        },
+        ["SHI:4:W1"] = {
+            dir = "S",
+            delay = 10,
+            next = "GRH:4:W1"
+        },
+        ["GRH:4:W1"] = {
+            dir = "S",
+            delay = 10,
+            next = "CCB:1:S1",
+
+            on_leave_rc = "B-CCB-T1S K-STN-CLEAR-ROUTE",
+        },
+        ["CCB:1:S1"] = {
+            dir = "S",
+            delay = 10,
+            next = "CED:1:E1",
+
+            on_leave_rc = "B-CED-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["CED:1:E1"] = {
+            dir = "S",
+            delay = 10,
+            next = "PIA:1:E1",
+
+            on_leave_rc = "B-PIA-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["PIA:1:E1"] = {
+            dir = "S",
+            delay = 10,
+            next = "VFT:1:E1",
+
+            on_leave_rc = "B-VFT-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["VFT:1:E1"] = {
+            dir = "N",
+            reverse = true, -- false for branching
+            delay = 10,
+            next = "PIA:2:W1", -- "eOTH:3:e1" for branching
+
+            on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
+            -- branching: J-SV_N-WL-WL B-eOTH-T3e
+        },
+        ["PIA:2:W1"] = {
+            dir = "N",
+            delay = 10,
+            next = "CED:2:W1",
+
+            on_leave_rc = "B-CED-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["CED:2:W1"] = {
+            dir = "N",
+            delay = 10,
+            next = "SHI:1:W1",
+
+            on_leave_rc = "B-GRH-T1W K-STN-CLEAR-ROUTE",
+        },
+        ["SHI:1W1"] = {
+            dir = "N",
+            delay = 10,
+            next = "SNL:2:N1",
+
+            on_leave_rc = "B-SNL-T2N K-STN-CLEAR-ROUTE",
+        },
+
+        -- Entry exclusively for branching operations
+        ["eOTH:3:e1"] = {
+            dir = "N",
+            delay = 10,
+            next = "VFT:2:W1",
+
+            on_leave_rc = "J-SV_N-WL-VFT B-VFT-T2W",
+        },
+        ["VFT:2:W1"] = {
+            dir = "N",
+            delay = 10,
+            next = "PIA:2:W1",
+
+            on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
+        },
+    },
+}
+
 F.stn_v3_lines["GRH2"] = {
     rc = "L-GRH2",
     code = "GRH2",
