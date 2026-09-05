@@ -67,6 +67,9 @@ F.stn_v3_lines["GRH1"] = {
             delay = 10,
             next = "PIA:2:W1", -- "eOTH:3:e1" for branching
 
+            depint = "00;00;02;00",
+            depoff = "00;00;00;00",
+
             on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
             -- branching: J-SV_N-WL-WL B-eOTH-T3e
         },
@@ -116,6 +119,9 @@ F.stn_v3_lines["GRH1"] = {
             dir = "N",
             delay = 10,
             next = "PIA:2:W1",
+
+            depint = "00;00;02;00",
+            depoff = "00;00;00;00",
 
             on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
         },
