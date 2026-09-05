@@ -80,11 +80,23 @@ F.stn_v3_lines["GRH1"] = {
         ["CED:2:W1"] = {
             dir = "N",
             delay = 10,
-            next = "SHI:1:W1",
+            next = "CCB:4:N1",
 
-            on_leave_rc = "B-GRH-T1W K-STN-CLEAR-ROUTE",
+            on_leave_rc = "B-CCB-T4N K-STN-CLEAR-ROUTE",
         },
-        ["SHI:1W1"] = {
+        ["CCB:4:N1"] = {
+            dir = "S",
+            delay = 10,
+            next = "GRH:1:E1",
+
+            on_leave_rc = "B-GRH-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["GRH:1:E1"] = {
+            dir = "S",
+            delay = 10,
+            next = "SHI:1:E1",
+        },
+        ["SHI:1:E1"] = {
             dir = "N",
             delay = 10,
             next = "SNL:2:N1",
