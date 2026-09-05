@@ -87,6 +87,15 @@ function F.stn_v3(params)
             train:set_rc(table.concat(rc_keep, " "))
         end
 
+        -- Calculate dynamic station definitions
+        -- func(train: train, arrival_time: rwt?, estimated: bool)
+        if type(station_def) == "function" then
+            station_def = station_def(train, rwt.now(), false)
+        end
+
+        assert(type(station_def) == "table")
+        S.station_defs_for_trains[atc_id] = station_def
+
         local atc = "B0W"
 
         if params.door_dir ~= "C" then
@@ -124,6 +133,9 @@ function F.stn_v3(params)
         train:set_text_inside(F.get_internal_display(line_id, params.station_id, time_str))
 
         local train_dir = station_def.dir
+        if type(train_dir) == "function" then
+            train_dir = train_dir(train)
+        end
         local terminus_id = line_def.termini[train_dir]
         local terminus_name = F.station_names[terminus_id] or terminus_id
         local no_to_prefix = line_def.no_to_prefix
@@ -153,6 +165,7 @@ function F.stn_v3(params)
         })
         F.send_train_to_pis_v3(atc_id)
     elseif type(event.msg) == "table" and event.msg.src == "F.stn_v3" then
+        station_def = S.station_defs_for_trains[atc_id]
         if not station_def then
             atc_set_text_inside("Station track misconfigured. Contact railway operator.")
             atc_set_text_outside("Station track misconfigured. Contact railway operator.")
@@ -205,6 +218,8 @@ function F.stn_v3(params)
                 F.add_train_to_track(atc_id, line_id, train:get_max_speed(), station_def.next)
                 F.register_train_on_checkpont(atc_id, point_id)
                 F.send_train_to_pis_v3(atc_id)
+
+                S.station_defs_for_trains[atc_id] = nil
             else
                 train:set_text_inside(F.get_internal_display(line_id, params.station_id, "Waiting for train ahead..."))
                 interrupt(1, {

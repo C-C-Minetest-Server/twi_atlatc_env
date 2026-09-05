@@ -16,6 +16,11 @@ S.time_from_checkpoint_to_trackpoint = S.time_from_checkpoint_to_trackpoint or {
 --     !POS:x:y:z -> time in second
 F.running_trains_data = {}
 
+-- Saves station definitions for dynamic defs and in case defs are removed
+if type(S.station_defs_for_trains) ~= "table" then
+    S.station_defs_for_trains = {}
+end
+
 -- Add the train to the track. Does NOT add initial checkpoints.
 -- Usually called at station tracks. F.register_train_on_checkpont is most probably
 -- called subsequently to register the leaving station as a checkpoint.
@@ -84,4 +89,5 @@ end
 -- Removed the train, when e.g. it enters a depot or othewise instructed so
 function F.deregister_train(atc_id)
     F.running_trains_data[atc_id] = nil
+    S.station_defs_for_trains[atc_id] = nil
 end
