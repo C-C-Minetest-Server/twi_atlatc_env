@@ -4,6 +4,47 @@ F.stn_v3_lines = {}
 
 -- Grape Hills Subway
 
+local GRH1_VFT_NORM = {
+    dir = "N",
+    reverse = true,
+    delay = 10,
+    next = "PIA:2:W1",
+
+    depint = "00;00;02;00",
+    depoff = "00;00;00;00",
+
+    on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
+}
+
+local GRH1_VFT_EXT = {
+    dir = "S_EXT",
+    delay = 10,
+    next = "eOTH:3:e1",
+
+    depint = "00;00;02;00",
+    depoff = "00;00;00;00",
+
+    on_leave_rc = "J-SV_N-WL-WL B-eOTH-T3e",
+}
+
+local grh1_eta_branchcheck = function(vft_eta)
+    local regular_etd = rwt.next_rpt(rwt.add(vft_eta, 10), "00;00;02;00", "00;00;00;00")
+    local extended_etd = rwt.next_rpt(rwt.add(vft_eta, 10), "00;00;06;00", "00;00;00;00")
+
+    if rwt.t_sec(regular_etd) == rwt.t_sec(extended_etd) then
+        -- Extended service every 6 minutes
+        return "S_EXT"
+    end
+
+    return "S"
+end
+
+local grh1_s_dircheck = function(train)
+    local train_id = train:get_id()
+    local vft_eta = F.get_train_arrival_time_at(train_id, "VFT:1:E1")
+    return vft_eta and grh1_eta_branchcheck(vft_eta) or "S"
+end
+
 F.stn_v3_lines["GRH1"] = {
     rc = "L-GRH1",
     code = "GRH1",
@@ -16,12 +57,12 @@ F.stn_v3_lines["GRH1"] = {
     termini = {
         N = "SNL",
         S = "VFT",
-        S_EXT = "OTH",
+        S_EXT = "eOTH",
     },
 
     stations = {
         ["SNL:2:N1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             reverse = true,
             delay = 10,
             next = "SHI:4:W1",
@@ -29,50 +70,50 @@ F.stn_v3_lines["GRH1"] = {
             on_leave_rc = "B-SHI-T4W K-STN-CLEAR-ROUTE",
         },
         ["SHI:4:W1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             delay = 10,
             next = "GRH:4:W1"
         },
         ["GRH:4:W1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             delay = 10,
             next = "CCB:1:S1",
 
             on_leave_rc = "B-CCB-T1S K-STN-CLEAR-ROUTE",
         },
         ["CCB:1:S1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             delay = 10,
             next = "CED:1:E1",
 
             on_leave_rc = "B-CED-T1E K-STN-CLEAR-ROUTE",
         },
         ["CED:1:E1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             delay = 10,
             next = "PIA:1:E1",
 
             on_leave_rc = "B-PIA-T1E K-STN-CLEAR-ROUTE",
         },
         ["PIA:1:E1"] = {
-            dir = "S",
+            dir = grh1_s_dircheck,
             delay = 10,
             next = "VFT:1:E1",
 
             on_leave_rc = "B-VFT-T1E K-STN-CLEAR-ROUTE",
         },
-        ["VFT:1:E1"] = {
-            dir = "N",
-            reverse = true, -- false for branching
-            delay = 10,
-            next = "PIA:2:W1", -- "eOTH:3:e1" for branching
+        ["VFT:1:E1"] = function(train, arrival_time, estimated)
+            if not arrival_time then
+                if estimated then return end
+                return GRH1_VFT_NORM
+            end
 
-            depint = "00;00;02;00",
-            depoff = "00;00;00;00",
+            if grh1_eta_branchcheck(arrival_time) == "S_EXT" then
+                return GRH1_VFT_EXT
+            end
 
-            on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
-            -- branching: J-SV_N-WL-WL B-eOTH-T3e
-        },
+            return GRH1_VFT_NORM
+        end,
         ["PIA:2:W1"] = {
             dir = "N",
             delay = 10,
@@ -120,7 +161,7 @@ F.stn_v3_lines["GRH1"] = {
             delay = 10,
             next = "PIA:2:W1",
 
-            depint = "00;00;02;00",
+            depint = "00;00;06;00",
             depoff = "00;00;00;00",
 
             on_leave_rc = "B-PIA-T2W K-STN-CLEAR-ROUTE",
