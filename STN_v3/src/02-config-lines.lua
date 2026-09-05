@@ -151,7 +151,7 @@ F.stn_v3_lines["GRH1"] = {
         -- Entry exclusively for branching operations
         ["eOTH:3:e1"] = {
             dir = "N",
-            delay = 10,
+            delay = 90,
             next = "VFT:2:W1",
 
             on_leave_rc = "J-SV_N-WL-VFT B-VFT-T2W",
