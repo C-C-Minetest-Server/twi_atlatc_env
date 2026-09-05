@@ -129,14 +129,14 @@ F.stn_v3_lines["GRH1"] = {
             on_leave_rc = "B-CCB-T4N K-STN-CLEAR-ROUTE",
         },
         ["CCB:4:N1"] = {
-            dir = "S",
+            dir = "N",
             delay = 10,
             next = "GRH:1:E1",
 
             on_leave_rc = "B-GRH-T1E K-STN-CLEAR-ROUTE",
         },
         ["GRH:1:E1"] = {
-            dir = "S",
+            dir = "N",
             delay = 10,
             next = "SHI:1:E1",
         },
