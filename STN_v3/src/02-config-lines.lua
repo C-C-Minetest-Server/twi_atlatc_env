@@ -152,6 +152,7 @@ F.stn_v3_lines["GRH1"] = {
         ["eOTH:3:e1"] = {
             dir = "N",
             delay = 90,
+            reverse = true,
             next = "VFT:2:W1",
 
             on_leave_rc = "J-SV_N-WL-VFT B-VFT-T2W",
