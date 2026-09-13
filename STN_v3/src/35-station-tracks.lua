@@ -167,8 +167,8 @@ function F.stn_v3(params)
     elseif type(event.msg) == "table" and event.msg.src == "F.stn_v3" then
         station_def = S.station_defs_for_trains[atc_id]
         if not station_def then
-            atc_set_text_inside("Station track misconfigured. Contact railway operator.")
-            atc_set_text_outside("Station track misconfigured. Contact railway operator.")
+            atc_set_text_inside("[E-1001] Station track misconfigured. Contact railway operator.")
+            atc_set_text_outside("[E-1001] Station track misconfigured. Contact railway operator.")
             return
         end
 
@@ -194,12 +194,52 @@ function F.stn_v3(params)
             local checkpoints = train:get_lzb_checkpoints()
             local first_checkpoint = checkpoints and checkpoints[1]
             if first_checkpoint == nil or first_checkpoint.speed ~= 0 then
+                local next_line_id = line_id
+                if station_def.through_run_to and station_def.through_run_to ~= line_id then
+                    next_line_id = station_def.through_run_to
+
+                    local next_line_def = F.stn_v3_lines[next_line_id]
+                    if
+                        not next_line_def
+                        or not next_line_def.stations
+                        or not next_line_def.stations[station_def.next]
+                    then
+                        atc_set_text_inside("[E-1002] Station track misconfigured. Contact railway operator.")
+                        atc_set_text_outside("[E-1002] Station track misconfigured. Contact railway operator.")
+                        return
+                    end
+
+                    -- Routing code
+
+                    local rc_list = F.get_rc_list(train:get_rc())
+
+                    if line_def.rc then
+                        local rc_keep = {}
+                        for _, rc in ipairs(rc_list) do
+                            if rc ~= line_def.rc then
+                                rc_keep[#rc_keep + 1] = rc
+                            end
+                        end
+                        rc_list = rc_keep
+                    end
+
+                    if next_line_def.rc then
+                        rc_list[#rc_list + 1] = next_line_def.rc
+                    end
+
+                    train:set_rc(table.concat(rc_list, " "))
+
+                    -- Line number
+
+                    train:set_line(next_line_def.line or "")
+                end
+
                 train:atc_send("OCD1A1SM")
 
                 local next_track_id = station_def.next
                 local next_track_id_parts = string_split(next_track_id, ":")
                 local next_station_id = next_track_id_parts[1]
-                train:set_text_inside("Next station: " .. F.get_internal_display(line_id, next_station_id))
+                train:set_text_inside("Next station: " .. F.get_internal_display(next_line_id, next_station_id))
 
                 -- In case there are no PIS data yet, do not show "leave now" forever
                 interrupt_pos(PIS_V3_EXT_INT_POS, {
@@ -215,7 +255,7 @@ function F.stn_v3(params)
                     track_id = params.track_id,
                 })
 
-                F.add_train_to_track(atc_id, line_id, train:get_max_speed(), station_def.next)
+                F.add_train_to_track(atc_id, next_line_id, train:get_max_speed(), station_def.next)
                 F.register_train_on_checkpont(atc_id, point_id)
                 F.send_train_to_pis_v3(atc_id)
 

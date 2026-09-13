@@ -84,6 +84,7 @@ function F.list_train_arrival_times(atc_id)
         end
 
         times_to_stations[station_pointer][2] = station_def
+        times_to_stations[station_pointer][3] = line_id
 
         if station_def.depoff and station_def.depint then
             local door_time = line_def.delay or 5
@@ -98,6 +99,17 @@ function F.list_train_arrival_times(atc_id)
 
         latest_checkpoint = station_pointer
         station_pointer = station_def.next
+
+        if station_def.through_run_to then
+            line_id = station_def.through_run_to
+            line_def = F.stn_v3_lines[line_id]
+
+            if not line_def then
+                break
+            end
+
+            line_stations = line_def and line_def.stations
+        end
     until station_pointer == dest
 
     train_data.times_to_stations = times_to_stations
@@ -119,63 +131,59 @@ function F.send_train_to_pis_v3(atc_id)
     if not train then return end
 
     local train_data = F.running_trains_data[atc_id]
-    local line_id = train_data and train_data.line_id
-    local line_def = F.stn_v3_lines[line_id]
-    local line_stations = line_def and line_def.stations
-
-    if not line_stations then return false end
 
     local arrival_times = F.list_train_arrival_times(atc_id)
     local send_batch = {}
 
     for track_key, data in pairs(arrival_times) do
-        local eta, line_station_def = data[1], data[2]
-        if not line_station_def then
-            -- "It is not yet the time" to calculate anything onwards
-            break
+        local eta, line_station_def, line_id = data[1], data[2], data[3]
+        local line_def = F.stn_v3_lines[line_id]
+
+        if line_station_def and line_def then
+            -- If false: "It is not yet the time" to calculate anything onwards
+
+            -- Discard point_id (track_key_components[3]), PIS doesn't care where exactly we stop
+            local track_key_components = string_split(track_key, ":")
+            local station_id, track_id = track_key_components[1], track_key_components[2]
+
+            local line_code = line_def.code or string.sub(line_id, 1, 4)
+            local line_name = line_def.name or line_id
+            local line_color = line_def.color
+            local line_background_color = line_def.background_color
+
+            local dir_code = line_station_def.dir
+            if type(dir_code) == "function" then
+                dir_code = dir_code(train)
+            end
+            local term_code = line_def.termini[dir_code]
+            local heading_to = F.station_names[term_code] or term_code
+
+            local no_to_prefix = line_def.no_to_prefix
+            local is_approaching = track_key == train_data.dest and train_data.is_approaching
+
+            send_batch[#send_batch + 1] = {
+                type = "update_train",
+
+                source_id = "F.send_train_to_pis_v3 " .. atc_id .. " (" ..
+                    atc_pos.x .. "," .. atc_pos.y .. "," .. atc_pos.z .. ")",
+
+                atc_id = atc_id,
+                train_status = is_approaching and "approaching" or "arriving",
+
+                station_id = station_id,
+                track_id = track_id,
+
+                line_code = line_code,
+                line_name = line_name,
+                line_color = line_color,
+                line_background_color = line_background_color,
+                heading_to = heading_to,
+                no_to_prefix = no_to_prefix,
+                direction_code = dir_code,
+
+                estimated_time = eta,
+            }
         end
-
-        -- Discard point_id (track_key_components[3]), PIS doesn't care where exactly we stop
-        local track_key_components = string_split(track_key, ":")
-        local station_id, track_id = track_key_components[1], track_key_components[2]
-
-        local line_code = line_def.code or string.sub(line_id, 1, 4)
-        local line_name = line_def.name or line_id
-        local line_color = line_def.color
-        local line_background_color = line_def.background_color
-
-        local dir_code = line_station_def.dir
-        if type(dir_code) == "function" then
-            dir_code = dir_code(train)
-        end
-        local term_code = line_def.termini[dir_code]
-        local heading_to = F.station_names[term_code] or term_code
-
-        local no_to_prefix = line_def.no_to_prefix
-        local is_approaching = track_key == train_data.dest and train_data.is_approaching
-
-        send_batch[#send_batch + 1] = {
-            type = "update_train",
-
-            source_id = "F.send_train_to_pis_v3 " .. atc_id .. " (" ..
-                atc_pos.x .. "," .. atc_pos.y .. "," .. atc_pos.z .. ")",
-
-            atc_id = atc_id,
-            train_status = is_approaching and "approaching" or "arriving",
-
-            station_id = station_id,
-            track_id = track_id,
-
-            line_code = line_code,
-            line_name = line_name,
-            line_color = line_color,
-            line_background_color = line_background_color,
-            heading_to = heading_to,
-            no_to_prefix = no_to_prefix,
-            direction_code = dir_code,
-
-            estimated_time = eta,
-        }
     end
 
     interrupt_pos(PIS_V3_EXT_INT_POS, {
