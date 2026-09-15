@@ -94,6 +94,13 @@ function F.stn_v3(params)
         end
 
         assert(type(station_def) == "table")
+        station_def = F.table_copy_shallow(station_def)
+
+        if type(station_def.dir) == "function" then
+            station_def.dir = station_def.dir(train)
+        end
+        assert(type(station_def.dir) == "string")
+
         S.station_defs_for_trains[atc_id] = station_def
 
         local atc = "B0W"

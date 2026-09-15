@@ -31,6 +31,16 @@ local function string_split(str, delim, include_empty, max_splits, sep_is_patter
     return items
 end
 
+F.table_copy_shallow = function(src)
+    local dst = {}
+
+    for k, v in pairs(src) do
+        dst[k] = v
+    end
+
+    return dst
+end
+
 F.get_rc_list = function(rc)
     rc = rc or F.get_rc_safe()
     return string_split(rc, " ")
