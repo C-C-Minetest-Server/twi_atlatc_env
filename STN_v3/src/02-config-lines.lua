@@ -303,7 +303,9 @@ F.stn_v3_lines["ISL"] = {
 
     stations = {
         ["SPN:3:W1"] = {
-            delay = 10,
+            depint = "00;00;02;00",
+            depoff = "00;00;00;00",
+            delay = 5,
             reverse = true,
 
             next = "ISN:1:E1",
