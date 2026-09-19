@@ -285,6 +285,113 @@ F.stn_v3_lines["GRH4"] = {
     },
 }
 
+-- Origin and Acacia Plains Metro
+
+F.stn_v3_lines["ISL"] = {
+    rc = "L-ISL",
+
+    code = "ISL",
+    name = {
+        "Origin Metro: Islands Line",
+        "Islands Line",
+        "Islands",
+    },
+    termini = {
+        E = "ACP",
+        W = "SPN",
+    },
+
+    stations = {
+        ["SPN:3:W1"] = {
+            delay = 10,
+            reverse = true,
+
+            next = "ISN:1:E1",
+            dir = "E",
+
+            on_leave_rc = "B-ISN-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["ISN:1:E1"] = {
+            delay = 10,
+
+            next = "FRI:1:E1",
+            dir = "E",
+
+            on_leave_rc = "B-FRI-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["FRI:1:E1"] = {
+            delay = 10,
+
+            next = "SCL:1:E1",
+            dir = "E",
+
+            on_leave_rc = "B-SCL-T1E K-STN-CLEAR-ROUTE",
+        },
+        ["SCL:1:E1"] = {
+            delay = 10,
+
+            next = "ACP:1:E1",
+            dir = "E",
+
+            through_run_to = "CEN",
+            on_leave_rc = "B-ACP-T1E K-STN-CLEAR-ROUTE",
+        },
+        -- ["ACP:1:E1"] = CEN,
+        ["SCL:2:W1"] = {
+            delay = 10,
+
+            next = "FRI:2:W1",
+            dir = "W",
+
+            on_leave_rc = "B-FRI-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["FRI:2:W1"] = {
+            delay = 10,
+
+            next = "ISN:2:W1",
+            dir = "W",
+
+            on_leave_rc = "B-ISN-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["ISN:2:W1"] = {
+            delay = 10,
+
+            next = "SPN:3:W1",
+            dir = "W",
+
+            on_leave_rc = "B-SPN-T3W K-STN-CLEAR-ROUTE",
+        },
+    }
+}
+
+F.stn_v3_lines["CEN"] = {
+    rc = "L-CEN",
+
+    code = "CEN",
+    name = {
+        "Acacia Plains Railway: Central Line",
+        "Central Line",
+        "Central",
+    },
+    termini = {
+        E = "ACP",
+        W = "SPN",
+    },
+
+    stations = {
+        ["ACP:1:E1"] = {
+            delay = 10,
+            reverse = true,
+
+            next = "SCL:2:W1",
+            dir = "W",
+
+            through_run_to = "ISL",
+            on_leave_rc = "B-SCL-T2W K-STN-CLEAR-ROUTE",
+        },
+    }
+}
+
 --[[
 eGRO-related lines:
 NX: 3 trains, interval 6 minutes, offset 1 minute

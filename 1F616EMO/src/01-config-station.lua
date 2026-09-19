@@ -295,9 +295,9 @@ F.pseudo_station_names = {
 }
 
 F.station_interchange = {
-    SPN = { "SPN", "U1", },
-    ISN = { "S1", "U1", },
-    FRI = { "U1", "RXIC", },
+    SPN = { "SPN", "ISL", },
+    ISN = { "S1", "ISL", },
+    FRI = { "ISL", "RXIC", },
     SPS = { "S1", "SPN", },
     HAI = { "S1", "NO1", "RXIC", },
     ALF = { "SPN", "ALFC", },

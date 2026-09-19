@@ -21,33 +21,6 @@ F.lines = {}
 
 -- Origin Metro
 
-F.lines["U1"] = {
-    -- RC L-U1
-    -- was: Spawn Subway Line 1
-    -- was: Spawn Metro: Islands Line
-    rc = "L-U1",
-    code = "ISL",
-    name = "Origin Metro: Islands Line",
-    textline_name = "Islands Line",
-    short_name = "Islands",
-    W = "SPN",
-    E = "ACP",
-    through_E = "CEN",
-
-    -- Shared with CEN
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point, line_id if different
-        { "SPN", "3", true,  "U1" },
-        { "ISN", "1", false, "U1" },
-        { "FRI", "1", false, "U1" },
-        { "SCL", "1", false, "U1" },
-        { "ACP", "1", true,  "CEN" },
-        { "SCL", "2", false, "U1" },
-        { "FRI", "2", false, "U1" },
-        { "ISN", "2", false, "U1" },
-    }),
-}
-
 F.lines["S1"] = {
     -- RC L-S1
     -- was: S1
@@ -136,18 +109,6 @@ F.lines["CSL"] = {
         { "SHV", "2" },
         { "SDS", "4" },
     }),
-}
-
-F.lines["CEN"] = {
-    rc = "L-U1",
-    name = "Acacia Plains Railway: Central Line",
-    textline_name = "Central Line",
-    short_name = "Central",
-    through_W = "U1",
-    E = F.lines["U1"].E,
-    W = F.lines["U1"].W,
-
-    adjacent_stations = F.lines["U1"].adjacent_stations,
 }
 
 F.lines["OAI"] = {
@@ -334,6 +295,26 @@ F.lines["SVL"] = {
     name = "SmushyVille Loop",
     textline_name = "SmushyVille Loop",
     short_name = "SmushyVille",
+}
+
+F.lines["ISL"] = {
+    -- code was: U1
+    -- was: Spawn Subway Line 1
+    -- was: Spawn Metro: Islands Line
+    code = "ISL",
+    name = "Origin Metro: Islands Line",
+    textline_name = "Islands Line",
+    short_name = "Islands",
+    W = "SPN",
+    E = "ACP",
+}
+
+F.lines["CEN"] = {
+    name = "Acacia Plains Railway: Central Line",
+    textline_name = "Central Line",
+    short_name = "Central",
+    W = "SPN",
+    E = "ACP",
 }
 
 F.lines["GRH1"] = {
