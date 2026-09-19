@@ -25,6 +25,8 @@ local GRH1_VFT_EXT = {
     depoff = "00;00;00;00",
 
     on_leave_rc = "J-SV_N-WL-WL B-eOTH-T3e",
+
+    via_dest = true,
 }
 
 local grh1_eta_branchcheck = function(vft_eta)
@@ -398,6 +400,8 @@ F.stn_v3_lines["OEX"] = {
             delay = 30,
             next = "HR-NEN:2:S1",
             dir = "E",
+
+            via_dest = true,
         },
         ["HR-NEN:2:S1"] = {
             delay = 30,
@@ -409,6 +413,8 @@ F.stn_v3_lines["OEX"] = {
             delay = 30,
             next = "eGRO:3:N1",
             dir = "W",
+
+            via_dest = true,
         },
     },
 }
