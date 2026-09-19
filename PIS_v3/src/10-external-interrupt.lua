@@ -123,6 +123,10 @@ function F.validate_train_event(data)
                     return false, "data.heading_to"
                 end
 
+                if data.via ~= nil and not F.validate_variable_length_string(data.via) then
+                    return false, "data.via"
+                end
+
                 if data.no_to_prefix ~= nil and type(data.no_to_prefix) ~= "boolean" then
                     return false, "data.no_to_prefix"
                 end
@@ -184,6 +188,7 @@ function F.register_train_event(data)
                 line_color = data.line_color,
                 line_background_color = data.line_background_color,
                 heading_to = data.heading_to,
+                via = data.via,
                 direction_code = data.direction_code,
                 no_to_prefix = data.no_to_prefix,
                 estimated_time = rwt_copy(data.estimated_time),

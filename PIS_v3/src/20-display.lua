@@ -44,10 +44,14 @@ function F.get_pis_single_line(def)
     if line_name and heading_to then
         lines[#lines + 1] = F.handle_variable_length_string(line_name, 26)
 
-        if train_coming_data.no_to_prefix then
-            lines[#lines + 1] = F.handle_variable_length_string(heading_to, 26)
+        if train_coming_data.via and os.time() % 10 < 5 then
+            lines[#lines + 1] = "via " .. F.handle_variable_length_string(train_coming_data.via, 22)
         else
-            lines[#lines + 1] = "To " .. F.handle_variable_length_string(heading_to, 23)
+            if train_coming_data.no_to_prefix then
+                lines[#lines + 1] = F.handle_variable_length_string(heading_to, 26)
+            else
+                lines[#lines + 1] = "To " .. F.handle_variable_length_string(heading_to, 23)
+            end
         end
 
         if train_coming_data and train_coming_data.estimated_time then
@@ -106,9 +110,15 @@ function F.get_pis_multi_line(def)
                 station_name_length = station_name_length + 5
             end
 
+            local heading_to
+            if train_data.via and os.time() % 10 < 5 then
+                heading_to = "via " .. F.handle_variable_length_string(train_data.via, station_name_length - 4)
+            else
+                heading_to = F.handle_variable_length_string(train_data.heading_to, station_name_length)
+            end
+
             lines[#lines + 1] = line_code_display ..
-                string.format("%-" .. station_name_length .. "s",
-                    F.handle_variable_length_string(train_data.heading_to, station_name_length)) ..
+                string.format("%-" .. station_name_length .. "s", heading_to) ..
                 " " .. arrive_time_string
 
             if not lines[3] and train_data.train_status == "approaching" and not def.no_current_train then
@@ -180,7 +190,6 @@ function F.get_status_textline_line(def)
         F.pis_list_of_trains[track_key] and F.pis_list_of_trains[track_key][train_coming_id] or nil
 
     local line_code = train_coming_data and train_coming_data.line_code or def.line_code or nil
-    local heading_to = train_coming_data and train_coming_data.heading_to or def.heading_to or nil
 
     if not line_code then
         disp = disp .. " Not in service"
@@ -190,8 +199,17 @@ function F.get_status_textline_line(def)
     local eta = train_coming_data and train_coming_data.estimated_time
     local append_text = eta
         and ((train_coming_data.train_status == "stopped" and " D." or " ") .. F.rwt_to_string_minutes(eta)) or ""
+
+    local heading_to
+    if train_coming_data and train_coming_data.via and os.time() % 10 < 5 then
+        heading_to = "via " .. F.handle_variable_length_string(train_coming_data.via, 26 - #disp - #append_text - 4)
+    else
+        local heading_to_raw = train_coming_data and train_coming_data.heading_to or def.heading_to or ""
+        heading_to = F.handle_variable_length_string(heading_to_raw, 26 - #disp - #append_text)
+    end
+
     disp = disp .. (#line_code < 4 and " " or "") .. string.format("%-3s", line_code) .. " "
-    disp = disp .. F.handle_variable_length_string(heading_to or "", 26 - #disp - #append_text)
+    disp = disp .. heading_to
     disp = string.format("%-" .. (26 - #append_text) ..  "s", disp) .. append_text
 
     return disp

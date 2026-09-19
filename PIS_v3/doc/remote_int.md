@@ -99,6 +99,7 @@ The `estimated_time` parameter should be a railway time object of the time the t
     line_color = 0x000000,
     line_background_color = 0xFFFFFF,
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
+    via = nil / "<via station name>" / { "<longer name>", "<shorter name>" },
     no_to_prefix = false,
     direction_code = "<direction code>",
 
@@ -140,6 +141,7 @@ The `estimated_time` parameter should be a railway time object of the time the t
     line_code = "<line code>",
     line_name = "<line name>",
     heading_to = "<station name>" / { "<longer name>", "<shorter name>" },
+    via = nil / "<via station name>" / { "<longer name>", "<shorter name>" },
     no_to_prefix = false,
     direction_code = "<direction code>",
 
