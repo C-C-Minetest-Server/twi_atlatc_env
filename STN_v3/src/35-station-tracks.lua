@@ -234,6 +234,14 @@ function F.stn_v3(params)
                 train:set_rc(rc)
             end
 
+            if station_def.through_run_to and station_def.through_run_to ~= line_id then
+                if not F.swap_train_route(train, station_def.next, line_id, station_def.through_run_to) then
+                    atc_set_text_inside("[E-1002] Station track misconfigured. Contact railway operator.")
+                    atc_set_text_outside("[E-1002] Station track misconfigured. Contact railway operator.")
+                    return
+                end
+            end
+
             if station_def.reverse then
                 train:atc_send("BBWRA1")
             else
@@ -249,20 +257,10 @@ function F.stn_v3(params)
             local checkpoints = train:get_lzb_checkpoints()
             local first_checkpoint = checkpoints and checkpoints[1]
             if first_checkpoint == nil or first_checkpoint.speed ~= 0 then
-                local next_line_id = line_id
-                local next_track_id = station_def.next
-                if station_def.through_run_to and station_def.through_run_to ~= line_id then
-                    next_line_id = station_def.through_run_to
-
-                    if not F.swap_train_route(train, next_track_id, line_id, next_line_id) then
-                        atc_set_text_inside("[E-1002] Station track misconfigured. Contact railway operator.")
-                        atc_set_text_outside("[E-1002] Station track misconfigured. Contact railway operator.")
-                        return
-                    end
-                end
-
                 train:atc_send("OCD1A1SM")
 
+                local next_line_id = station_def.through_run_to or line_id
+                local next_track_id = station_def.next
                 local next_track_id_parts = string_split(next_track_id, ":")
                 local next_station_id = next_track_id_parts[1]
                 train:set_text_inside("Next station: " .. F.get_internal_display(next_line_id, next_station_id))
