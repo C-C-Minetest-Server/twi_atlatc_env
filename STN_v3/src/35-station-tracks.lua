@@ -27,6 +27,54 @@ function F.track_match_train(point_id, train)
     return
 end
 
+function F.swap_train_route(train, next_pt, old_id, new_id)
+    if old_id == new_id then
+        return true
+    end
+
+    local old_def = F.stn_v3_lines[old_id]
+    local new_def = F.stn_v3_lines[new_id]
+
+    if not (
+        (old_def and new_def)
+        and (new_def.line or new_def.rc)
+        and (new_def.stations and new_def.stations[next_pt])
+    ) then
+        return false
+    end
+
+    if not new_def.line and not new_def.rc then
+        return false
+    end
+
+    local line = train:get_line()
+    local rc_list = F.get_rc_list(train:get_rc())
+    local rc_keep = {}
+
+    if old_def.line and line == old_def.line then
+        line = ""
+    end
+
+    if new_def.line then
+        line = new_def.line
+    end
+
+    for _, rc in ipairs(rc_list) do
+        if rc ~= old_def.rc and rc ~= new_def.rc then
+            rc_keep[#rc_keep+1] = rc
+        end
+    end
+
+    if new_def.rc then
+        rc_keep[#rc_keep+1] = new_def.rc
+    end
+
+    train:set_line(line)
+    train:set_rc(table.concat(rc_keep, " "))
+
+    return true
+end
+
 function F.validate_station_track_params(params)
     params.station_id = params.station_id or params.here or params.platform_id
     params.track_id = params.track_id or params.track
@@ -202,48 +250,19 @@ function F.stn_v3(params)
             local first_checkpoint = checkpoints and checkpoints[1]
             if first_checkpoint == nil or first_checkpoint.speed ~= 0 then
                 local next_line_id = line_id
+                local next_track_id = station_def.next
                 if station_def.through_run_to and station_def.through_run_to ~= line_id then
                     next_line_id = station_def.through_run_to
 
-                    local next_line_def = F.stn_v3_lines[next_line_id]
-                    if
-                        not next_line_def
-                        or not next_line_def.stations
-                        or not next_line_def.stations[station_def.next]
-                    then
+                    if not F.swap_train_route(train, next_track_id, line_id, next_line_id) then
                         atc_set_text_inside("[E-1002] Station track misconfigured. Contact railway operator.")
                         atc_set_text_outside("[E-1002] Station track misconfigured. Contact railway operator.")
                         return
                     end
-
-                    -- Routing code
-
-                    local rc_list = F.get_rc_list(train:get_rc())
-
-                    if line_def.rc then
-                        local rc_keep = {}
-                        for _, rc in ipairs(rc_list) do
-                            if rc ~= line_def.rc then
-                                rc_keep[#rc_keep + 1] = rc
-                            end
-                        end
-                        rc_list = rc_keep
-                    end
-
-                    if next_line_def.rc then
-                        rc_list[#rc_list + 1] = next_line_def.rc
-                    end
-
-                    train:set_rc(table.concat(rc_list, " "))
-
-                    -- Line number
-
-                    train:set_line(next_line_def.line or "")
                 end
 
                 train:atc_send("OCD1A1SM")
 
-                local next_track_id = station_def.next
                 local next_track_id_parts = string_split(next_track_id, ":")
                 local next_station_id = next_track_id_parts[1]
                 train:set_text_inside("Next station: " .. F.get_internal_display(next_line_id, next_station_id))
