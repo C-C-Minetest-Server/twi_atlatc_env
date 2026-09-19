@@ -24,22 +24,24 @@ for station in future_path
 function F.list_train_arrival_times(atc_id)
     local train = get_train(atc_id)
     if not train then
-        return {}
+        return {}, {}
     end
 
     local train_data = F.running_trains_data[atc_id]
-    if not train_data then return {} end
+    if not train_data then return {}, {} end
 
     -- Do not re-calculate within 2 seconds
     do
         local cached_times_to_stations = train_data.times_to_stations
+        local cached_order_of_visit = train_data.order_of_visit
         local cached_time = train_data.times_to_stations_time
 
-        if cached_time and (cached_time + 2) > os.time() then
-            return cached_times_to_stations
+        if cached_time and cached_order_of_visit and (cached_time + 2) > os.time() then
+            return cached_times_to_stations, cached_order_of_visit
         end
 
         train_data.times_to_stations = nil
+        train_data.order_of_visit = nil
         train_data.times_to_stations_time = nil
     end
 
@@ -51,10 +53,11 @@ function F.list_train_arrival_times(atc_id)
     local max_speed_cat = train_data.max_speed_cat
 
     if not dest or not line_stations or not max_speed_cat or not latest_checkpoint then
-        return {}
+        return {}, {}
     end
 
     local times_to_stations = {}
+    local order_of_visit = {}
     local time_standpoint = rwt.now()
     local station_pointer = dest
     repeat
@@ -68,9 +71,10 @@ function F.list_train_arrival_times(atc_id)
 
         local est_arrival = rwt.add(time_standpoint, average_delta)
         times_to_stations[station_pointer] = { est_arrival }
+        order_of_visit[#order_of_visit+1] = station_pointer
+
 
         local station_def = line_stations[station_pointer]
-
         if type(station_def) == "function" then
             -- func(train: train, arrival_time: rwt?, estimated: bool)
             station_def = station_def(train, est_arrival, true)
@@ -113,9 +117,10 @@ function F.list_train_arrival_times(atc_id)
     until station_pointer == dest
 
     train_data.times_to_stations = times_to_stations
+    train_data.order_of_visit = order_of_visit
     train_data.times_to_stations_time = os.time()
 
-    return times_to_stations
+    return times_to_stations, order_of_visit
 end
 
 function F.get_train_arrival_time_at(atc_id, track_key)
@@ -132,10 +137,12 @@ function F.send_train_to_pis_v3(atc_id)
 
     local train_data = F.running_trains_data[atc_id]
 
-    local arrival_times = F.list_train_arrival_times(atc_id)
+    local arrival_times, order_of_visit = F.list_train_arrival_times(atc_id)
     local send_batch = {}
+    local send_batch_ptr = 1
 
-    for track_key, data in pairs(arrival_times) do
+    for _, track_key in ipairs(order_of_visit) do
+        local data = arrival_times[track_key]
         local eta, line_station_def, line_id = data[1], data[2], data[3]
         local line_def = F.stn_v3_lines[line_id]
 
@@ -146,17 +153,39 @@ function F.send_train_to_pis_v3(atc_id)
             local track_key_components = string_split(track_key, ":")
             local station_id, track_id = track_key_components[1], track_key_components[2]
 
+            -- Direction code computation
+            local dir_code = line_station_def.dir
+
+            if type(dir_code) == "function" then
+                dir_code = dir_code(train)
+            end
+
+            if send_batch[#send_batch] and dir_code ~= send_batch[#send_batch].direction_code then
+                send_batch_ptr = #send_batch + 1
+            end
+
+            -- Set the "via" destination on previous stations on the same direction
+            if line_station_def.via_dest then
+                local via_dest_name = F.station_names[station_id] or station_id
+
+                for i = send_batch_ptr, #send_batch do
+                    local this_msg = send_batch[i]
+
+                    if not this_msg.via then
+                        this_msg.via = via_dest_name
+                    end
+                end
+
+                send_batch_ptr = #send_batch + 1
+            end
+
             local line_code = line_def.code or string.sub(line_id, 1, 4)
             local line_name = line_def.name or line_id
             local line_color = line_def.color
             local line_background_color = line_def.background_color
-
-            local dir_code = line_station_def.dir
-            if type(dir_code) == "function" then
-                dir_code = dir_code(train)
-            end
             local term_code = line_def.termini[dir_code]
             local heading_to = F.station_names[term_code] or term_code
+            local via = F.station_names[line_station_def.via_override] or line_station_def.via_override or nil
 
             local no_to_prefix = line_def.no_to_prefix
             local is_approaching = track_key == train_data.dest and train_data.is_approaching
@@ -178,6 +207,7 @@ function F.send_train_to_pis_v3(atc_id)
                 line_color = line_color,
                 line_background_color = line_background_color,
                 heading_to = heading_to,
+                via = via,
                 no_to_prefix = no_to_prefix,
                 direction_code = dir_code,
 
