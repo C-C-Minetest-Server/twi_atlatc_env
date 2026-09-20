@@ -62,32 +62,6 @@ F.lines["SPN-CW"] = {
     }),
 }
 
-F.lines["SPN-ACW"] = {
-    -- Spawn Line (Anti clockwise)
-    -- was: Spawn Metro: Spawn Line
-    rc = "L-SPN-ACW",
-    code = "SPN",
-    name = "Origin Metro: Origin Loop",
-    textline_name = "Origin Line",
-    short_name = "Origin",
-    default_dir = "ACW",
-    custom_dir_abbr = "ACW",
-    custom_term_desc = F.pseudo_station_names.ACW,
-
-    departure_time_adjustment = 2,
-
-    adjacent_stations = construct_adjacent_stations({
-        -- station, track, reverse point
-        { "SPN", "2" },
-        { "HLY", "2" },
-        { "YTP", "2" },
-        { "MOF", "2" },
-        { "NLU", "2" },
-        { "ALF", "2" },
-        { "SPS", "2" },
-    }),
-}
-
 -- SmushyVille Metro
 
 F.lines["CSL"] = {
@@ -282,10 +256,7 @@ F.lines["SPN"] = {
     textline_name = "Origin Line",
     short_name = "Origin",
 
-    adjacent_stations = merge_key_tables({
-        F.lines["SPN-CW"].adjacent_stations,
-        F.lines["SPN-ACW"].adjacent_stations,
-    }),
+    adjacent_stations = F.lines["SPN-CW"].adjacent_stations,
 }
 
 -- Handled in STN_v3 (Display only)

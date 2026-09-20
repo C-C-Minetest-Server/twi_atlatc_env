@@ -394,6 +394,79 @@ F.stn_v3_lines["CEN"] = {
     }
 }
 
+F.stn_v3_lines["SPN-ACW"] = {
+    rc = "L-SPN-ACW",
+    code = "SPN",
+    name = {
+        "Origin Metro: Origin Line",
+        "Origin Line",
+        "Origin",
+    },
+    termini = { ACW = F.pseudo_station_names.ACW },
+    no_to_prefix = true,
+
+    stations = {
+        ["NLU:2:E1"] = {
+            delay = 10,
+
+            next = "ALF:2:E1",
+            dir = "ACW",
+
+            on_leave_rc = "B-ALF-T2E K-STN-CLEAR-ROUTE",
+        },
+        ["ALF:2:E1"] = {
+            delay = 10,
+
+            next = "SPS:2:N1",
+            dir = "ACW",
+
+            on_leave_rc = "B-SPS-T2N K-STN-CLEAR-ROUTE",
+        },
+        ["SPS:2:N1"] = {
+            delay = 10,
+
+            next = "SPN:2:W1",
+            dir = "ACW",
+
+            on_leave_rc = "J-SPN_S-SPS-SPN B-SPN-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["SPN:2:W1"] = {
+            delay = 10,
+
+            next = "HLY:2:W1",
+            dir = "ACW",
+
+            on_leave_rc = "B-HLY-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["HLY:2:W1"] = {
+            delay = 10,
+
+            next = "YTP:2:W1",
+            dir = "ACW",
+
+            on_leave_rc = "B-YTP-T2W K-STN-CLEAR-ROUTE",
+        },
+        ["YTP:2:W1"] = {
+            delay = 5,
+            depint = "00;00;02;00",
+            depoff = "00;00;00;00",
+
+            next = "MOF:2:S1",
+            dir = "ACW",
+
+            on_leave_rc = "B-MOF-T2S K-STN-CLEAR-ROUTE",
+        },
+        ["MOF:2:S1"] = {
+            delay = 10,
+
+            next = "NLU:2:E1",
+            dir = "ACW",
+
+            on_leave_rc = "B-NLU-T2E K-STN-CLEAR-ROUTE",
+        },
+    }
+}
+
 --[[
 eGRO-related lines:
 NX: 3 trains, interval 6 minutes, offset 1 minute
